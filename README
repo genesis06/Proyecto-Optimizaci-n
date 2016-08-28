@@ -1,0 +1,21 @@
+
+============Compilación===========
+Pasos para compilar el programa:
+1. Correr el archivo sh para generar los ejecutables
+$ sh make.sh
+
+============Ejecución===========
+Dirigase a la carpeta con el archivo proyecto0 por medio de la linea de comandos
+ y el comando c. Ejecute el archivo:
+$ ./proyecto0
+
+
+
+
+Referencias y tutoriales
+
+http://prognotes.net/2015/06/gtk-3-c-program-using-glade-3/
+
+https://developer.gnome.org/gtk3/stable
+
+http://www.tutorialspoint.com/cprogramming/

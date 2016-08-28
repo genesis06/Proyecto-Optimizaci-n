@@ -1,0 +1,39 @@
+#include <gtk/gtk.h>
+
+
+int main(int argc, char **argv)
+{
+    GtkBuilder      *builder; 
+    GtkWidget       *window;
+
+    GtkWidget *textDescription;
+
+ 
+    gtk_init(&argc, &argv);
+ 
+    builder = gtk_builder_new();
+    gtk_builder_add_from_file (builder, "../glade/proyecto0.glade", NULL);
+ 
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "pendingMessage"));
+    gtk_builder_connect_signals(builder, NULL);
+ 
+    textDescription = GTK_WIDGET(gtk_builder_get_object(builder, "pendingText"));
+    g_object_unref(builder);
+    
+     gtk_label_set_text(GTK_LABEL(textDescription), argv[1]);
+    
+
+
+    gtk_widget_show(window);                
+    gtk_main();
+    
+    return 0;
+}
+
+ 
+// called when window is closed
+void closePendingWindow()
+{
+    gtk_main_quit();
+}
+
