@@ -34,7 +34,7 @@ void runRutas()
 void runMochila()
 {
   
-    system("cd src ; ./pending Mochila &");
+    system("./src/mochila &");
 }
 void runRemplazo()
 {
@@ -49,7 +49,7 @@ void runArboles()
 void runSeries()
 {
   
-    system("cd src ; ./src/pending Series &");
+    system("cd src ; ./pending Series &");
 }
 void runMultiplicacion()
 {
