@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+int cantidadMaxima;
+int cantidadObjetos;
+int tipo;//0=0/1, 1= bounded, 2= unbounded
+int matrizValores[20][3];
+char *nombreObjetos[20];
+
 int main(int argc, char *argv[])
 {
     GtkBuilder      *builder;
