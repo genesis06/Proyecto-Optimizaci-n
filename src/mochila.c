@@ -14,20 +14,25 @@ GtkWidget *button;
 GtkWidget *comboBox;
 
 
-// A utility function that returns maximum of two integers
-static int max(int a, int b) { return (a > b)? a : b; }
+//-----------------------------Empieza Algoritmo knapSack 0/1 -----------
+int max(int a, int b) { return (a > b)? a : b; }
 
-
-//-------------------------------------------------------------------------------------------------------- 
-// Returns the maximum value that can be put in a knapsack of capacity W
-static int knapSack01(int W, int wt[], int val[], int n)
+/*
+	W = Capacidad Maxima
+	wt = El peso de cada objeto
+	val = Valores de cada objeto
+	n   = Cantidad Objetos
+*/
+int knapSack01(int W, int wt[], int val[], int n)
 {
-   int i, w,j;
+   int i, w;
    int K[n+1][W+1];
- 
-   // Build table K[][] in bottom up manner
+   char matrizString[500] = "";
+   char row[100] = "";
+
    for (i = 0; i <= n; i++)
    {
+       strcpy(row, "");
        for (w = 0; w <= W; w++)
        {
            if (i==0 || w==0)
@@ -36,31 +41,18 @@ static int knapSack01(int W, int wt[], int val[], int n)
                  K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]);
            else
                  K[i][w] = K[i-1][w];
-       }
-   }
-
-    
-    char matrizString[300] = "";
-
-    //Crea el String
-    char row[50] = "";
-
-    for (i = 0; i < n+1; i++ ) {
-        strcpy(row, "");
-       for (j = 0; j < W+1; j++ ) {
-
-          char num[50] = "";
-          sprintf(num, "%d\t", K[i][j]);
+	  
+	  char num[50] = "";
+          sprintf(num, "%d\t", K[i][w]);
           strcat(row, num);
-          //printf("%d\t",m[i][j] );
-        }
-        //printf("\n");
+         
+       }
         strcat(row, "\n");
         strcat(matrizString, row);
-    }
+   }
+
    printf("%s\n",matrizString );
 	
-  
    return K[n][W];
 }
 
@@ -87,8 +79,8 @@ item_t_bounded items_bounded[] = {
     {"map",                      9,   150,   1},
     {"compass",                 13,    35,   1},
     {"water",                  153,   200,   2},
-    {"sandwich",                50,    60,   2},
-    {"glucose",                 15,    60,   2},
+    {"sandwich",                50,    60,   2}
+    /*{"glucose",                 15,    60,   2},
     {"tin",                     68,    45,   3},
     {"banana",                  27,    60,   3},
     {"apple",                   39,    40,   3},
@@ -104,8 +96,8 @@ item_t_bounded items_bounded[] = {
     {"note-case",               22,    80,   1},
     {"sunglasses",               7,    20,   1},
     {"towel",                   18,    12,   2},
-    {"socks",                    4,    50,   1},
-    {"book",                    30,    10,   2},
+    {"socks",                    4,    50,   1}*/
+    
 };
  
 int n_bounded = sizeof (items_bounded) / sizeof (item_t_bounded);
@@ -138,6 +130,12 @@ int *knapsackBounded (int w) {
             j -= items_bounded[i - 1].weight;
         }
     }
+  
+    
+    
+
+
+
     free(mm);
     free(m);
     return s;
@@ -145,7 +143,7 @@ int *knapsackBounded (int w) {
 
  static void knapSackBoundedProblem()
 {
-    printf("%s\n","KnapSackBounded");
+    
     int i, tc = 0, tw = 0, tv = 0, *s;
     s = knapsackBounded(400);
     for (i = 0; i < n_bounded; i++) {
@@ -156,7 +154,7 @@ int *knapsackBounded (int w) {
             tv += s[i] * items_bounded[i].value;
         }
     }
-    printf("%-22s %5d %5d %5d\n", "count, weight, value:", tc, tw, tv);
+    printf("%-22s %5d %5d %5d\n", "Cuenta, Peso, Valor:", tc, tw, tv);
    
 
 }
@@ -172,9 +170,9 @@ typedef struct {
 } item_t_unbounded;
  
 item_t_unbounded itemsUnbounded[] = {
-    {"panacea", 3000.0, 0.3, 0.025},
-    {"ichor",   1800.0, 0.2, 0.015},
-    {"gold",    2500.0, 2.0, 0.002},
+    {"Item1", 3000.0, 0.3, 0.025},
+    {"Item2",   1800.0, 0.2, 0.015},
+    {"Item3",    2500.0, 2.0, 0.002},
 };
  
 int n_unbounded = sizeof (itemsUnbounded) / sizeof (item_t_unbounded);
@@ -208,7 +206,7 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
 
  static void knapSackUnBoundedProblem()
 {
-    printf("%s\n","UnKnapSackBounded");
+   
     count = malloc(n_unbounded * sizeof (int));
     best = malloc(n_unbounded * sizeof (int));
     best_value = 0;
@@ -217,7 +215,7 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
     for (i = 0; i < n_unbounded; i++) {
         printf("%d %s\n", best[i], itemsUnbounded[i].name);
     }
-    printf("best value: %.0f\n", best_value);
+    printf("Mejor Valor: %.0f\n", best_value);
     free(count); free(best);
     
 }
@@ -265,21 +263,14 @@ int main(int argc, char *argv[])
     window = GTK_WIDGET(gtk_builder_get_object(builder, "mochilaWindow"));
     gtk_builder_connect_signals(builder, NULL);
 
-    
    
- // ocupo hacer que se ejecute el algoritmo dependiendo del combo Box ????????????
     comboBox = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext3"));
     comboSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBox));
     
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
     g_signal_connect(button, "clicked", G_CALLBACK(resolver), window);
   
-   /*  button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
-    g_signal_connect(button, "clicked", G_CALLBACK(knapSackBoundedProblem), window);*/
-   
-    /*  button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
-    g_signal_connect(button, "clicked", G_CALLBACK(knapSack01Problem), window);*/
- 
+
     g_object_unref(builder);
  
     gtk_widget_show(window);                
