@@ -56,6 +56,7 @@ int knapSack01(int W, int wt[], int val[], int n)
    return K[n][W];
 }
 
+//Funcion Ejemplo 0/1
  static void knapSackProblem01()
 {
     printf("%s\n","Maxima ganancia es");
@@ -101,7 +102,8 @@ item_t_bounded items_bounded[] = {
 };
  
 int n_bounded = sizeof (items_bounded) / sizeof (item_t_bounded);
- 
+// Metodo principal Bounded
+
 int *knapsackBounded (int w) {
     int i, j, k, v, *mm, **m, *s;
     mm = calloc((n_bounded + 1) * (w + 1), sizeof (int));
@@ -140,7 +142,7 @@ int *knapsackBounded (int w) {
     free(m);
     return s;
 }
-
+// Funcion Ejemplo Bounded
  static void knapSackBoundedProblem()
 {
     
@@ -161,7 +163,7 @@ int *knapsackBounded (int w) {
 
 
 //--------------------------Empieza Algoritmo UnBounded------------------------------------------------
-
+// Estructura ayuda Unbounded
 typedef struct {
     char *name;
     double value;
@@ -179,7 +181,8 @@ int n_unbounded = sizeof (itemsUnbounded) / sizeof (item_t_unbounded);
 int *count;
 int *best;
 double best_value;
- 
+
+// Metodo Principal Unbouded
 void knapsackUnbounded (int i, double value, double weight, double volume) {
     int j, m1, m2, m;
     if (i == n_unbounded) {
@@ -203,7 +206,7 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
         );
     }
 }
-
+//Funcion Ejemplo UnBounded
  static void knapSackUnBoundedProblem()
 {
    
@@ -219,7 +222,7 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
     free(count); free(best);
     
 }
-
+// Llamada desde botón
 void resolver (GtkWidget* button, gpointer window){
  comboSelect = gtk_combo_box_get_active(GTK_COMBO_BOX(comboBox));
  switch(comboSelect) {
@@ -244,7 +247,57 @@ void resolver (GtkWidget* button, gpointer window){
    }
 
 }
+//Open File
+static void showOpenFile(GtkWidget* button, gpointer window)
+{
+     //Contruccion Dialog
+	GtkWidget *dialog;
 
+	dialog = gtk_file_chooser_dialog_new("Chosse a file", GTK_WINDOW(window), 
+				GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_OK, GTK_RESPONSE_OK, 
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+
+	gtk_widget_show_all(dialog);
+
+        //Localizar el directorio
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), g_get_home_dir());
+
+        //Guarda la respuesta al hacer Ok/Cancel
+	gint resp = gtk_dialog_run(GTK_DIALOG(dialog));
+
+	if(resp == GTK_RESPONSE_OK)
+		{
+			
+		FILE *infile;
+		
+		
+		infile = fopen(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)), "r");
+	 
+		char buff[255];
+		char firstLane[255] = "Nada" ;
+
+		//Leer hasta que no hay lineas
+		while (fgets(buff, 255, (FILE*)infile)){  
+			
+			//Lee primera Linea	
+			if(strcmp(firstLane, "Nada") == 0){
+				
+			   strcpy(firstLane, buff);
+			   printf("Primera Linea %s\n", firstLane );
+			}else{
+			//Lee resto de lineas
+		           printf("%s\n", buff );
+			}
+		} 	
+		// Cerrar Archivo
+		fclose(infile);
+		}
+	else
+		g_print("Presionó Cancelar\n");
+           
+	gtk_widget_destroy(dialog);
+	
+}
 
 //--------------------------------------------------------------------------
 int main(int argc, char *argv[])
@@ -254,31 +307,26 @@ int main(int argc, char *argv[])
     GtkBuilder      *builder;
 
     gtk_init(&argc, &argv);
-
     
- 
     builder = gtk_builder_new();
     gtk_builder_add_from_file (builder, "src/mochila.glade", NULL);
  
     window = GTK_WIDGET(gtk_builder_get_object(builder, "mochilaWindow"));
     gtk_builder_connect_signals(builder, NULL);
 
-   
     comboBox = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext3"));
     comboSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBox));
     
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
     g_signal_connect(button, "clicked", G_CALLBACK(resolver), window);
-  
 
+    button = GTK_WIDGET(gtk_builder_get_object(builder, "button5"));
+    g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
+  
     g_object_unref(builder);
- 
     gtk_widget_show(window);                
     gtk_main();
- 
-   
-    
-    
+
     return 0;
 
 }
