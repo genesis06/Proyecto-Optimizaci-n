@@ -9,7 +9,7 @@ int cantidadObjetos;
 int tipo;//0=0/1, 1= bounded, 2= unbounded
 int matrizValores[20][3];
 char *nombreObjetos[20];
-int MATRIX_SIZE ;
+int comboSelect ;
 GtkWidget *button;
 GtkWidget *comboBox;
 
@@ -64,7 +64,7 @@ static int knapSack01(int W, int wt[], int val[], int n)
    return K[n][W];
 }
 
- static void knapSackProblem01(GtkWidget* button, gpointer window)
+ static void knapSackProblem01()
 {
     printf("%s\n","Maxima ganancia es");
     int val[] = {11, 7, 12};
@@ -143,7 +143,7 @@ int *knapsackBounded (int w) {
     return s;
 }
 
- static void knapSackBoundedProblem(GtkWidget* button, gpointer window)
+ static void knapSackBoundedProblem()
 {
     printf("%s\n","KnapSackBounded");
     int i, tc = 0, tw = 0, tv = 0, *s;
@@ -206,7 +206,7 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
     }
 }
 
- static void knapSackUnBoundedProblem(GtkWidget* button, gpointer window)
+ static void knapSackUnBoundedProblem()
 {
     printf("%s\n","UnKnapSackBounded");
     count = malloc(n_unbounded * sizeof (int));
@@ -220,6 +220,31 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
     printf("best value: %.0f\n", best_value);
     free(count); free(best);
     
+}
+
+void resolver (GtkWidget* button, gpointer window){
+ comboSelect = gtk_combo_box_get_active(GTK_COMBO_BOX(comboBox));
+ switch(comboSelect) {
+      case -1 :
+         printf("Aún no se selecciona nda!\n" );
+         break;
+      case 2 :
+	 printf("Selecciona 0/1\n" );
+	 knapSackProblem01();
+         break;
+      case 0 :
+         printf("Selecciona Bounded" );
+	 knapSackBoundedProblem();
+         break;
+      case 1 :
+         printf("Selecciona Unbounded\n" );
+	 knapSackUnBoundedProblem();
+         break;
+     
+      default :
+         printf("Invalida seleccion, elige el tipo de algoritmo\n" );
+   }
+
 }
 
 
@@ -247,7 +272,7 @@ int main(int argc, char *argv[])
     comboSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBox));
     
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
-    g_signal_connect(button, "clicked", G_CALLBACK(knapSackUnBoundedProblem), window);
+    g_signal_connect(button, "clicked", G_CALLBACK(resolver), window);
   
    /*  button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
     g_signal_connect(button, "clicked", G_CALLBACK(knapSackBoundedProblem), window);*/
