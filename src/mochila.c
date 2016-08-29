@@ -1,3 +1,6 @@
+/*
+   ITCR - Investigación de Operaciones
+*/
 #include <gtk/gtk.h>
 #include <stdbool.h>
 #include <string.h>
@@ -12,7 +15,52 @@ char *nombreObjetos[20];
 int comboSelect ;
 GtkWidget *button;
 GtkWidget *comboBox;
+GtkWidget *dialog;
 
+typedef struct {
+    char *name;
+    double value;
+    double weight;
+    double volume;
+} item_t_unbounded;
+
+typedef struct {
+    char *name;
+    int weight;
+    int value;
+    int count;
+} item_t_bounded;
+ 
+item_t_unbounded itemsUnbounded[] = {
+    {"Item1", 3000.0, 0.3, 0.025},
+    {"Item2",   1800.0, 0.2, 0.015},
+    {"Item3",    2500.0, 2.0, 0.002},
+};
+ 
+item_t_bounded items_bounded[] = {
+    {"map",                      9,   150,   1},
+    {"compass",                 13,    35,   1},
+    {"water",                  153,   200,   2},
+    {"sandwich",                50,    60,   2}
+    /*{"glucose",                 15,    60,   2},
+    {"tin",                     68,    45,   3},
+    {"banana",                  27,    60,   3},
+    {"apple",                   39,    40,   3},
+    {"cheese",                  23,    30,   1},
+    {"beer",                    52,    10,   3},
+    {"suntan cream",            11,    70,   1},
+    {"camera",                  32,    30,   1},
+    {"T-shirt",                 24,    15,   2},
+    {"trousers",                48,    10,   2},
+    {"umbrella",                73,    40,   1},
+    {"waterproof trousers",     42,    70,   1},
+    {"waterproof overclothes",  43,    75,   1},
+    {"note-case",               22,    80,   1},
+    {"sunglasses",               7,    20,   1},
+    {"towel",                   18,    12,   2},
+    {"socks",                    4,    50,   1}*/
+    
+};
 
 //-----------------------------Empieza Algoritmo knapSack 0/1 -----------
 int max(int a, int b) { return (a > b)? a : b; }
@@ -56,54 +104,12 @@ int knapSack01(int W, int wt[], int val[], int n)
    return K[n][W];
 }
 
-//Funcion Ejemplo 0/1
- static void knapSackProblem01()
-{
-    printf("%s\n","Maxima ganancia es");
-    int val[] = {11, 7, 12};
-    int wt[] = {4, 3, 5};
-    int  W = 10;
-    int n = sizeof(val)/sizeof(val[0]);
-    printf("%d\n", knapSack01(W, wt, val, n));
 
-}
 
 //-----------------------------Empieza Algoritmo Bounded----------------------------------------------
-typedef struct {
-    char *name;
-    int weight;
-    int value;
-    int count;
-} item_t_bounded;
- 
-item_t_bounded items_bounded[] = {
-    {"map",                      9,   150,   1},
-    {"compass",                 13,    35,   1},
-    {"water",                  153,   200,   2},
-    {"sandwich",                50,    60,   2}
-    /*{"glucose",                 15,    60,   2},
-    {"tin",                     68,    45,   3},
-    {"banana",                  27,    60,   3},
-    {"apple",                   39,    40,   3},
-    {"cheese",                  23,    30,   1},
-    {"beer",                    52,    10,   3},
-    {"suntan cream",            11,    70,   1},
-    {"camera",                  32,    30,   1},
-    {"T-shirt",                 24,    15,   2},
-    {"trousers",                48,    10,   2},
-    {"umbrella",                73,    40,   1},
-    {"waterproof trousers",     42,    70,   1},
-    {"waterproof overclothes",  43,    75,   1},
-    {"note-case",               22,    80,   1},
-    {"sunglasses",               7,    20,   1},
-    {"towel",                   18,    12,   2},
-    {"socks",                    4,    50,   1}*/
-    
-};
- 
-int n_bounded = sizeof (items_bounded) / sizeof (item_t_bounded);
-// Metodo principal Bounded
 
+int n_bounded = sizeof (items_bounded) / sizeof (item_t_bounded);
+ 
 int *knapsackBounded (int w) {
     int i, j, k, v, *mm, **m, *s;
     mm = calloc((n_bounded + 1) * (w + 1), sizeof (int));
@@ -132,57 +138,17 @@ int *knapsackBounded (int w) {
             j -= items_bounded[i - 1].weight;
         }
     }
-  
-    
-    
-
-
-
     free(mm);
     free(m);
     return s;
 }
-// Funcion Ejemplo Bounded
- static void knapSackBoundedProblem()
-{
-    
-    int i, tc = 0, tw = 0, tv = 0, *s;
-    s = knapsackBounded(400);
-    for (i = 0; i < n_bounded; i++) {
-        if (s[i]) {
-            printf("%-22s %5d %5d %5d\n", items_bounded[i].name, s[i], s[i] * items_bounded[i].weight, s[i] * items_bounded[i].value);
-            tc += s[i];
-            tw += s[i] * items_bounded[i].weight;
-            tv += s[i] * items_bounded[i].value;
-        }
-    }
-    printf("%-22s %5d %5d %5d\n", "Cuenta, Peso, Valor:", tc, tw, tv);
-   
-
-}
-
-
 //--------------------------Empieza Algoritmo UnBounded------------------------------------------------
-// Estructura ayuda Unbounded
-typedef struct {
-    char *name;
-    double value;
-    double weight;
-    double volume;
-} item_t_unbounded;
- 
-item_t_unbounded itemsUnbounded[] = {
-    {"Item1", 3000.0, 0.3, 0.025},
-    {"Item2",   1800.0, 0.2, 0.015},
-    {"Item3",    2500.0, 2.0, 0.002},
-};
- 
+
 int n_unbounded = sizeof (itemsUnbounded) / sizeof (item_t_unbounded);
 int *count;
 int *best;
 double best_value;
-
-// Metodo Principal Unbouded
+ 
 void knapsackUnbounded (int i, double value, double weight, double volume) {
     int j, m1, m2, m;
     if (i == n_unbounded) {
@@ -206,7 +172,34 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
         );
     }
 }
-//Funcion Ejemplo UnBounded
+//------------------------------------------------------ Funciones de Ejemplo 
+
+ static void knapSackProblem01()
+{
+    printf("%s\n","Maxima ganancia es");
+    int val[] = {11, 7, 12};
+    int wt[] = {4, 3, 5};
+    int  W = 10;
+    int n = sizeof(val)/sizeof(val[0]);
+    printf("%d\n", knapSack01(W, wt, val, n));
+
+}
+
+ static void knapSackBoundedProblem()
+{ 
+    int i, tc = 0, tw = 0, tv = 0, *s;
+    s = knapsackBounded(400);
+    for (i = 0; i < n_bounded; i++) {
+        if (s[i]) {
+            printf("%-22s %5d %5d %5d\n", items_bounded[i].name, s[i], s[i] * items_bounded[i].weight, s[i] * items_bounded[i].value);
+            tc += s[i];
+            tw += s[i] * items_bounded[i].weight;
+            tv += s[i] * items_bounded[i].value;
+        }
+    }
+    printf("%-22s %5d %5d %5d\n", "Cuenta, Peso, Valor:", tc, tw, tv);
+}
+
  static void knapSackUnBoundedProblem()
 {
    
@@ -222,7 +215,7 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
     free(count); free(best);
     
 }
-// Llamada desde botón
+//--------------------------------------------------------Switch ComboBox
 void resolver (GtkWidget* button, gpointer window){
  comboSelect = gtk_combo_box_get_active(GTK_COMBO_BOX(comboBox));
  switch(comboSelect) {
@@ -230,15 +223,15 @@ void resolver (GtkWidget* button, gpointer window){
          printf("Aún no se selecciona nda!\n" );
          break;
       case 2 :
-	 printf("Selecciona 0/1\n" );
+	
 	 knapSackProblem01();
          break;
       case 0 :
-         printf("Selecciona Bounded" );
+        
 	 knapSackBoundedProblem();
          break;
       case 1 :
-         printf("Selecciona Unbounded\n" );
+        
 	 knapSackUnBoundedProblem();
          break;
      
@@ -250,9 +243,7 @@ void resolver (GtkWidget* button, gpointer window){
 //Open File
 static void showOpenFile(GtkWidget* button, gpointer window)
 {
-     //Contruccion Dialog
-	GtkWidget *dialog;
-
+        //Contruccion Dialog
 	dialog = gtk_file_chooser_dialog_new("Chosse a file", GTK_WINDOW(window), 
 				GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_OK, GTK_RESPONSE_OK, 
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
@@ -307,13 +298,16 @@ int main(int argc, char *argv[])
     GtkBuilder      *builder;
 
     gtk_init(&argc, &argv);
+
     
+ 
     builder = gtk_builder_new();
     gtk_builder_add_from_file (builder, "src/mochila.glade", NULL);
  
     window = GTK_WIDGET(gtk_builder_get_object(builder, "mochilaWindow"));
     gtk_builder_connect_signals(builder, NULL);
 
+   
     comboBox = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext3"));
     comboSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBox));
     
@@ -323,13 +317,12 @@ int main(int argc, char *argv[])
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button5"));
     g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
   
+
     g_object_unref(builder);
+ 
     gtk_widget_show(window);                
     gtk_main();
-
+ 
     return 0;
 
 }
-
-
-
