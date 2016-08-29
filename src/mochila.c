@@ -17,21 +17,46 @@ static int max(int a, int b) { return (a > b)? a : b; }
 // Devuelve el valor máximo que se puede poner en una mochila de la capacidad W
 static int knapSack(int W, int wt[], int val[], int n)
 {
-   // Caso Base
-   if (n == 0 || W == 0)
-       return 0;
+  int i, w,j;
+   int K[n+1][W+1];
  
-    // Si el peso del elemento enésimo es más que la capacidad de la mochila W, a continuación,
-    // Este artículo no se puede incluir en la solución óptima
-   if (wt[n-1] > W)
-       return knapSack(W, wt, val, n-1);
- 
-   // Devuelve el máximo de dos casos:
-    // (1) número de ítems incluidos
-    // (2) no incluido
-   else return max( val[n-1] + knapSack(W-wt[n-1], wt, val, n-1),
-                    knapSack(W, wt, val, n-1)
-                  );
+   // Build table K[][] in bottom up manner
+   for (i = 0; i <= n; i++)
+   {
+       for (w = 0; w <= W; w++)
+       {
+           if (i==0 || w==0)
+               K[i][w] = 0;
+           else if (wt[i-1] <= w)
+                 K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]);
+           else
+                 K[i][w] = K[i-1][w];
+       }
+   }
+
+    unsigned int column = 0;
+    char matrizString[300] = "";
+
+    //Crea el String
+    char row[50] = "";
+
+    for (i = 0; i < n+1; i++ ) {
+        strcpy(row, "");
+       for (j = 0; j < W+1; j++ ) {
+
+          char num[50] = "";
+          sprintf(num, "%d\t", K[i][j]);
+          strcat(row, num);
+          //printf("%d\t",m[i][j] );
+        }
+        //printf("\n");
+        strcat(row, "\n");
+        strcat(matrizString, row);
+    }
+   printf("%s\n",matrizString );
+	
+  
+   return K[n][W];
 }
 
  static void knapSackProblem(GtkWidget* button, gpointer window)
