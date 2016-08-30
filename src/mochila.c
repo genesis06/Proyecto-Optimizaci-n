@@ -7,15 +7,30 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+int max(int a, int b);
+void separarColumnas(int fila);
+int knapSack01(int W, int wt[], int val[], int n);
+int *knapsackBounded (int w);
+void knapsackUnbounded (int i, double value, double weight, double volume);
+static void knapSackProblem01();
+static void knapSackBoundedProblem();
+static void knapSackUnBoundedProblem();
+void resolver (GtkWidget* button, gpointer window);
+static void showOpenFile(GtkWidget* button, gpointer window);
+void separarColumnas(int fila);
+
+
 int cantidadMaxima;
 int cantidadObjetos;
 int tipo;//0=0/1, 1= bounded, 2= unbounded
-int matrizValores[20][3];
+int matrizValores[20][4];
 char *nombreObjetos[20];
 int comboSelect ;
 GtkWidget *button;
 GtkWidget *comboBox;
 GtkWidget *dialog;
+
+char linea[100];
 
 typedef struct {
     char *name;
@@ -265,29 +280,100 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 		infile = fopen(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)), "r");
 	 
 		char buff[255];
-		char firstLane[255] = "Nada" ;
+    char *token;
+		char *primeraLinea[255];
+    
 
 		//Leer hasta que no hay lineas
-		while (fgets(buff, 255, (FILE*)infile)){  
-			
+		  
+			fgets(buff, 255, (FILE*)infile);
+
+
 			//Lee primera Linea	
-			if(strcmp(firstLane, "Nada") == 0){
-				
-			   strcpy(firstLane, buff);
-			   printf("Primera Linea %s\n", firstLane );
-			}else{
-			//Lee resto de lineas
-		           printf("%s\n", buff );
-			}
-		} 	
+			   strcpy(primeraLinea, buff);
+			
+         /******* Inicia proceso de split línea para obtener datos ******/
+          token = strtok (buff," ");
+          int index = 0;
+
+          /** Obtiene datos de primera linea y la guarda en un array **/
+          while (token != NULL)
+          {
+              if(index <3){
+                primeraLinea[index] = token;  
+              }
+              token = strtok (NULL, " ");
+              index++;
+          }
+          /***************************************************************/
+          
+          /** Inicializa variables**/
+          cantidadMaxima = atoi(primeraLinea[0]);
+          tipo = atoi(primeraLinea[1]);
+          cantidadObjetos = atoi(primeraLinea[2]);
+          printf("Cantidad máxima: %d\n", cantidadMaxima);
+          printf("Tipo algortimo: %d\n", tipo);
+          printf("Cantidad objetos: %d\n", cantidadObjetos);
+          
+    /********************** Proceso para leer y guardar matriz ******************************/      
+    int indiceFilas = 0;
+    strcpy(linea,"");
+
+    // Lee resto de líneas
+		while (fgets(buff, 255, (FILE*)infile)){
+
+       strcpy(linea, buff);
+      if(indiceFilas < cantidadMaxima){
+        separarColumnas(indiceFilas);  
+      }
+
+      indiceFilas++;
+      strcpy(linea,"");
+			
+		}
+    /*****************************************************************************************/
+
+    /** Imprime matriz  **/
+    printf("Matriz\n");
+
+    for(int i=0;i<4;i++){
+         for(int j=0;j<4;j++){
+          //printf("%d %d\n", i,j);
+        printf("%d ", matrizValores[i][j]); 
+      }
+      printf("\n");
+    }
+    /****************************/
 		// Cerrar Archivo
 		fclose(infile);
 		}
-	else
+	else{
 		g_print("Presionó Cancelar\n");
-           
-	gtk_widget_destroy(dialog);
+	  gtk_widget_destroy(dialog);
+  }
 	
+}
+
+void separarColumnas(int fila){
+  
+  char *token;
+  int indiceColumnas =0;
+
+  /**Agarra el primer token separado por espacio**/
+  token = strtok (linea," ");  
+  
+  while (token != NULL )
+  {
+    /***Guarda el token en la matriz****/
+    int valor = atoi(token);
+    matrizValores[fila][indiceColumnas] = valor;
+    token = strtok (NULL, " ");
+      
+    indiceColumnas++;
+      
+      
+  }
+   
 }
 
 //--------------------------------------------------------------------------
