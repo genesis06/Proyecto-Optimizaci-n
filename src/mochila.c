@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+int MAX_INPUT_MATRIX_SIZE = 20;
+GtkWidget *textInputsMatrix[20][4];
+
 int max(int a, int b);
 void separarColumnas(int fila);
 int knapSack01(int W, int wt[], int val[], int n);
@@ -24,10 +27,14 @@ int cantidadMaxima;
 int cantidadObjetos;
 int tipo;//0=0/1, 1= bounded, 2= unbounded
 int matrizValores[20][4];
-char *nombreObjetos[20];
+char *nombreObjetos[20] = {"1", "2", "3", "4", "5", "6","7","8", "9", "10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
 int comboSelect ;
+int comboBoxCapacidadSelected ;
+int comboBoxObjetosSelect ;
 GtkWidget *button;
 GtkWidget *comboBox;
+GtkWidget *comboBoxCapacidad;
+GtkWidget *comboBoxObjetos;
 GtkWidget *dialog;
 
 char linea[100];
@@ -233,6 +240,7 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
 //--------------------------------------------------------Switch ComboBox
 void resolver (GtkWidget* button, gpointer window){
  comboSelect = gtk_combo_box_get_active(GTK_COMBO_BOX(comboBox));
+ getTextInputValues();
  switch(comboSelect) {
       case -1 :
          printf("Aún no se selecciona nda!\n" );
@@ -259,7 +267,8 @@ void resolver (GtkWidget* button, gpointer window){
 static void showOpenFile(GtkWidget* button, gpointer window)
 {
         //Contruccion Dialog
-	dialog = gtk_file_chooser_dialog_new("Chosse a file", GTK_WINDOW(window), 
+	
+  dialog = gtk_file_chooser_dialog_new("Chosse a file", GTK_WINDOW(window), 
 				GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_OK, GTK_RESPONSE_OK, 
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
@@ -351,6 +360,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 		g_print("Presionó Cancelar\n");
 	  gtk_widget_destroy(dialog);
   }
+  setTextInputValues();
 	
 }
 
@@ -376,12 +386,103 @@ void separarColumnas(int fila){
    
 }
 
+//Esta funcion esconde los inputs para cambiar tamaño de matriz
+void updateInput()
+{
+    comboBoxObjetosSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxObjetos));
+    g_print("%d",comboBoxObjetosSelect);
+    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+           if(i <= comboBoxObjetosSelect)
+            {
+               gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
+            }
+            else
+            {
+                 gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][j])); 
+            }    
+        }
+    }
+
+}
+
+//this function replaces the textInputsMatrix with curret values
+void getTextInputValues()
+{
+    comboBoxObjetosSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxObjetos));
+    cantidadObjetos = comboBoxObjetosSelect;
+    comboBoxCapacidadSelected = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxCapacidad));
+    cantidadMaxima = comboBoxCapacidadSelected;
+    for (int i = 0; i < cantidadObjetos; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+            if(j == 0)
+            {
+               matrizValores[i][j] = 0;
+            }
+            else
+            {
+              gchar *currentTextInputText;
+              currentTextInputText = gtk_entry_get_text(GTK_ENTRY(textInputsMatrix[i][j]));
+              int newValue = atoi(currentTextInputText);
+              matrizValores[i][j] = newValue;
+              if(i <= comboBoxObjetosSelect)
+              {
+                 gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
+              }
+              else
+              {
+                   gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][j])); 
+              }
+            }        
+        }
+    }
+}
+void setTextInputValues()
+{
+
+    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+    {
+        for (int j = 1; j < 4; ++j)
+        { 
+            if(i <= cantidadObjetos)
+              {
+                 char newChar[4];
+                  snprintf(newChar, 4, "%d", matrizValores[i][j]);
+                  gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), newChar);
+                 gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
+              }
+              else
+              {
+                   gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][j])); 
+              }
+        }
+         
+    }
+    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+    {
+       
+         if(i <= cantidadObjetos)
+        {
+             gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][0]));
+              gtk_button_set_label (GTK_BUTTON (textInputsMatrix[i][0]), nombreObjetos[i]);
+        }
+        else
+        {
+             gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][0])); 
+        }
+    }
+}
 //--------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
     
     GtkWidget       *window;
     GtkBuilder      *builder;
+    GtkGrid    *inputsGrid;
 
     gtk_init(&argc, &argv);
 
@@ -396,6 +497,13 @@ int main(int argc, char *argv[])
    
     comboBox = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext3"));
     comboSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBox));
+
+
+    comboBoxCapacidad = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext1"));
+    comboBoxCapacidadSelected = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxCapacidad));
+
+    comboBoxObjetos = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext4"));
+    comboBoxObjetosSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxObjetos));
     
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
     g_signal_connect(button, "clicked", G_CALLBACK(resolver), window);
@@ -403,12 +511,55 @@ int main(int argc, char *argv[])
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button5"));
     g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
   
+    
+    inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "grid2"));
+
+    
+ 
+   
+
+    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        { 
+            if(j == 0)
+            {
+              textInputsMatrix[i][j] = gtk_button_new ();
+              //gtk_entry_set_max_length (GTK_BUTTON (textInputsMatrix[i][j]),4);
+              gtk_button_set_label (GTK_BUTTON (textInputsMatrix[i][j]), nombreObjetos[i]);
+              gtk_widget_show (textInputsMatrix[i][j]);
+             // gtk_entry_set_max_width_chars(GTK_BUTTON (textInputsMatrix[i][j]), 4);
+              //gtk_entry_set_width_chars(GTK_BUTTON (textInputsMatrix[i][j]), 4);
+              gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
+
+            }
+            else
+            {
+              textInputsMatrix[i][j] = gtk_entry_new ();
+              gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),4);
+              gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "-1");
+              gtk_widget_show (textInputsMatrix[i][j]);
+              gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
+              gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
+              gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
+            }
+            //GtkWidget *entry;
+            //add one input and store reference
+            
+           
+        }
+    }
+
+    //gtk_widget_hide(resultBox);
+    //gtk_widget_hide(intermediateBox);
+
+
+
 
     g_object_unref(builder);
  
     gtk_widget_show(window);                
     gtk_main();
- 
-    return 0;
+     return 0;
 
 }
