@@ -267,6 +267,7 @@ void resolver (GtkWidget* button, gpointer window){
 
 /** Save file **/
 void showSaveFile(){
+  getTextInputValues();
   GtkWidget *dialog;
   GtkFileChooser *chooser;
   GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
@@ -489,7 +490,7 @@ void updateInput()
     {
         for (int j = 0; j < 4; ++j)
         {
-           if(i <= comboBoxObjetosSelect)
+           if(i < comboBoxObjetosSelect)
             {
                gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
             }
