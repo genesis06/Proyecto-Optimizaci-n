@@ -9,6 +9,7 @@
 
 int MAX_INPUT_MATRIX_SIZE = 20;
 GtkWidget *textInputsMatrix[20][4];
+GtkWidget       *window;
 
 int max(int a, int b);
 void separarColumnas(int fila);
@@ -263,6 +264,98 @@ void resolver (GtkWidget* button, gpointer window){
    }
 
 }
+
+/** Save file **/
+void showSaveFile(){
+  GtkWidget *dialog;
+  GtkFileChooser *chooser;
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+  gint res;
+
+  dialog = gtk_file_chooser_dialog_new ("Save File",
+                                        window,
+                                        action,
+                                        ("_Cancel"),
+                                        GTK_RESPONSE_CANCEL,
+                                        ("_Save"),
+                                        GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  chooser = GTK_FILE_CHOOSER (dialog);
+
+  gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
+
+  res = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (res == GTK_RESPONSE_ACCEPT)
+    {
+      printf("ENtro if\n");
+      void getTextInputValues();  // Actualiza para obtener los ultimos datos ingresados por el usuario
+
+      char *filename = gtk_file_chooser_get_filename (chooser);
+
+      FILE *fichero;
+      char* lineas[50];
+      char texto[100];
+
+      fichero = fopen(filename,"w+");
+
+      if (fichero == NULL) {
+        printf( "No se puede crear el fichero.\n" );
+      }
+
+      /** Proceso para guardar datos en archivo **/
+      char cantMaxChar[5];
+      char tipoChar[5];
+      char cantObjChar[5];
+      //Conversion de tipos para guardar primera linea
+      sprintf(cantMaxChar, "%d",3); // ***********CAMBIAR NUMERO POR cantidadMaxima
+      sprintf(tipoChar, "%d",1); // **************CAMBIAR NUMERO POR tipo
+      sprintf(cantObjChar, "%d",5); //*********** CAMBIAR NUMERO POR cantidadObjetos
+      printf("%s %s %s\n",cantMaxChar,tipoChar,cantObjChar );
+
+
+      char primerLinea[20];
+      strcat(primerLinea, cantMaxChar);
+      strcat(primerLinea," ");
+      strcat(primerLinea, tipoChar);
+      strcat(primerLinea," ");
+      strcat(primerLinea, cantObjChar);
+      strcat(primerLinea,"\n");
+
+      printf("%s\n", primerLinea);
+      fputs(primerLinea, fichero); // Escribe primera linea en archivo
+      strcpy(primerLinea,"");
+
+      for (int i = 0; i < 5; i++) // ***** Cambiar 5 por cantidadObjetos
+      {
+        for (int j = 0; j < 4; j++)
+        {
+          char valor[10];
+          sprintf(valor, "%d", matrizValores[i][j]);
+
+          printf("%d\n", matrizValores[i][j]);
+          strcat(texto, valor);
+          strcpy(valor,"");
+          if (j<3)
+          {
+            strcat(texto," ");
+          }
+        }
+        strcat(texto, "\n");
+        fputs(texto, fichero);
+        strcpy(texto,"");
+      }
+      
+      if (fclose(fichero)!=0)
+        printf( "Problemas al cerrar el fichero\n" );
+
+      /** Fin proceso  **/
+    }
+    gtk_widget_destroy(dialog);
+}
+
+
+
 //Open File
 static void showOpenFile(GtkWidget* button, gpointer window)
 {
@@ -357,6 +450,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 		fclose(infile);
 		}
 	else{
+    gtk_widget_destroy (dialog);
 		g_print("Presionó Cancelar\n");
 	  gtk_widget_destroy(dialog);
   }
@@ -429,6 +523,7 @@ void getTextInputValues()
               currentTextInputText = gtk_entry_get_text(GTK_ENTRY(textInputsMatrix[i][j]));
               int newValue = atoi(currentTextInputText);
               matrizValores[i][j] = newValue;
+
               if(i <= comboBoxObjetosSelect)
               {
                  gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
@@ -480,7 +575,7 @@ void setTextInputValues()
 int main(int argc, char *argv[])
 {
     
-    GtkWidget       *window;
+    
     GtkBuilder      *builder;
     GtkGrid    *inputsGrid;
 
