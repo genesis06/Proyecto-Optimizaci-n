@@ -7,26 +7,21 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+//variables de todos los problemas
 int MAX_INPUT_MATRIX_SIZE = 20;
 GtkWidget *textInputsMatrix[20][4];
 GtkWidget       *window;
+GtkWidget *resultInputsMatrix[20][20];
 
-int max(int a, int b);
-void separarColumnas(int fila);
-int knapSack01(int W, int wt[], int val[], int n);
-int *knapsackBounded (int w);
-void knapsackUnbounded (int i, double value, double weight, double volume);
-static void knapSackProblem01();
-static void knapSackBoundedProblem();
-static void knapSackUnBoundedProblem();
-void resolver (GtkWidget* button, gpointer window);
-static void showOpenFile(GtkWidget* button, gpointer window);
-void separarColumnas(int fila);
+//variables de interfaz
+GtkGrid    *resultGrid;
+GtkWidget *resultScreen;
+GtkWidget *inputScreen;
 
-
+//variables especificas de este programa
+int tipo;//0=0/1, 1= bounded, 2= unbounded
 int cantidadMaxima;
 int cantidadObjetos;
-int tipo;//0=0/1, 1= bounded, 2= unbounded
 int matrizValores[20][4];
 char *nombreObjetos[20] = {"1", "2", "3", "4", "5", "6","7","8", "9", "10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
 int comboSelect ;
@@ -37,6 +32,24 @@ GtkWidget *comboBox;
 GtkWidget *comboBoxCapacidad;
 GtkWidget *comboBoxObjetos;
 GtkWidget *dialog;
+
+
+//delcaraciones de funciones
+int max(int a, int b);
+void separarColumnas(int fila);
+int knapSack01(int W, int wt[], int val[], int n);
+int *knapsackBounded (int w);
+void knapsackUnbounded (int i, double value, double weight, double volume);
+static void knapSackProblem01();
+static void knapSackBoundedProblem();
+static void knapSackUnBoundedProblem();
+static void getTextInputValues();
+static void setTextInputValues();
+void resolver (GtkWidget* button, gpointer window);
+static void showOpenFile(GtkWidget* button, gpointer window);
+void separarColumnas(int fila);
+
+
 
 char linea[100];
 
@@ -100,31 +113,55 @@ int knapSack01(int W, int wt[], int val[], int n)
    int K[n+1][W+1];
    char matrizString[500] = "";
    char row[100] = "";
-
    for (i = 0; i <= n; i++)
    {
        strcpy(row, "");
        for (w = 0; w <= W; w++)
        {
-           if (i==0 || w==0)
+            
+            if (i==0)
+               K[i][w] = w;
+           else if (i==0 || w==0)
                K[i][w] = 0;
            else if (wt[i-1] <= w)
                  K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]);
            else
                  K[i][w] = K[i-1][w];
-	  
-	  char num[50] = "";
+	         
+           //imprimir en consola
+          char num[50] = "";
           sprintf(num, "%d\t", K[i][w]);
           strcat(row, num);
-         
+          
+          //imprimir en interfaz;
+          char newLabelValue[20] = "";
+          snprintf(newLabelValue, 50, "%d", K[i][w]);
+          gtk_label_set_text(GTK_LABEL(resultInputsMatrix[i][w]), newLabelValue);
+          //gtk_grid_attach(resultGrid,resultInputsMatrix[i][w],i,w,1,1);
+          
        }
         strcat(row, "\n");
         strcat(matrizString, row);
    }
 
    printf("%s\n",matrizString );
-	
+	 
+
+
+   for (int i = 0; i < 20; ++i)
+    {
+        for (int j = 0; j < 20; ++j)
+        { 
+             
+          resultInputsMatrix[i][j] = gtk_label_new ("");
+          gtk_widget_show (resultInputsMatrix[i][j]);
+          gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
+           
+        }
+    }
    return K[n][W];
+
+   
 }
 
 
@@ -240,6 +277,9 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
 }
 //--------------------------------------------------------Switch ComboBox
 void resolver (GtkWidget* button, gpointer window){
+ gtk_widget_hide(inputScreen);
+  gtk_widget_show(resultScreen);
+
  comboSelect = gtk_combo_box_get_active(GTK_COMBO_BOX(comboBox));
  getTextInputValues();
  switch(comboSelect) {
@@ -572,6 +612,16 @@ void setTextInputValues()
         }
     }
 }
+void cleanInput()
+{
+    gtk_widget_hide(resultScreen);
+    gtk_widget_show(inputScreen);
+
+}
+void closeWindow()
+{
+    gtk_main_quit();
+}
 //--------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
@@ -579,6 +629,8 @@ int main(int argc, char *argv[])
     
     GtkBuilder      *builder;
     GtkGrid    *inputsGrid;
+    
+
 
     gtk_init(&argc, &argv);
 
@@ -609,7 +661,14 @@ int main(int argc, char *argv[])
   
     
     inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "grid2"));
+    resultGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridRespuesta"));
+    gtk_widget_set_name (GTK_WIDGET(resultGrid), "gridRespuesta");
 
+    inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxInput"));
+    resultScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxResult"));
+
+    gtk_widget_hide(resultScreen);
+    gtk_widget_show(inputScreen);
     
  
    
@@ -646,9 +705,43 @@ int main(int argc, char *argv[])
         }
     }
 
-    //gtk_widget_hide(resultBox);
-    //gtk_widget_hide(intermediateBox);
+    for (int i = 0; i < 20; ++i)
+    {
+        for (int j = 0; j < 20; ++j)
+        { 
+             
+          resultInputsMatrix[i][j] = gtk_label_new (" - " );
+          gtk_widget_show (resultInputsMatrix[i][j]);
+          gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
+           
+        }
+    }
 
+
+    GtkCssProvider *provider;
+    GdkDisplay *display;
+    GdkScreen *screen;
+
+  gtk_window_set_title(GTK_WINDOW(window), "CSS Window");
+  g_signal_connect(G_OBJECT (window), "destroy",
+      G_CALLBACK(gtk_main_quit), NULL);
+
+/*---------------- CSS ----------------------------------------------------------------------------------------------------*/
+  provider = gtk_css_provider_new ();
+  display = gdk_display_get_default ();
+  screen = gdk_display_get_default_screen (display);
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  gsize bytes_written, bytes_read;
+
+  const gchar* ccsContent = "src/mochila.css";  
+
+  GError *error = 0;
+ 
+   gtk_css_provider_load_from_path (provider,
+                                      g_filename_to_utf8(ccsContent, strlen(ccsContent), &bytes_read, &bytes_written, &error),
+                                      NULL);
+  g_object_unref (provider);
 
 
 
@@ -659,3 +752,4 @@ int main(int argc, char *argv[])
      return 0;
 
 }
+

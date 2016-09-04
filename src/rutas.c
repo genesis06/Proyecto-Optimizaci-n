@@ -143,7 +143,7 @@ void showResults()
 
 //utils functions for interfance
 
-//this function replaces the textInputsMatrix with curret values
+g//this function replaces the textInputsMatrix with curret values
 void getTextInputValues()
 {
     for (int i = 0; i < MATRIX_SIZE; ++i)
