@@ -259,6 +259,11 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][0]), peso);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][0]), cuenta);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][0]), valor);
+            gtk_widget_show (resultInputsMatrix[0][0]);
+            gtk_widget_show (resultInputsMatrix[1][0]);
+            gtk_widget_show (resultInputsMatrix[2][0]);
+            gtk_widget_show (resultInputsMatrix[3][0]);
+
 
     for (i = 0; i < n_bounded; i++) {
         if (s[i]) {
@@ -276,6 +281,11 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), peso);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), cuenta);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][i + 1]), valor);
+            gtk_widget_show (resultInputsMatrix[0][i + 1]);
+            gtk_widget_show (resultInputsMatrix[1][i + 1]);
+            gtk_widget_show (resultInputsMatrix[2][i + 1]);
+            gtk_widget_show (resultInputsMatrix[3][i + 1]);
+
 
             tc += s[i];
             tw += s[i] * items_bounded[i].weight;
@@ -286,7 +296,7 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
 
     //interfaz resultado
      //strings de titulo
-            snprintf(nombre, 50, "Resultado:");
+            snprintf(nombre, 50, "Total:");
             snprintf(peso, 50, "%d", tc);
             snprintf(cuenta, 50, "%d",tw);
             snprintf(valor, 50, "%d",  tv);
@@ -294,6 +304,21 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), peso);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), cuenta);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][i + 1]), valor);
+            gtk_widget_show (resultInputsMatrix[0][i + 1]);
+            gtk_widget_show (resultInputsMatrix[1][i + 1]);
+            gtk_widget_show (resultInputsMatrix[2][i + 1]);
+            gtk_widget_show (resultInputsMatrix[3][i + 1]);
+
+    for (int iClean = 0; iClean < 20; ++iClean)
+    {
+        for (int jClean = 0; jClean < 20; ++jClean)
+        { 
+             
+          if(iClean > 3 || jClean > i + 1)
+          gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
+           
+        }
+    }
 }
 
  static void knapSackUnBoundedProblem()
