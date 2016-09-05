@@ -24,6 +24,7 @@ int cantidadMaxima;
 int cantidadObjetos;
 int matrizValores[20][4];
 char *nombreObjetos[20] = {"1", "2", "3", "4", "5", "6","7","8", "9", "10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
+int contaNombres = 0;
 int comboSelect ;
 int comboBoxCapacidadSelected ;
 int comboBoxObjetosSelect ;
@@ -490,11 +491,8 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 		// Cerrar Archivo
 		fclose(infile);
 		}
-	else{
-    gtk_widget_destroy (dialog);
-		g_print("Presionó Cancelar\n");
 	  gtk_widget_destroy(dialog);
-  }
+  printf("Objeto: %s\n", nombreObjetos[0]);
   setTextInputValues();
 	
 }
@@ -510,13 +508,20 @@ void separarColumnas(int fila){
   while (token != NULL )
   {
     /***Guarda el token en la matriz****/
+    if(indiceColumnas==0){
+      // agarra los nombres de los objetos para guardarlos en la lista
+        char *nombre;
+        strcpy(nombre,token);
+        nombreObjetos[contaNombres]=nombre;
+        printf("Nombre: %s\n", nombre);
+        printf("Nombre: %s\n", nombreObjetos[contaNombres]);
+        contaNombres++;
+    }
     int valor = atoi(token);
     matrizValores[fila][indiceColumnas] = valor;
     token = strtok (NULL, " ");
       
     indiceColumnas++;
-      
-      
   }
    
 }
