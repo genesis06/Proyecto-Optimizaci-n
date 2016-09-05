@@ -250,15 +250,50 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
 { 
     int i, tc = 0, tw = 0, tv = 0, *s;
     s = knapsackBounded(400);
+            //strings de titulo
+            char nombre[20]= "Nombre";
+            char peso[20] = "Peso";
+            char cuenta[20] = "Cuenta";
+            char valor[20] = "Valor";
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][0]), nombre);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][0]), peso);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][0]), cuenta);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][0]), valor);
+
     for (i = 0; i < n_bounded; i++) {
         if (s[i]) {
+            //print in console
             printf("%-22s %5d %5d %5d\n", items_bounded[i].name, s[i], s[i] * items_bounded[i].weight, s[i] * items_bounded[i].value);
+            
+            //print in screen
+            char peso[20] = "";
+            char cuenta[20] = "";
+            char valor[20] = "";
+            snprintf(peso, 50, "%d", s[i]);
+            snprintf(cuenta, 50, "%d",s[i] * items_bounded[i].weight);
+            snprintf(valor, 50, "%d",  s[i] * items_bounded[i].value);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), items_bounded[i].name);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), peso);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), cuenta);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][i + 1]), valor);
+
             tc += s[i];
             tw += s[i] * items_bounded[i].weight;
             tv += s[i] * items_bounded[i].value;
         }
     }
     printf("%-22s %5d %5d %5d\n", "Cuenta, Peso, Valor:", tc, tw, tv);
+
+    //interfaz resultado
+     //strings de titulo
+            snprintf(nombre, 50, "Resultado:");
+            snprintf(peso, 50, "%d", tc);
+            snprintf(cuenta, 50, "%d",tw);
+            snprintf(valor, 50, "%d",  tv);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), nombre);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), peso);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), cuenta);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][i + 1]), valor);
 }
 
  static void knapSackUnBoundedProblem()
@@ -501,7 +536,6 @@ void separarColumnas(int fila){
   
   char *token;
   int indiceColumnas =0;
-
   /**Agarra el primer token separado por espacio**/
   token = strtok (linea," ");  
   
@@ -512,16 +546,17 @@ void separarColumnas(int fila){
       // agarra los nombres de los objetos para guardarlos en la lista
         char *nombre;
         strcpy(nombre,token);
-        nombreObjetos[contaNombres]=nombre;
+        nombreObjetos[fila]=nombre;
         printf("Nombre: %s\n", nombre);
-        printf("Nombre: %s\n", nombreObjetos[contaNombres]);
+        printf("Nombre: %s\n", nombreObjetos[fila]);
         contaNombres++;
     }
     int valor = atoi(token);
     matrizValores[fila][indiceColumnas] = valor;
+    indiceColumnas++;
     token = strtok (NULL, " ");
       
-    indiceColumnas++;
+    
   }
    
 }
