@@ -149,14 +149,13 @@ int knapSack01(int W, int wt[], int val[], int n)
 	 
 
 
-   for (int i = 0; i < 20; ++i)
+   for (int iClean = 0; iClean < 20; ++iClean)
     {
-        for (int j = 0; j < 20; ++j)
+        for (int jClean = 0; jClean < 20; ++jClean)
         { 
              
-          resultInputsMatrix[i][j] = gtk_label_new ("");
-          gtk_widget_show (resultInputsMatrix[i][j]);
-          gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
+          if(iClean > i - 1 || jClean > w - 1)
+          gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
            
         }
     }
