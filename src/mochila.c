@@ -23,7 +23,10 @@ int tipo;//0=0/1, 1= bounded, 2= unbounded
 int cantidadMaxima;
 int cantidadObjetos;
 int matrizValores[20][4];
-char *nombreObjetos[20] = {"A1", "A2", "A3", "A4", "A5", "A6","A7","A8", "A9", "A10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
+//char *nombreObjetos[20] = {"A1", "A2", "A3", "A4", "A5", "A6","A7","A8", "A9", "A10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
+char *nombreObjetos[20];
+char stringNombres[100];
+
 int contaNombres = 0;
 int comboSelect ;
 int comboBoxCapacidadSelected ;
@@ -73,6 +76,13 @@ typedef struct {
     int weight;
     int value;
 } item_t;
+
+typedef struct {
+    char *name;
+} name_object;
+
+name_object nombres[] = {{"A1"}, {"A2"}, {"A3"}, {"A4"}, {"A5"}, {"A6"},{"A7"},{"A8"}, {"A9"}};;
+
  
 item_t items[] = {
     {"candelero",                      5,   10},
@@ -291,7 +301,6 @@ void knapsackUnbounded (int i, int value, int weight) {
             gtk_widget_show (resultInputsMatrix[1][i + 1]);
             gtk_widget_show (resultInputsMatrix[2][i + 1]);
             gtk_widget_show (resultInputsMatrix[3][i + 1]);
-
 }
 
  static void knapSackBoundedProblem()
@@ -608,13 +617,15 @@ static void showOpenFile(GtkWidget* button, gpointer window)
     // Lee resto de líneas
 		while (fgets(buff, 255, (FILE*)infile)){
 
-       strcpy(linea, buff);
-      if(indiceFilas < cantidadMaxima){
-        separarColumnas(indiceFilas);  
-      }
+            strcpy(linea, buff);
+            //printf("Linea: %s\n", buff);
+            if(indiceFilas < cantidadObjetos){
+            separarColumnas(indiceFilas); 
+            printf("Objeto: %s\n",  nombres[0].name); 
+            }
 
-      indiceFilas++;
-      strcpy(linea,"");
+            indiceFilas++;
+            strcpy(linea,"");
 			
 		}
     /*****************************************************************************************/
@@ -629,12 +640,27 @@ static void showOpenFile(GtkWidget* button, gpointer window)
       }
       printf("\n");
     }
+
+    /******* Inicia proceso de split línea para obtener datos ******/
+          char* nombre;
+          nombre = strtok (stringNombres," ");
+          int indice = 0;
+
+          /** Obtiene datos de primera linea y la guarda en un array **/
+          while (nombre != NULL)
+          {
+              if(indice <4){
+                nombreObjetos[indice] = nombre;  
+              }
+              nombre = strtok (NULL, " ");
+              indice++;
+          }
     /****************************/
 		// Cerrar Archivo
 		fclose(infile);
 		}
 	  gtk_widget_destroy(dialog);
-  printf("Objeto: %s\n", nombreObjetos[0]);
+  
   setTextInputValues();
 	
 }
@@ -651,12 +677,9 @@ void separarColumnas(int fila){
     /***Guarda el token en la matriz****/
     if(indiceColumnas==0){
       // agarra los nombres de los objetos para guardarlos en la lista
-        char *nombre;
-        strcpy(nombre,token);
-        nombreObjetos[fila]=nombre;
-        printf("Nombre: %s\n", nombre);
-        printf("Nombre: %s\n", nombreObjetos[fila]);
-        contaNombres++;
+        strcat(stringNombres,token);
+        strcat(stringNombres," ");
+        printf("String: %s\n", stringNombres);
     }
     int valor = atoi(token);
     matrizValores[fila][indiceColumnas] = valor;
@@ -733,7 +756,7 @@ void setTextInputValues()
     {
         for (int j = 1; j < 4; ++j)
         { 
-            if(i <= cantidadObjetos)
+            if(i < cantidadObjetos)
               {
                  char newChar[4];
                   snprintf(newChar, 4, "%d", matrizValores[i][j]);
@@ -750,7 +773,7 @@ void setTextInputValues()
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
        
-         if(i <= cantidadObjetos)
+         if(i < cantidadObjetos)
         {
              gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][0]));
               gtk_button_set_label (GTK_BUTTON (textInputsMatrix[i][0]), nombreObjetos[i]);
