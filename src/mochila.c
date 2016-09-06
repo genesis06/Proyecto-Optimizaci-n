@@ -38,7 +38,7 @@ GtkWidget *dialog;
 //delcaraciones de funciones
 int max(int a, int b);
 void separarColumnas(int fila);
-int knapSack01(int W, int wt[], int val[], int n);
+//int *knapSack01(item_t *items, int n, int w);
 int *knapsackBounded (int w);
 void knapsackUnbounded (int i, int value, int weight);
 static void knapSackProblem01();
@@ -67,6 +67,19 @@ typedef struct {
     int value;
     int count;
 } item_t_bounded;
+
+typedef struct {
+    char *name;
+    int weight;
+    int value;
+} item_t;
+ 
+item_t items[] = {
+    {"candelero",                      5,   10},
+    {"radio",                 3,    9},
+    {"poster",                  4,   5},
+    {"anillo",                1,   15}
+};
  
 item_t_unbounded itemsUnbounded[] = {
     {"Item1", 3000.0, 0.3, 0.025},
@@ -108,60 +121,44 @@ int max(int a, int b) { return (a > b)? a : b; }
 	val = Valores de cada objeto
 	n   = Cantidad Objetos
 */
-int knapSack01(int W, int wt[], int val[], int n)
-{
-   int i, w;
-   int K[n+1][W+1];
-   char matrizString[500] = "";
-   char row[100] = "";
-   for (i = 0; i <= n; i++)
-   {
-       strcpy(row, "");
-       for (w = 0; w <= W; w++)
-       {
-            
-            if (i==0)
-               K[i][w] = w;
-           else if (i==0 || w==0)
-               K[i][w] = 0;
-           else if (wt[i-1] <= w)
-                 K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]);
-           else
-                 K[i][w] = K[i-1][w];
-	         
-           //imprimir en consola
-          char num[50] = "";
-          sprintf(num, "%d\t", K[i][w]);
-          strcat(row, num);
-          
-          //imprimir en interfaz;
-          char newLabelValue[20] = "";
-          snprintf(newLabelValue, 50, "%d", K[i][w]);
-          gtk_label_set_text(GTK_LABEL(resultInputsMatrix[i][w]), newLabelValue);
-          //gtk_grid_attach(resultGrid,resultInputsMatrix[i][w],i,w,1,1);
-          
-       }
-        strcat(row, "\n");
-        strcat(matrizString, row);
-   }
-
-   printf("%s\n",matrizString );
-	 
-
-
-   for (int iClean = 0; iClean < 20; ++iClean)
-    {
-        for (int jClean = 0; jClean < 20; ++jClean)
-        { 
-             
-          if(iClean > i - 1 || jClean > w - 1)
-          gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
-           
+int *knapSack01(int w) {
+    int i, j, a, b, *mm, **m, *s;
+    mm = calloc((cantidadObjetos + 1) * (w + 1), sizeof (int));
+    m = malloc((cantidadObjetos + 1) * sizeof (int *));
+    m[0] = mm;
+    for (i = 1; i <= cantidadObjetos; i++) {
+        m[i] = &mm[i * (w + 1)];
+        for (j = 0; j <= w; j++) {
+            if (matrizValores[i - 1][2] > j) {
+                m[i][j] = m[i - 1][j];
+            }
+            else {
+                a = m[i - 1][j];
+                b = m[i - 1][j - matrizValores[i - 1][2]] + matrizValores[i - 1][1];
+                m[i][j] = a > b ? a : b;
+            }
         }
     }
-   return K[n][W];
-
-   
+    
+    for (int i = 1; i <= cantidadObjetos; i++)
+    {
+        for (int j = 1; j <= w; j++)
+        {
+            printf("%d ", m[i][j]);
+           //matrizValores[i][j] = m[i][j]; // DEBEMOS CREAR UNA MATRIZ QUE GUARDE LOS VALORES DE LA TABLA PARA LA SOLUCION
+        }
+        printf("\n");
+    }
+    s = calloc(cantidadObjetos, sizeof (int));
+    for (i = cantidadObjetos, j = w; i > 0; i--) {
+        if (m[i][j] > m[i - 1][j]) {
+            s[i - 1] = 1;
+            j -= matrizValores[i - 1][2];
+        }
+    }
+    free(mm);
+    free(m);
+    return s;
 }
 
 
@@ -238,12 +235,62 @@ void knapsackUnbounded (int i, int value, int weight) {
 
  static void knapSackProblem01()
 {
-    printf("%s\n","Maxima ganancia es");
-    int val[] = {11, 7, 12};
-    int wt[] = {4, 3, 5};
-    int  W = 10;
-    int n = sizeof(val)/sizeof(val[0]);
-    printf("%d\n", knapSack01(W, wt, val, n));
+    int i, n, tc = 0,tw = 0, tv = 0, *s;
+    s = knapSack01(cantidadMaxima);
+
+    char nombre[20]= "Nombre";
+    char peso[20] = "Cantidad";
+    char cuenta[20] = "Peso";
+    char valor[20] = "Valor";
+    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][0]), nombre);
+    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][0]), peso);
+    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][0]), cuenta);
+    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][0]), valor);
+    gtk_widget_show (resultInputsMatrix[0][0]);
+    gtk_widget_show (resultInputsMatrix[1][0]);
+    gtk_widget_show (resultInputsMatrix[2][0]);
+    gtk_widget_show (resultInputsMatrix[3][0]);
+
+
+    for (i = 0; i < cantidadObjetos; i++) {
+        if (s[i]) {
+
+            //print in screen
+            char peso[20] = "";
+            char cuenta[20] = "";
+            char valor[20] = "";
+            snprintf(peso, 50, "%d", s[i]);
+            snprintf(cuenta, 50, "%d",s[i] * matrizValores[i][2]);
+            snprintf(valor, 50, "%d",  s[i] * matrizValores[i][1]);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), nombreObjetos[i]);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), peso);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), cuenta);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][i + 1]), valor);
+            gtk_widget_show (resultInputsMatrix[0][i + 1]);
+            gtk_widget_show (resultInputsMatrix[1][i + 1]);
+            gtk_widget_show (resultInputsMatrix[2][i + 1]);
+            gtk_widget_show (resultInputsMatrix[3][i + 1]);
+
+            printf("%-22s %5d %5d\n", nombreObjetos[i], matrizValores[i][2], matrizValores[i][1]);
+            tw += matrizValores[i][2];
+            tv += matrizValores[i][1];
+        }
+    }
+    printf("%-22s %5d %5d\n", "totals:", tw, tv);
+
+    //strings de titulo
+            snprintf(nombre, 50, "Total:");
+            snprintf(peso, 50, "%d", tc);
+            snprintf(cuenta, 50, "%d",tw);
+            snprintf(valor, 50, "%d",  tv);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), nombre);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), peso);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), cuenta);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][i + 1]), valor);
+            gtk_widget_show (resultInputsMatrix[0][i + 1]);
+            gtk_widget_show (resultInputsMatrix[1][i + 1]);
+            gtk_widget_show (resultInputsMatrix[2][i + 1]);
+            gtk_widget_show (resultInputsMatrix[3][i + 1]);
 
 }
 
