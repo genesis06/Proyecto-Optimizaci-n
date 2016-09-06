@@ -23,7 +23,7 @@ int tipo;//0=0/1, 1= bounded, 2= unbounded
 int cantidadMaxima;
 int cantidadObjetos;
 int matrizValores[20][4];
-char *nombreObjetos[20] = {"1", "2", "3", "4", "5", "6","7","8", "9", "10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
+char *nombreObjetos[20] = {"A1", "A2", "A3", "A4", "A5", "A6","A7","A8", "A9", "A10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
 int contaNombres = 0;
 int comboSelect ;
 int comboBoxCapacidadSelected ;
@@ -40,7 +40,7 @@ int max(int a, int b);
 void separarColumnas(int fila);
 int knapSack01(int W, int wt[], int val[], int n);
 int *knapsackBounded (int w);
-void knapsackUnbounded (int i, double value, double weight, double volume);
+void knapsackUnbounded (int i, int value, int weight);
 static void knapSackProblem01();
 static void knapSackBoundedProblem();
 static void knapSackUnBoundedProblem();
@@ -209,29 +209,30 @@ int *knapsackBounded (int w) {
 int n_unbounded = sizeof (itemsUnbounded) / sizeof (item_t_unbounded);
 int *count;
 int *best;
-double best_value;
-void knapsackUnbounded (int i, double value, double weight, double volume) {
+int best_value;
+void knapsackUnbounded (int i, int value, int weight) {
     int j, m1, m2, m;
-    if (i == n_unbounded) {
+    if (i == cantidadObjetos) {
         if (value > best_value) {
             best_value = value;
-            for (j = 0; j < n_unbounded; j++) {
+            for (j = 0; j < cantidadMaxima; j++) {
                 best[j] = count[j];
             }
         }
         return;
     }
-    m1 = weight / itemsUnbounded[i].weight;
-    m2 = volume / itemsUnbounded[i].volume;
-    m = m1 < m2 ? m1 : m2;
+    if(weight > 0)
+    {
+      m = weight / matrizValores[i][2];
     for (count[i] = m; count[i] >= 0; count[i]--) {
         knapsackUnbounded(
             i + 1,
-            value + count[i] * itemsUnbounded[i].value,
-            weight - count[i] * itemsUnbounded[i].weight,
-            volume - count[i] * itemsUnbounded[i].volume
+            value + count[i] * matrizValores[i][1],
+            weight - count[i] * matrizValores[i][2]
         );
     }
+    }
+    
 }
 //------------------------------------------------------ Funciones de Ejemplo 
 
@@ -324,16 +325,49 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
  static void knapSackUnBoundedProblem()
 {
    
-    count = malloc(n_unbounded * sizeof (int));
-    best = malloc(n_unbounded * sizeof (int));
+    count = malloc(cantidadObjetos * sizeof (int));
+    best = malloc(cantidadObjetos * sizeof (int));
     best_value = 0;
-    knapsackUnbounded(0, 0.0, 25.0, 0.25);
+    knapsackUnbounded(0, 0, cantidadMaxima);
+     //strings de titulo
+    char nombre[20]= "Nombre";
+    char cantidad[20] = "Cantidad";
+    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][0]), nombre);
+    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][0]), cantidad);
+    gtk_widget_show (resultInputsMatrix[0][0]);
+    gtk_widget_show (resultInputsMatrix[1][0]);
+
     int i;
-    for (i = 0; i < n_unbounded; i++) {
-        printf("%d %s\n", best[i], itemsUnbounded[i].name);
+    for (i = 0; i < cantidadObjetos; i++) {
+        printf("%d %s\n", best[i], nombreObjetos[i]);
+
+        snprintf(cantidad, 50, "%d", best[i]);
+        gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), nombreObjetos[i]);
+        gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), cantidad);
+        gtk_widget_show (resultInputsMatrix[0][i + 1]);
+        gtk_widget_show (resultInputsMatrix[1][i + 1]);
     }
-    printf("Mejor Valor: %.0f\n", best_value);
+    printf("Mejor Valor: %d\n", best_value);
+    
+    snprintf(cantidad, 50, "%d", best_value);
+    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), "Valor Maximo:");
+    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), cantidad);
+    gtk_widget_show (resultInputsMatrix[0][i + 1]);
+    gtk_widget_show (resultInputsMatrix[1][i + 1]);
+
+
     free(count); free(best);
+
+    for (int iClean = 0; iClean < 20; ++iClean)
+    {
+        for (int jClean = 0; jClean < 20; ++jClean)
+        { 
+             
+          if(iClean > 1 || jClean > i + 1)
+          gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
+           
+        }
+    }
     
 }
 //--------------------------------------------------------Switch ComboBox
