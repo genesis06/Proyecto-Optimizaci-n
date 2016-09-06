@@ -10,7 +10,7 @@
 //variables de todos los problemas
 int MAX_INPUT_MATRIX_SIZE = 20;
 GtkWidget *textInputsMatrix[20][4];
-GtkWidget       *window;
+GtkWidget   *window;
 GtkWidget *resultInputsMatrix[20][20];
 
 //variables de interfaz
@@ -168,34 +168,36 @@ int knapSack01(int W, int wt[], int val[], int n)
 
 //-----------------------------Empieza Algoritmo Bounded----------------------------------------------
 
-int n_bounded = sizeof (items_bounded) / sizeof (item_t_bounded);
- 
+//int cantidadObjetos = sizeof (items_bounded) / sizeof (item_t_bounded);
+
 int *knapsackBounded (int w) {
     int i, j, k, v, *mm, **m, *s;
-    mm = calloc((n_bounded + 1) * (w + 1), sizeof (int));
-    m = malloc((n_bounded + 1) * sizeof (int *));
+    mm = calloc((cantidadObjetos + 1) * (w + 1), sizeof (int));
+    m = malloc((cantidadObjetos + 1) * sizeof (int *));
     m[0] = mm;
-    for (i = 1; i <= n_bounded; i++) {
+    for (i = 1; i <= cantidadObjetos; i++) {
         m[i] = &mm[i * (w + 1)];
         for (j = 0; j <= w; j++) {
             m[i][j] = m[i - 1][j];
-            for (k = 1; k <= items_bounded[i - 1].count; k++) {
-                if (k * items_bounded[i - 1].weight > j) {
+            for (k = 1; k <= matrizValores[i - 1][3]; k++) {
+                if (k * matrizValores[i - 1][2] > j) {
                     break;
                 }
-                v = m[i - 1][j - k * items_bounded[i - 1].weight] + k * items_bounded[i - 1].value;
+                v =  matrizValores[i - 1][2];
+                v = m[i - 1][j - k * v] ;
+                v = v+ k * matrizValores[i - 1][1]; 
                 if (v > m[i][j]) {
                     m[i][j] = v;
                 }
             }
         }
     }
-    s = calloc(n_bounded, sizeof (int));
-    for (i = n_bounded, j = w; i > 0; i--) {
+    s = calloc(cantidadObjetos, sizeof (int));
+    for (i = cantidadObjetos, j = w; i > 0; i--) {
         int v = m[i][j];
-        for (k = 0; v != m[i - 1][j] + k * items_bounded[i - 1].value; k++) {
+        for (k = 0; v != m[i - 1][j] + k * matrizValores[i - 1][1]; k++) {
             s[i - 1]++;
-            j -= items_bounded[i - 1].weight;
+            j -= matrizValores[i - 1][2];
         }
     }
     free(mm);
@@ -208,7 +210,6 @@ int n_unbounded = sizeof (itemsUnbounded) / sizeof (item_t_unbounded);
 int *count;
 int *best;
 double best_value;
- 
 void knapsackUnbounded (int i, double value, double weight, double volume) {
     int j, m1, m2, m;
     if (i == n_unbounded) {
@@ -248,11 +249,11 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
  static void knapSackBoundedProblem()
 { 
     int i, tc = 0, tw = 0, tv = 0, *s;
-    s = knapsackBounded(400);
+    s = knapsackBounded(cantidadMaxima);
             //strings de titulo
             char nombre[20]= "Nombre";
-            char peso[20] = "Peso";
-            char cuenta[20] = "Cuenta";
+            char peso[20] = "Cantidad";
+            char cuenta[20] = "Peso";
             char valor[20] = "Valor";
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][0]), nombre);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][0]), peso);
@@ -264,19 +265,19 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
             gtk_widget_show (resultInputsMatrix[3][0]);
 
 
-    for (i = 0; i < n_bounded; i++) {
+    for (i = 0; i < cantidadObjetos; i++) {
         if (s[i]) {
             //print in console
-            printf("%-22s %5d %5d %5d\n", items_bounded[i].name, s[i], s[i] * items_bounded[i].weight, s[i] * items_bounded[i].value);
+            printf("%-22s %5d %5d %5d\n", nombreObjetos[i], s[i], s[i] * matrizValores[i][2], s[i] * matrizValores[i][1]);
             
             //print in screen
             char peso[20] = "";
             char cuenta[20] = "";
             char valor[20] = "";
             snprintf(peso, 50, "%d", s[i]);
-            snprintf(cuenta, 50, "%d",s[i] * items_bounded[i].weight);
-            snprintf(valor, 50, "%d",  s[i] * items_bounded[i].value);
-            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), items_bounded[i].name);
+            snprintf(cuenta, 50, "%d",s[i] * matrizValores[i][2]);
+            snprintf(valor, 50, "%d",  s[i] * matrizValores[i][1]);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), nombreObjetos[i]);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), peso);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), cuenta);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][i + 1]), valor);
@@ -287,8 +288,8 @@ void knapsackUnbounded (int i, double value, double weight, double volume) {
 
 
             tc += s[i];
-            tw += s[i] * items_bounded[i].weight;
-            tv += s[i] * items_bounded[i].value;
+            tw += s[i] * matrizValores[i][2];
+            tv += s[i] * matrizValores[i][1];
         }
     }
     printf("%-22s %5d %5d %5d\n", "Cuenta, Peso, Valor:", tc, tw, tv);
@@ -342,6 +343,7 @@ void resolver (GtkWidget* button, gpointer window){
 
  comboSelect = gtk_combo_box_get_active(GTK_COMBO_BOX(comboBox));
  getTextInputValues();
+ cleanLabels();
  switch(comboSelect) {
       case -1 :
          printf("Aún no se selecciona nda!\n" );
@@ -594,7 +596,7 @@ void updateInput()
     {
         for (int j = 0; j < 4; ++j)
         {
-           if(i < comboBoxObjetosSelect)
+           if(i <= comboBoxObjetosSelect)
             {
                gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
             }
@@ -611,9 +613,11 @@ void updateInput()
 void getTextInputValues()
 {
     comboBoxObjetosSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxObjetos));
-    cantidadObjetos = comboBoxObjetosSelect;
+    cantidadObjetos = comboBoxObjetosSelect + 1;
     comboBoxCapacidadSelected = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxCapacidad));
-    cantidadMaxima = comboBoxCapacidadSelected;
+    cantidadMaxima = comboBoxCapacidadSelected + 1;
+     printf("objetos: %d\n", cantidadObjetos);
+      printf("pesio: %d\n", cantidadMaxima);
     for (int i = 0; i < cantidadObjetos; ++i)
     {
         for (int j = 0; j < 4; ++j)
@@ -673,6 +677,18 @@ void setTextInputValues()
         else
         {
              gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][0])); 
+        }
+    }
+}
+void cleanLabels()
+{
+
+    for (int i = 0; i < 20; ++i)
+    {
+        for (int j = 0; j < 20; ++j)
+        { 
+          gtk_label_set_text(GTK_LABEL(resultInputsMatrix[i][j])," - ");
+           
         }
     }
 }
@@ -780,6 +796,9 @@ int main(int argc, char *argv[])
            
         }
     }
+
+    
+
 
 
     GtkCssProvider *provider;
