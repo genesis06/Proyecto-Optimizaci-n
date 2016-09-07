@@ -1,5 +1,8 @@
 /*
    ITCR - Investigación de Operaciones
+
+   Algoritmos 1/0, bounded , unbounded basados en ejemplos de codigo disponibles de la pagina https://rosettacode.org/wiki/Rosetta_Code,
+   Licencia GNU Free Documentation License 1.2 
 */
 #include <gtk/gtk.h>
 #include <stdbool.h>
