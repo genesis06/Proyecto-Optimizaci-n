@@ -356,16 +356,16 @@ void knapsackUnbounded (int i, int value, int weight) {
     printf("%-22s %5d %5d\n", "totals:", tw, tv);
 
     //strings de titulo
-            snprintf(nombre, 50, "Total:");
+            snprintf(nombre, 50, "Z:");
             snprintf(peso, 50, "%d", tc);
             snprintf(cuenta, 50, "%d",tw);
             snprintf(valor, 50, "%d",  tv);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), nombre);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), peso);
-            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), cuenta);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), nombre);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][i + 1]), valor);
-            gtk_widget_show (resultInputsMatrix[0][i + 1]);
-            gtk_widget_show (resultInputsMatrix[1][i + 1]);
+            gtk_widget_hide (resultInputsMatrix[0][i + 1]);
+            gtk_widget_hide (resultInputsMatrix[1][i + 1]);
             gtk_widget_show (resultInputsMatrix[2][i + 1]);
             gtk_widget_show (resultInputsMatrix[3][i + 1]);
 
@@ -378,7 +378,7 @@ void knapsackUnbounded (int i, int value, int weight) {
           {
             gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
           }
-          else
+          else if (iClean > 1)
           {
               gtk_widget_show (resultInputsMatrix[iClean][jClean]);
             }
@@ -437,16 +437,16 @@ void knapsackUnbounded (int i, int value, int weight) {
 
     //interfaz resultado
      //strings de titulo
-            snprintf(nombre, 50, "Total:");
+            snprintf(nombre, 50, "Z:");
             snprintf(peso, 50, "%d", tc);
             snprintf(cuenta, 50, "%d",tw);
             snprintf(valor, 50, "%d",  tv);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), nombre);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), peso);
-            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), cuenta);
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), nombre);
             gtk_label_set_text(GTK_LABEL(resultInputsMatrix[3][i + 1]), valor);
-            gtk_widget_show (resultInputsMatrix[0][i + 1]);
-            gtk_widget_show (resultInputsMatrix[1][i + 1]);
+            gtk_widget_hide (resultInputsMatrix[0][i + 1]);
+            gtk_widget_hide (resultInputsMatrix[1][i + 1]);
             gtk_widget_show (resultInputsMatrix[2][i + 1]);
             gtk_widget_show (resultInputsMatrix[3][i + 1]);
 
@@ -490,7 +490,7 @@ void knapsackUnbounded (int i, int value, int weight) {
     printf("Mejor Valor: %d\n", best_value);
     
     snprintf(cantidad, 50, "%d", best_value);
-    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), "Valor Maximo:");
+    gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), "Z:");
     gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), cantidad);
     gtk_widget_show (resultInputsMatrix[0][i + 1]);
     gtk_widget_show (resultInputsMatrix[1][i + 1]);
@@ -523,16 +523,16 @@ void resolver (GtkWidget* button, gpointer window){
          printf("Aún no se selecciona nda!\n" );
          break;
       case 2 :
-	
-	 knapSackProblem01();
+      	 gtk_label_set_text(resultadoString3, "XI pertence a {0,1}");
+      	 knapSackProblem01();
          break;
       case 0 :
-        
-	 knapSackBoundedProblem();
+         gtk_label_set_text(resultadoString3, "XI mayor o igual a 0");
+	       knapSackBoundedProblem();
          break;
       case 1 :
-        
-	 knapSackUnBoundedProblem();
+         gtk_label_set_text(resultadoString3, "XI mayor o igual a 0");
+	       knapSackUnBoundedProblem();
          break;
      
       default :
@@ -542,7 +542,7 @@ void resolver (GtkWidget* button, gpointer window){
     generarStringSujetoA();
   gtk_label_set_text(resultadoString1, stringInicial);
   gtk_label_set_text(resultadoString2, stringSujeto);
-  gtk_label_set_text(resultadoString3, "yo me encargo de la segunda restriccion");
+  
   strcpy(stringInicial,"");
   strcpy(stringSujeto,"");
 
