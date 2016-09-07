@@ -69,7 +69,7 @@ Dinámica</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_markup" translatable="yes">Encontrar rutas cortas o de menor costo</property>
+                <property name="tooltip_markup" translatable="yes">Encontrar la ruta mas corta (o de menor costo) entre cualquier par de nodos</property>
                 <property name="halign">start</property>
                 <property name="relief">none</property>
                 <property name="xalign">0.43000000715255737</property>
@@ -102,7 +102,7 @@ Dinámica</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_markup" translatable="yes">Mejor solución entre un conjunto finito de posibles soluciones a un problema.</property>
+                <property name="tooltip_markup" translatable="yes">Define cuales objetos escoger dentro de un conjunto que maximice o minimice un valor.</property>
                 <property name="halign">start</property>
                 <property name="relief">none</property>
                 <property name="xalign">0.43000000715255737</property>
@@ -135,7 +135,7 @@ Dinámica</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_markup" translatable="yes">Categoría de decisiones de inversión de recursos en cambios de equipo.</property>
+                <property name="tooltip_markup" translatable="yes">Permite determinar cuales decisiones de inversión de recursos tomar para cambios de equipo dentro de un plazo establecido.</property>
                 <property name="halign">start</property>
                 <property name="relief">none</property>
                 <property name="xalign">0.43000000715255737</property>
