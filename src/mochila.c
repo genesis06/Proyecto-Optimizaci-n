@@ -21,6 +21,10 @@ GtkGrid    *resultGrid;
 GtkWidget *resultScreen;
 GtkWidget *inputScreen;
 
+GtkWidget   *resultadoString1;
+GtkWidget   *resultadoString2;
+GtkWidget   *resultadoString3;
+
 //variables especificas de este programa
 int tipo;//0=0/1, 1= bounded, 2= unbounded
 int cantidadMaxima;
@@ -507,6 +511,10 @@ void resolver (GtkWidget* button, gpointer window){
          printf("Invalida seleccion, elige el tipo de algoritmo\n" );
    }
 
+  gtk_label_set_text(resultadoString1, "maximizacion aca");
+  gtk_label_set_text(resultadoString2, "restriccion aca");
+  gtk_label_set_text(resultadoString3, "yo me encargo de la segunda restriccion");
+
 }
 
 /** Save file **/
@@ -920,6 +928,10 @@ int main(int argc, char *argv[])
 
     inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxInput"));
     resultScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxResult"));
+
+    resultadoString1 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate2"));
+    resultadoString2 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate4"));
+    resultadoString3 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate5"));
 
     gtk_widget_hide(resultScreen);
     gtk_widget_show(inputScreen);

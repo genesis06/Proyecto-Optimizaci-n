@@ -145,17 +145,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button6">
-                    <property name="label" translatable="yes">Expresión Inicial</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -168,6 +158,7 @@
               <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="halign">start</property>
                 <property name="margin_left">15</property>
                 <property name="margin_right">15</property>
                 <property name="margin_top">15</property>
@@ -446,10 +437,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label6">
+                              <object class="GtkLabel" id="labelRespuestaMate1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Solucion</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Maximizar:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -458,12 +450,12 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="labelSolucion1">
+                              <object class="GtkLabel" id="labelRespuestaMate2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">***</property>
-                                <property name="angle">0.029999999999999999</property>
+                                <property name="label" translatable="yes">****
+</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -472,16 +464,45 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="labelSolucion2">
+                              <object class="GtkLabel" id="labelRespuestaMate3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Restricciones:</property>
+                                <property name="angle">0.029999999999999999</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="labelRespuestaMate4">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">****
 </property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">3</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="labelRespuestaMate5">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">****
+</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">5</property>
                               </packing>
                             </child>
                           </object>
