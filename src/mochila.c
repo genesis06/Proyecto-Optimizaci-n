@@ -23,8 +23,8 @@ int tipo;//0=0/1, 1= bounded, 2= unbounded
 int cantidadMaxima;
 int cantidadObjetos;
 int matrizValores[20][4];
-//char *nombreObjetos[20] = {"A1", "A2", "A3", "A4", "A5", "A6","A7","A8", "A9", "A10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
-char *nombreObjetos[20];
+char *nombreObjetos[20] = {"A1", "A2", "A3", "A4", "A5", "A6","A7","A8", "A9", "A10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
+//char *nombreObjetos[20];
 char stringNombres[100];
 
 int contaNombres = 0;
@@ -301,6 +301,23 @@ void knapsackUnbounded (int i, int value, int weight) {
             gtk_widget_show (resultInputsMatrix[1][i + 1]);
             gtk_widget_show (resultInputsMatrix[2][i + 1]);
             gtk_widget_show (resultInputsMatrix[3][i + 1]);
+
+    for (int iClean = 0; iClean < 20; ++iClean)
+    {
+        for (int jClean = 0; jClean < 20; ++jClean)
+        { 
+             
+          if(iClean > 3 || jClean > i + 1)
+          {
+            gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
+          }
+          else
+          {
+              gtk_widget_show (resultInputsMatrix[iClean][jClean]);
+            }
+           
+        }
+    }
 }
 
  static void knapSackBoundedProblem()
