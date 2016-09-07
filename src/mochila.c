@@ -6,6 +6,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
+
+
 
 //variables de todos los problemas
 int MAX_INPUT_MATRIX_SIZE = 20;
@@ -23,6 +26,7 @@ int tipo;//0=0/1, 1= bounded, 2= unbounded
 int cantidadMaxima;
 int cantidadObjetos;
 int matrizValores[20][4];
+int tablaCalculos[20][4];
 char *nombreObjetos[20] = {"A1", "A2", "A3", "A4", "A5", "A6","A7","A8", "A9", "A10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
 //char *nombreObjetos[20];
 char stringNombres[100];
@@ -53,7 +57,7 @@ void resolver (GtkWidget* button, gpointer window);
 static void showOpenFile(GtkWidget* button, gpointer window);
 void separarColumnas(int fila);
 
-
+char stringInicial[100];
 
 char linea[100];
 
@@ -121,6 +125,31 @@ item_t_bounded items_bounded[] = {
     {"socks",                    4,    50,   1}*/
     
 };
+//Z = 15xA + 5xP + 9xR + 10xC
+
+void generarStringProblemaInicial(){
+    char num[5];
+    sprintf(num,"%d",matrizValores[0][1]);
+    strcat(stringInicial, "Z = ");
+    strcat(stringInicial,num);
+    strcat(stringInicial,"x");
+    strcat(stringInicial,nombreObjetos[0]);
+    
+    for (int i = 1; i < cantidadObjetos; i++)
+    {
+        strcpy(num,"");
+        sprintf(num,"%d",matrizValores[i][1]);
+        strcat(stringInicial," + ");
+        strcat(stringInicial,num);
+        strcat(stringInicial,"x");
+        strcat(stringInicial,nombreObjetos[i]);
+
+    }
+    
+    printf("Problema inciial: %s\n", stringInicial);
+    
+}
+
 
 //-----------------------------Empieza Algoritmo knapSack 0/1 -----------
 int max(int a, int b) { return (a > b)? a : b; }
@@ -141,24 +170,30 @@ int *knapSack01(int w) {
         for (j = 0; j <= w; j++) {
             if (matrizValores[i - 1][2] > j) {
                 m[i][j] = m[i - 1][j];
+                //printf("%d ", m[i][j]);
             }
             else {
                 a = m[i - 1][j];
                 b = m[i - 1][j - matrizValores[i - 1][2]] + matrizValores[i - 1][1];
                 m[i][j] = a > b ? a : b;
+                
             }
+            //printf("%d ", m[i][j]);
         }
+        printf("\n");
     }
     
-    for (int i = 1; i <= cantidadObjetos; i++)
+    for (int i = 1; i <=cantidadObjetos; i++)
     {
         for (int j = 1; j <= w; j++)
         {
             printf("%d ", m[i][j]);
-           //matrizValores[i][j] = m[i][j]; // DEBEMOS CREAR UNA MATRIZ QUE GUARDE LOS VALORES DE LA TABLA PARA LA SOLUCION
+           tablaCalculos[i][j] = m[i][j]; // DEBEMOS CREAR UNA MATRIZ QUE GUARDE LOS VALORES DE LA TABLA PARA LA SOLUCION
+
         }
         printf("\n");
     }
+    
     s = calloc(cantidadObjetos, sizeof (int));
     for (i = cantidadObjetos, j = w; i > 0; i--) {
         if (m[i][j] > m[i - 1][j]) {
@@ -476,6 +511,7 @@ void resolver (GtkWidget* button, gpointer window){
 
 /** Save file **/
 void showSaveFile(){
+    generarStringProblemaInicial();
   getTextInputValues();
   GtkWidget *dialog;
   GtkFileChooser *chooser;
@@ -504,6 +540,7 @@ void showSaveFile(){
       char *filename = gtk_file_chooser_get_filename (chooser);
 
       FILE *fichero;
+      char stringSave[300];
       char* lineas[50];
       char texto[100];
 
@@ -514,53 +551,60 @@ void showSaveFile(){
       }
 
       /** Proceso para guardar datos en archivo **/
-      char cantMaxChar[5];
-      char tipoChar[5];
-      char cantObjChar[5];
+      char cantMaxChar[10];
+      char tipoChar[10];
+      char cantObjChar[10];
+
+      //itoa(cantidadMaxima,cantMaxChar,10); 
+      //itoa(tipo,tipoChar,10); 
+      //itoa(cantidadObjetos,cantObjChar,10); 
       //Conversion de tipos para guardar primera linea
-      sprintf(cantMaxChar, "%d",3); // ***********CAMBIAR NUMERO POR cantidadMaxima
-      sprintf(tipoChar, "%d",1); // **************CAMBIAR NUMERO POR tipo
-      sprintf(cantObjChar, "%d",5); //*********** CAMBIAR NUMERO POR cantidadObjetos
+      sprintf(cantMaxChar,"%d",cantidadMaxima); // ***********CAMBIAR NUMERO POR cantidadMaxima
+      sprintf(tipoChar, "%d",tipo); // **************CAMBIAR NUMERO POR tipo
+      sprintf(cantObjChar, "%d",cantidadObjetos); //*********** CAMBIAR NUMERO POR cantidadObjetos
       printf("%s %s %s\n",cantMaxChar,tipoChar,cantObjChar );
 
 
-      char primerLinea[20];
-      strcat(primerLinea, cantMaxChar);
-      strcat(primerLinea," ");
-      strcat(primerLinea, tipoChar);
-      strcat(primerLinea," ");
-      strcat(primerLinea, cantObjChar);
-      strcat(primerLinea,"\n");
+      //char primerLinea[20];
+      strcat(stringSave, cantMaxChar);
+      strcat(stringSave," ");
+      strcat(stringSave, tipoChar);
+      strcat(stringSave," ");
+      strcat(stringSave, cantObjChar);
+      strcat(stringSave,"\n");
 
-      printf("%s\n", primerLinea);
-      fputs(primerLinea, fichero); // Escribe primera linea en archivo
-      strcpy(primerLinea,"");
+      printf("String:%s\n", stringSave);
+     // fputs(primerLinea, fichero); // Escribe primera linea en archivo
+      //strcpy(primerLinea,"");
 
-      for (int i = 0; i < 5; i++) // ***** Cambiar 5 por cantidadObjetos
+      for (int i = 0; i < cantidadObjetos; i++) // ***** Cambiar 5 por cantidadObjetos
       {
         for (int j = 0; j < 4; j++)
         {
           char valor[10];
           sprintf(valor, "%d", matrizValores[i][j]);
 
-          printf("%d\n", matrizValores[i][j]);
-          strcat(texto, valor);
+          //printf("%d\n", matrizValores[i][j]);
+          strcat(stringSave, valor);
           strcpy(valor,"");
           if (j<3)
           {
-            strcat(texto," ");
+            strcat(stringSave," ");
           }
         }
-        strcat(texto, "\n");
-        fputs(texto, fichero);
-        strcpy(texto,"");
+        strcat(stringSave, "\n");
+        //fputs(texto, fichero);
+        //strcpy(texto,"");
       }
-      
+      printf("stringSave: %s\n", stringSave);
+      fputs(stringSave, fichero);
       if (fclose(fichero)!=0)
         printf( "Problemas al cerrar el fichero\n" );
 
       /** Fin proceso  **/
+    
     }
+
     gtk_widget_destroy(dialog);
 }
 
@@ -646,7 +690,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
             //printf("Linea: %s\n", buff);
             if(indiceFilas < cantidadObjetos){
             separarColumnas(indiceFilas); 
-            printf("Objeto: %s\n",  nombres[0].name); 
+            //printf("Objeto: %s\n",  nombres[0].name); 
             }
 
             indiceFilas++;
@@ -658,7 +702,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
     /** Imprime matriz  **/
     printf("Matriz\n");
 
-    for(int i=0;i<4;i++){
+    for(int i=0;i<cantidadObjetos;i++){
          for(int j=0;j<4;j++){
           //printf("%d %d\n", i,j);
         printf("%d ", matrizValores[i][j]); 
@@ -680,6 +724,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
               nombre = strtok (NULL, " ");
               indice++;
           }
+
     /****************************/
 		// Cerrar Archivo
 		fclose(infile);
@@ -704,7 +749,7 @@ void separarColumnas(int fila){
       // agarra los nombres de los objetos para guardarlos en la lista
         strcat(stringNombres,token);
         strcat(stringNombres," ");
-        printf("String: %s\n", stringNombres);
+        //printf("String: %s\n", stringNombres);
     }
     int valor = atoi(token);
     matrizValores[fila][indiceColumnas] = valor;
