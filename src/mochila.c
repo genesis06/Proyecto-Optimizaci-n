@@ -62,6 +62,7 @@ static void showOpenFile(GtkWidget* button, gpointer window);
 void separarColumnas(int fila);
 
 char stringInicial[100];
+char stringSujeto[100];
 
 char linea[100];
 
@@ -151,6 +152,33 @@ void generarStringProblemaInicial(){
     }
     
     printf("Problema inciial: %s\n", stringInicial);
+    
+}
+//1xA + 4xP + 3xR + 5xC ≤ 8
+void generarStringSujetoA(){
+    char num[5];
+    sprintf(num,"%d",matrizValores[0][2]);
+    strcat(stringSujeto, "Sujeto a : ");
+    strcat(stringSujeto,num);
+    strcat(stringSujeto,"x");
+    strcat(stringSujeto,nombreObjetos[0]);
+    
+    for (int i = 1; i < cantidadObjetos; i++)
+    {
+        strcpy(num,"");
+        sprintf(num,"%d",matrizValores[i][2]);
+        strcat(stringSujeto," + ");
+        strcat(stringSujeto,num);
+        strcat(stringSujeto,"x");
+        strcat(stringSujeto,nombreObjetos[i]);
+
+    }
+    strcpy(num,"");
+    sprintf(num,"%d",cantidadMaxima);
+    strcat(stringSujeto," <= ");
+    strcat(stringSujeto,num);
+    
+    printf("%s\n", stringSujeto);
     
 }
 
@@ -510,16 +538,17 @@ void resolver (GtkWidget* button, gpointer window){
       default :
          printf("Invalida seleccion, elige el tipo de algoritmo\n" );
    }
-
-  gtk_label_set_text(resultadoString1, "maximizacion aca");
-  gtk_label_set_text(resultadoString2, "restriccion aca");
+   generarStringProblemaInicial();
+    generarStringSujetoA();
+  gtk_label_set_text(resultadoString1, stringInicial);
+  gtk_label_set_text(resultadoString2, stringSujeto);
   gtk_label_set_text(resultadoString3, "yo me encargo de la segunda restriccion");
 
 }
 
 /** Save file **/
 void showSaveFile(){
-    generarStringProblemaInicial();
+
   getTextInputValues();
   GtkWidget *dialog;
   GtkFileChooser *chooser;
