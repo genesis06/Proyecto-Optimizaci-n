@@ -552,6 +552,7 @@ void resolver (GtkWidget* button, gpointer window){
 void showSaveFile(){
 
   getTextInputValues();
+  
   GtkWidget *dialog;
   GtkFileChooser *chooser;
   GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
@@ -579,7 +580,7 @@ void showSaveFile(){
       char *filename = gtk_file_chooser_get_filename (chooser);
 
       FILE *fichero;
-      char stringSave[300];
+      //char stringSave[300];
       char* lineas[50];
       char texto[100];
 
@@ -590,9 +591,9 @@ void showSaveFile(){
       }
 
       /** Proceso para guardar datos en archivo **/
-      char cantMaxChar[10];
-      char tipoChar[10];
-      char cantObjChar[10];
+      char cantMaxChar[5];
+      char tipoChar[5];
+      char cantObjChar[5];
 
       //itoa(cantidadMaxima,cantMaxChar,10); 
       //itoa(tipo,tipoChar,10); 
@@ -604,17 +605,17 @@ void showSaveFile(){
       printf("%s %s %s\n",cantMaxChar,tipoChar,cantObjChar );
 
 
-      //char primerLinea[20];
-      strcat(stringSave, cantMaxChar);
-      strcat(stringSave," ");
-      strcat(stringSave, tipoChar);
-      strcat(stringSave," ");
-      strcat(stringSave, cantObjChar);
-      strcat(stringSave,"\n");
+      char primerLinea[20];
+      strcat(primerLinea, cantMaxChar);
+      strcat(primerLinea," ");
+      strcat(primerLinea, tipoChar);
+      strcat(primerLinea," ");
+      strcat(primerLinea, cantObjChar);
+      strcat(primerLinea,"\n");
 
-      printf("String:%s\n", stringSave);
-     // fputs(primerLinea, fichero); // Escribe primera linea en archivo
-      //strcpy(primerLinea,"");
+      printf("String:%s\n", primerLinea);
+      fputs(primerLinea, fichero); // Escribe primera linea en archivo
+      strcpy(primerLinea,"");
 
       for (int i = 0; i < cantidadObjetos; i++) // ***** Cambiar 5 por cantidadObjetos
       {
@@ -624,19 +625,19 @@ void showSaveFile(){
           sprintf(valor, "%d", matrizValores[i][j]);
 
           //printf("%d\n", matrizValores[i][j]);
-          strcat(stringSave, valor);
+          strcat(texto, valor);
           strcpy(valor,"");
           if (j<3)
           {
-            strcat(stringSave," ");
+            strcat(texto," ");
           }
         }
-        strcat(stringSave, "\n");
-        //fputs(texto, fichero);
-        //strcpy(texto,"");
+        strcat(texto, "\n");
+        fputs(texto, fichero);
+        strcpy(texto,"");
       }
-      printf("stringSave: %s\n", stringSave);
-      fputs(stringSave, fichero);
+      //printf("stringSave: %s\n", stringSave);
+      //fputs(stringSave, fichero);
       if (fclose(fichero)!=0)
         printf( "Problemas al cerrar el fichero\n" );
 
@@ -892,6 +893,7 @@ void setTextInputValues()
              gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][0])); 
         }
     }
+    strcpy(stringNombres,"");
 }
 void cleanLabels()
 {
