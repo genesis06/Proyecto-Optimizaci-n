@@ -543,6 +543,8 @@ void resolver (GtkWidget* button, gpointer window){
   gtk_label_set_text(resultadoString1, stringInicial);
   gtk_label_set_text(resultadoString2, stringSujeto);
   gtk_label_set_text(resultadoString3, "yo me encargo de la segunda restriccion");
+  strcpy(stringInicial,"");
+  strcpy(stringSujeto,"");
 
 }
 
