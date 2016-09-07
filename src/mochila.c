@@ -623,6 +623,14 @@ static void showOpenFile(GtkWidget* button, gpointer window)
           cantidadMaxima = atoi(primeraLinea[0]);
           tipo = atoi(primeraLinea[1]);
           cantidadObjetos = atoi(primeraLinea[2]);
+          int indiceComboObjetos = tipo - 1;
+          if(indiceComboObjetos == -1)
+          {
+            indiceComboObjetos = 2;
+          }
+          gtk_combo_box_set_active(GTK_COMBO_BOX(comboBoxObjetos),cantidadObjetos - 1 );
+          gtk_combo_box_set_active(GTK_COMBO_BOX(comboBoxCapacidad),cantidadMaxima - 1 );
+          gtk_combo_box_set_active(GTK_COMBO_BOX(comboBox),indiceComboObjetos );
           printf("Cantidad máxima: %d\n", cantidadMaxima);
           printf("Tipo algortimo: %d\n", tipo);
           printf("Cantidad objetos: %d\n", cantidadObjetos);
