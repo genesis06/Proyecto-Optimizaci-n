@@ -39,7 +39,7 @@ void runMochila()
 void runRemplazo()
 {
   
-    system(".cd src ; ./equipos Remplazo &");
+    system(".cd src ; ./src/equipos Remplazo &");
 }
 void runArboles()
 {

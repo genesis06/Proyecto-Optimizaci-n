@@ -293,7 +293,7 @@ void showSaveFile(){
       fputs(primerLinea, fichero); // Escribe primera linea en archivo
       strcpy(primerLinea,"");
 
-      for (int i = 0; i < vidaUtil; i++) // ***** Cambiar 5 por vidaUtil
+      for (int i = 0; i < vidaUtil; i++) 
       {
         for (int j = 0; j < 4; j++)
         {
@@ -484,7 +484,7 @@ void updateInput()
     g_print("%d",comboBoxVidaUtilSelect);
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
-        for (int j = 0; j < 4; ++j)
+        for (int j = 0; j < 7; ++j)
         {
            if(i <= comboBoxVidaUtilSelect)
             {
@@ -510,7 +510,7 @@ void getTextInputValues()
       printf("pesio: %d\n", plazoProyecto);
     for (int i = 0; i < vidaUtil; ++i)
     {
-        for (int j = 0; j < 2; ++j)
+        for (int j = 0; j < 5; ++j)
         {
             if(j == 0)
             {
@@ -540,7 +540,7 @@ void setTextInputValues()
 
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
-        for (int j = 1; j < 4; ++j)
+        for (int j = 1; j < 5; ++j)
         { 
             if(i < vidaUtil)
               {
@@ -594,8 +594,7 @@ void closeWindow()
 }
 void displayAnswer()
 {   
-    vidaUtil = 5;//comentar esta linea para que concuerde con el valor de la interfaz
-    for (int i = 0; i <= plazoProyecto; i++) 
+    for (int i = 1; i <= plazoProyecto; i++) 
     {
         char costoTiempo[20] = "";
         snprintf(costoTiempo, 20, "%d", costosPorTiempo[i]);
@@ -614,11 +613,11 @@ void displayAnswer()
         for (int jClean = 0; jClean < 20; ++jClean)
         { 
              
-          if(iClean > 2 || jClean > plazoProyecto + 1)
+          if(iClean > 2 || jClean > vidaUtil + 1)
           {
             gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
           }
-          else if (iClean > 1)
+          else
           {
               gtk_widget_show (resultInputsMatrix[iClean][jClean]);
             }
@@ -677,7 +676,7 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (int j = 0; j < 5; ++j)
         { 
             if(j == 0)
             {
@@ -696,7 +695,7 @@ int main(int argc, char *argv[])
             {
               textInputsMatrix[i][j] = gtk_entry_new ();
               gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),4);
-              gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "1");
+              gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "0");
               gtk_widget_show (textInputsMatrix[i][j]);
               gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
               gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
@@ -707,7 +706,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    for (int i = 1; i < 20; ++i)
+    for (int i = 0; i < 20; ++i)
     {
         for (int j = 0; j < 20; ++j)
         { 
@@ -720,7 +719,7 @@ int main(int argc, char *argv[])
     }
 
     
-
+    updateInput();
 
 
     GtkCssProvider *provider;
@@ -754,6 +753,7 @@ int main(int argc, char *argv[])
  
     gtk_widget_show(window);                
     gtk_main();
+
      return 0;
 
 }
