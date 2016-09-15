@@ -15,7 +15,7 @@
 
 //variables de todos los problemas
 int MAX_INPUT_MATRIX_SIZE = 10;
-GtkWidget *textInputsMatrix[20][4];
+GtkWidget *textInputsMatrix[20][5];
 GtkWidget   *window;
 GtkWidget *resultInputsMatrix[20][20];
 
@@ -38,6 +38,7 @@ int costosPorTiempo[30] = {0,0,0,0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int costos[3] = {0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
 int cantidadProximos[30] = {0,0,0,0,0}; //lleva el conteo de cuantos proximos hay en cada tiempo
 char stringReemplazoOptimo[100];
+int costoInicial;
 
 
 int tablaCalculos[20][2];
@@ -535,11 +536,16 @@ void getTextInputValues()
     vidaUtil = comboBoxVidaUtilSelect + 1;
     comboBoxPlazoSelected = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxPlazo));
     plazoProyecto = comboBoxPlazoSelected + 1;
-     printf("objetos: %d\n", vidaUtil);
-      printf("pesio: %d\n", plazoProyecto);
+    
+
+    gchar *costoInicialString;           
+    costoInicialString = gtk_entry_get_text(GTK_ENTRY(textInputsMatrix[0][4]));
+    costoInicial = atoi(costoInicialString);
+    printf("costo inicial: %d\n", costoInicial);
+           
     for (int i = 0; i < vidaUtil; ++i)
     {
-        for (int j = 0; j < 5; ++j)
+        for (int j = 0; j < 4; ++j)
         {
             if(j == 0)
             {
@@ -749,7 +755,7 @@ int main(int argc, char *argv[])
         for (int j = 0; j < 20; ++j)
         { 
              
-          resultInputsMatrix[i][j] = gtk_label_new (" - " );
+          resultInputsMatrix[i][j] = gtk_label_new (" " );
           gtk_widget_show (resultInputsMatrix[i][j]);
           gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
            
