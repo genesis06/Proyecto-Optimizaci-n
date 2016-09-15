@@ -29,14 +29,17 @@ GtkWidget *inputScreen;
 int tipo;//0=0/1, 1= bounded, 2= unbounded
 
 double inflacion;
-int plazoProyecto;
-int vidaUtil;
-int matrizValores[20][4];
-int tablaCalculos[20][4];
-char *nombreObjetos[20] = {"A1", "A2", "A3", "A4", "A5", "A6","A7","A8", "A9", "A10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
-char *listaProximos[30] = {"1,3", "2,4" , "5", "4", "5"};
+int valorCompra = 500;
+int plazoProyecto = 5; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
+int vidaUtil= 3; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
+int matrizValores[30][2]; = {{30,400},{40,300},{60,250}}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
+char *listaProximos[30] = {"", "" , "", "", ""}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
+int costosPorTiempo[30] = {0,0,0,0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
+int costos[3] = {0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
+
+int tablaCalculos[20][2];
 char stringNombres[100];
-int costosPorTiempo[30] = {640,510,380,260,130,0};
+char *nombreObjetos[20] = {"A1", "A2", "A3", "A4", "A5", "A6","A7","A8", "A9", "A10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
 int contaNombres = 0;
 int comboSelect ;
 int comboBoxPlazoSelected ;
@@ -47,8 +50,19 @@ GtkWidget *comboBoxPlazo;
 GtkWidget *comboBoxVidaUtil;
 GtkWidget *dialog;
 
+typedef struct {
+    int valor;
+    int proximo;
+} G_prox;
 
 //delcaraciones de funciones
+void calcularCostos();
+void calcularG(int t);
+int calcularMantenimientos(int year);
+G_prox* ordenar(G_prox*valores, int largo, int t);
+int cantidadRepetidos(G_prox*valores, int largo);
+void imprimirBellman();
+
 int max(int a, int b);
 void separarColumnas(int fila);
 static void getTextInputValues();
@@ -65,10 +79,128 @@ char stringSujeto[100];
 char linea[100];
 
 
+// Funcion principal
+void reemplazoEquipos(){
+  calcularCostos();
+  for (int i = plazoProyecto; i >= 0; i--)
+  {
+    calcularG(i);
+  }
+}
 
-//name_object nombres[] = {{"A1"}, {"A2"}, {"A3"}, {"A4"}, {"A5"}, {"A6"},{"A7"},{"A8"}, {"A9"}};
 
- 
+// Calcula los costos dependiendo de los valores de tx
+void calcularCostos(){
+
+  for (int i = 0; i < vidaUtil; i++)
+  {
+    costos[i] = valorCompra + calcularMantenimientos(i+1) - matrizValores[i][1];
+  }
+}
+
+//Calcula los mantenimientos para cada año
+int calcularMantenimientos(int year){
+  int mante=0;
+  for (int i = 0; i < year; i++)
+  {
+    mante += matrizValores[i][0];
+  }
+  return mante;
+}
+
+
+void calcularG(int t){
+  if(t == plazoProyecto){
+    printf("%d\n", ); 0;
+
+  }
+  else{
+    int largoValores;
+    if ((plazoProyecto - t) > vidaUtil)
+    {
+      largoValores = vidaUtil;
+    }
+    else{
+      largoValores = plazoProyecto - t; 
+    }
+    
+    int valores[largoValores];
+    G_prox auxiliar[largoValores];
+
+    int contaValores = 0;
+    for (int i = t; i < plazoProyecto; i++)
+    {
+      auxiliar[contaValores].valor = costos[contaValores] + costosPorTiempo[t+1+contaValores];
+      auxiliar[contaValores].proximo = (t + (contaValores + 1));
+      contaValores++;
+      if ((plazoProyecto - t) > vidaUtil && contaValores==vidaUtil)
+      {
+        break;
+      }
+    }
+    if(t==4){
+      char *num=calloc(5, sizeof(char));
+      sprintf(num,"%d",  t+1);
+      costosPorTiempo[t] = costos[0];
+      listaProximos[t] = num;
+    }
+    else{
+      
+      memcpy(auxiliar,ordenar(auxiliar,largoValores, t),sizeof(auxiliar)); 
+      
+      char *num=calloc(5, sizeof(char));
+      sprintf(num,"%d", auxiliar[0].proximo);
+      costosPorTiempo[t] = auxiliar[0].valor;
+      listaProximos[t] = num;
+
+      int repetidos = cantidadRepetidos(auxiliar, largoValores);
+      if (repetidos > 1)
+      {
+        char *proximos=calloc(10, sizeof(char));
+        strcpy(proximos,listaProximos[t]);
+        strcat(proximos,",");
+        for (int i = 1; i < repetidos; i++)
+        {
+          char *num2=calloc(5, sizeof(char));
+          sprintf(num2,"%d", auxiliar[i].proximo);
+          strcat(proximos,num2);    
+        }
+        listaProximos[t]= proximos;
+      }
+    }
+
+  }
+}
+
+
+G_prox* ordenar(G_prox*valores, int largo, int t){
+  G_prox aux;
+  for (int i = 0; i < largo-1; i++)
+  {
+    for (int j = i+1; j < largo; j++)
+    {
+      if(valores[j].valor < valores[i].valor){
+        aux = valores[j];
+        valores[j] = valores[i];
+        valores[i] = aux;
+      }
+    }
+  }
+  return valores;
+
+}
+
+int cantidadRepetidos(G_prox*valores, int largo){
+  int cantidad = 1;
+  for (int i = 1; i < largo; i++)
+  {
+    if(valores[0].valor == valores[i].valor){
+      cantidad++;
+    }
+  }
+  //printf("Cantidad: %d\n", cantidad);
+  return cantidad;
+}
 
  
 //--------------------------------------------------------Switch ComboBox
