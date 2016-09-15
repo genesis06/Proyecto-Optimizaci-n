@@ -36,6 +36,9 @@ int matrizValores[30][2] = {{30,400},{40,300},{60,250}}; // CAMBIAR POR EL VALOR
 char *listaProximos[30] = {"", "" , "", "", ""}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int costosPorTiempo[30] = {0,0,0,0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int costos[3] = {0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
+int cantidadProximos[30] = {0,0,0,0,0}; //lleva el conteo de cuantos proximos hay en cada tiempo
+char stringReemplazoOptimo[100];
+
 
 int tablaCalculos[20][2];
 char stringNombres[100];
@@ -61,7 +64,7 @@ void calcularG(int t);
 int calcularMantenimientos(int year);
 G_prox* ordenar(G_prox*valores, int largo, int t);
 int cantidadRepetidos(G_prox*valores, int largo);
-void imprimirBellman();
+void calcularReemplazoOptimo(int t);
 
 int max(int a, int b);
 void separarColumnas(int fila);
@@ -86,6 +89,32 @@ void reemplazoEquipos(){
   {
     calcularG(i);
   }
+}
+
+void calcularReemplazoOptimo(int t){
+  char* string = calloc(100, sizeof(char));
+  int largo = cantidadProximos[t];
+  
+  while(t!=plazoProyecto){
+    if(largo>1){
+      char *aux = listaProximos[t];   
+      char *token = calloc(5, sizeof(char));
+      token = strtok (aux,",");
+      strcat(string,token);
+      strcat(string, " ");
+
+      t = atoi(token);
+      
+    }
+    else{
+      strcat(string,listaProximos[t]);
+      strcat(string, " ");
+      t = atoi(listaProximos[t]);
+    }
+    largo = cantidadProximos[t];
+  }
+  strcpy(stringReemplazoOptimo, string);
+  printf("Reemplazo: %s\n", stringReemplazoOptimo);
 }
 
 
