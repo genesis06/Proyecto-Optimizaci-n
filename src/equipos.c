@@ -32,7 +32,7 @@ double inflacion;
 int valorCompra = 500;
 int plazoProyecto = 5; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int vidaUtil= 3; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
-int matrizValores[30][2]; = {{30,400},{40,300},{60,250}}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
+int matrizValores[30][2] = {{30,400},{40,300},{60,250}}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 char *listaProximos[30] = {"", "" , "", "", ""}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int costosPorTiempo[30] = {0,0,0,0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int costos[3] = {0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
@@ -111,7 +111,7 @@ int calcularMantenimientos(int year){
 
 void calcularG(int t){
   if(t == plazoProyecto){
-    printf("%d\n", ); 0;
+    printf("%d\n", 0);// 0;
 
   }
   else{
@@ -209,10 +209,10 @@ void resolver (GtkWidget* button, gpointer window)
     gtk_widget_hide(inputScreen);
     gtk_widget_show(resultScreen);
 
-    //getTextInputValues();
+    getTextInputValues();
     
 
-
+    reemplazoEquipos();
 
 
 
@@ -510,7 +510,7 @@ void getTextInputValues()
       printf("pesio: %d\n", plazoProyecto);
     for (int i = 0; i < vidaUtil; ++i)
     {
-        for (int j = 0; j < 4; ++j)
+        for (int j = 0; j < 2; ++j)
         {
             if(j == 0)
             {
@@ -595,15 +595,18 @@ void closeWindow()
 void displayAnswer()
 {   
     vidaUtil = 5;//comentar esta linea para que concuerde con el valor de la interfaz
-    for (int i = 0; i <= vidaUtil; i++) 
+    for (int i = 0; i <= plazoProyecto; i++) 
     {
         char costoTiempo[20] = "";
-        snprintf(costoTiempo, 50, "%d", costosPorTiempo[i]);
+        snprintf(costoTiempo, 20, "%d", costosPorTiempo[i]);
         char tiempo[20] = "";
-        snprintf(tiempo, 50, "%d", i);
+        snprintf(tiempo, 20, "%d", i);
         gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), tiempo);
         gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), costoTiempo);
         gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), listaProximos[i]);
+        gtk_widget_show (resultInputsMatrix[0][i + 1]);
+        gtk_widget_show (resultInputsMatrix[1][i + 1]);
+        gtk_widget_show (resultInputsMatrix[2][i + 1]);
 
     }
     for (int iClean = 0; iClean < 20; ++iClean)
@@ -611,7 +614,7 @@ void displayAnswer()
         for (int jClean = 0; jClean < 20; ++jClean)
         { 
              
-          if(iClean > 2 || jClean > vidaUtil + 1)
+          if(iClean > 2 || jClean > plazoProyecto + 1)
           {
             gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
           }
