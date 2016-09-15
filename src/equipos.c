@@ -513,7 +513,7 @@ void updateInput()
     g_print("%d",comboBoxVidaUtilSelect);
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
-        for (int j = 0; j < 7; ++j)
+        for (int j = 0; j < 4; ++j)
         {
            if(i <= comboBoxVidaUtilSelect)
             {
@@ -731,6 +731,15 @@ int main(int argc, char *argv[])
               gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
             }
             
+
+            if(j==4)
+            {
+                if(i!=0)
+                {
+                      gtk_widget_hide(textInputsMatrix[i][j]);
+                }
+
+            }
            
         }
     }
