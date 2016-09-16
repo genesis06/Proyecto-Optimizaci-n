@@ -168,7 +168,7 @@ void calcularG(int t){
         break;
       }
     }
-    if(t==4){
+    if(t==(plazoProyecto-1)){
       char *num=calloc(5, sizeof(char));
       sprintf(num,"%d",  t+1);
       costosPorTiempo[t] = costos[0];
@@ -382,7 +382,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 		infile = fopen(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)), "r");
 	 
 		char buff[255];
-    char *token;
+    char *token = calloc(5, sizeof(char));
 		char *primeraLinea[255];
     
 
@@ -410,20 +410,14 @@ static void showOpenFile(GtkWidget* button, gpointer window)
           /***************************************************************/
           
           /** Inicializa variables**/
-          plazoProyecto = atoi(primeraLinea[0]);
-          tipo = atoi(primeraLinea[1]);
-          vidaUtil = atoi(primeraLinea[2]);
-          int indiceComboObjetos = tipo - 1;
-          if(indiceComboObjetos == -1)
-          {
-            indiceComboObjetos = 2;
-          }
-          gtk_combo_box_set_active(GTK_COMBO_BOX(comboBoxVidaUtil),vidaUtil - 1 );
-          gtk_combo_box_set_active(GTK_COMBO_BOX(comboBoxPlazo),plazoProyecto - 1 );
+          costoInicial = atoi(primeraLinea[0]);
+          vidaUtil = atoi(primeraLinea[1]);
+          plazoProyecto = atoi(primeraLinea[2]);
+
           //gtk_combo_box_set_active(GTK_COMBO_BOX(comboBox),indiceComboObjetos );
-          printf("Cantidad máxima: %d\n", plazoProyecto);
-          printf("Tipo algortimo: %d\n", tipo);
-          printf("Cantidad objetos: %d\n", vidaUtil);
+          printf("Plazo: %d\n", plazoProyecto);
+          printf("vida: %d\n", vidaUtil);
+          printf("Compra: %d\n", costoInicial);
           
     /********************** Proceso para leer y guardar matriz ******************************/      
     int indiceFilas = 0;
@@ -449,7 +443,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
     printf("Matriz\n");
 
     for(int i=0;i<vidaUtil;i++){
-         for(int j=0;j<4;j++){
+         for(int j=0;j<2;j++){
           //printf("%d %d\n", i,j);
         printf("%d ", matrizValores[i][j]); 
       }
@@ -457,7 +451,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
     }
 
     /******* Inicia proceso de split línea para obtener datos ******/
-          char* nombre;
+          char* nombre = calloc(5, sizeof(char));
           nombre = strtok (stringNombres," ");
           int indice = 0;
 
@@ -483,7 +477,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 
 void separarColumnas(int fila){
   
-  char *token;
+  char *token =calloc(5, sizeof(char));;
   int indiceColumnas =0;
   /**Agarra el primer token separado por espacio**/
   token = strtok (linea," ");  
@@ -491,12 +485,6 @@ void separarColumnas(int fila){
   while (token != NULL )
   {
     /***Guarda el token en la matriz****/
-    if(indiceColumnas==0){
-      // agarra los nombres de los objetos para guardarlos en la lista
-        strcat(stringNombres,token);
-        strcat(stringNombres," ");
-        //printf("String: %s\n", stringNombres);
-    }
     int valor = atoi(token);
     matrizValores[fila][indiceColumnas] = valor;
     indiceColumnas++;
