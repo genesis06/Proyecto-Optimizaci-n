@@ -17,12 +17,13 @@
 int MAX_INPUT_MATRIX_SIZE = 10;
 GtkWidget *textInputsMatrix[20][5];
 GtkWidget   *window;
-GtkWidget *resultInputsMatrix[20][20];
+GtkWidget *resultInputsMatrix[20][32];
 
 //variables de interfaz
 GtkGrid    *resultGrid;
 GtkWidget *resultScreen;
 GtkWidget *inputScreen;
+GtkWidget   *resultadoString1;
 
 
 //variables especificas de este programa
@@ -116,6 +117,7 @@ void calcularReemplazoOptimo(int t){
   }
   strcpy(stringReemplazoOptimo, string);
   printf("Reemplazo: %s\n", stringReemplazoOptimo);
+  gtk_label_set_text(resultadoString1, stringReemplazoOptimo);
 }
 
 
@@ -610,10 +612,10 @@ void cleanLabels()
 {
     for (int i = 1; i < 20; ++i)
     {
-        for (int j = 0; j < 20; ++j)
+        for (int j = 0; j < 32; ++j)
         { 
-          gtk_label_set_text(GTK_LABEL(resultInputsMatrix[i][j])," - ");
-             gtk_widget_show(resultInputsMatrix[i][j]);
+          gtk_label_set_text(GTK_LABEL(resultInputsMatrix[i][j]),"  ");
+         gtk_widget_show(resultInputsMatrix[i][j]);
         }
     }
 }
@@ -635,7 +637,7 @@ void displayAnswer()
         snprintf(costoTiempo, 20, "%d", costosPorTiempo[i]);
         char tiempo[20] = "";
         snprintf(tiempo, 20, "%d", i);
-        gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), tiempo);
+        //gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), tiempo);
         gtk_label_set_text(GTK_LABEL(resultInputsMatrix[1][i + 1]), costoTiempo);
         gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), listaProximos[i]);
         gtk_widget_show (resultInputsMatrix[0][i + 1]);
@@ -645,7 +647,7 @@ void displayAnswer()
     }
     for (int iClean = 0; iClean < 20; ++iClean)
     {
-        for (int jClean = 0; jClean < 20; ++jClean)
+        for (int jClean = 0; jClean < 32; ++jClean)
         { 
              
           if(iClean > 2 || jClean > vidaUtil + 1)
@@ -702,6 +704,7 @@ int main(int argc, char *argv[])
     inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxInput"));
     resultScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxResult"));
 
+    resultadoString1 =  GTK_WIDGET(gtk_builder_get_object(builder, "stringConstruido"));
 
     gtk_widget_hide(resultScreen);
     gtk_widget_show(inputScreen);
@@ -752,12 +755,19 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < 20; ++i)
     {
-        for (int j = 0; j < 20; ++j)
+        for (int j = 0; j < 32; ++j)
         { 
-             
-          resultInputsMatrix[i][j] = gtk_label_new (" " );
-          gtk_widget_show (resultInputsMatrix[i][j]);
-          gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
+            if(i==0)
+            {
+               resultInputsMatrix[i][j] =  gtk_grid_get_child_at(resultGrid,i,j);
+            }
+            else
+            {
+                resultInputsMatrix[i][j] = gtk_label_new (" " );
+                gtk_widget_show (resultInputsMatrix[i][j]);
+                gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
+            }
+          
            
         }
     }
@@ -802,3 +812,123 @@ int main(int argc, char *argv[])
 
 }
 
+void buttonAnswer1()
+{
+    calcularReemplazoOptimo(1);
+}
+void buttonAnswer2()
+{
+    calcularReemplazoOptimo(2);
+}
+void buttonAnswer3()
+{
+    calcularReemplazoOptimo(3);
+}
+void buttonAnswer4()
+{
+    calcularReemplazoOptimo(4);
+}
+void buttonAnswer5()
+{
+    calcularReemplazoOptimo(5);
+}
+void buttonAnswer6()
+{
+    calcularReemplazoOptimo(6);
+}
+void buttonAnswer7()
+{
+    calcularReemplazoOptimo(7);
+}
+void buttonAnswer8()
+{
+    calcularReemplazoOptimo(8);
+}
+void buttonAnswer9()
+{
+    calcularReemplazoOptimo(9);
+}
+void buttonAnswer10()
+{
+    calcularReemplazoOptimo(10);
+}
+void buttonAnswer11()
+{
+    calcularReemplazoOptimo(11);
+}
+void buttonAnswer12()
+{
+    calcularReemplazoOptimo(12);
+}
+void buttonAnswer13()
+{
+    calcularReemplazoOptimo(13);
+}
+void buttonAnswer14()
+{
+    calcularReemplazoOptimo(14);
+}
+void buttonAnswer15()
+{
+    calcularReemplazoOptimo(15);
+}
+void buttonAnswer16()
+{
+    calcularReemplazoOptimo(16);
+}
+void buttonAnswer17()
+{
+    calcularReemplazoOptimo(17);
+}
+void buttonAnswer18()
+{
+    calcularReemplazoOptimo(18);
+}
+void buttonAnswer19()
+{
+    calcularReemplazoOptimo(19);
+}
+void buttonAnswer20()
+{
+    calcularReemplazoOptimo(20);
+}
+void buttonAnswer21()
+{
+    calcularReemplazoOptimo(21);
+}
+void buttonAnswer22()
+{
+    calcularReemplazoOptimo(22);
+}
+void buttonAnswer23()
+{
+    calcularReemplazoOptimo(23);
+}
+void buttonAnswer24()
+{
+    calcularReemplazoOptimo(24);
+}
+void buttonAnswer25()
+{
+    calcularReemplazoOptimo(25);
+}
+void buttonAnswer26()
+{
+    calcularReemplazoOptimo(26);
+}
+void buttonAnswer27()
+{
+    calcularReemplazoOptimo(27);
+}
+void buttonAnswer28()
+{
+    calcularReemplazoOptimo(28);
+}
+void buttonAnswer29()
+{
+    calcularReemplazoOptimo(29);
+}
+void buttonAnswer30()
+{
+    calcularReemplazoOptimo(30);
+}
