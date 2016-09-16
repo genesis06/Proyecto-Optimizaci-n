@@ -40,6 +40,7 @@ int costos[3] = {0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
 int cantidadProximos[30] = {0,0,0,0,0}; //lleva el conteo de cuantos proximos hay en cada tiempo
 char stringReemplazoOptimo[100];
 int costoInicial;
+int ganancias[30]={0,0,0,0,0};
 
 
 int tablaCalculos[20][2];
@@ -116,7 +117,7 @@ void calcularReemplazoOptimo(int t){
     largo = cantidadProximos[t];
   }
   strcpy(stringReemplazoOptimo, string);
-  printf("Reemplazo: %s\n", stringReemplazoOptimo);
+  printf("Reemplazo: %s\n", string);
   gtk_label_set_text(resultadoString1, stringReemplazoOptimo);
 }
 
@@ -127,7 +128,15 @@ void calcularCostos(){
   costoInicial = valorCompra;
   for (int i = 0; i < vidaUtil; i++)
   {
-    costos[i] = valorCompra + calcularMantenimientos(i+1) - matrizValores[i][1];
+    if (ganancias[i]<=0)
+    {
+      costos[i] = valorCompra + calcularMantenimientos(i+1) - matrizValores[i][1];
+    }
+    else{
+
+      costos[i] = (valorCompra + calcularMantenimientos(i+1) - matrizValores[i][1]) - ganancias[i];
+    }
+    
   }
 }
 
