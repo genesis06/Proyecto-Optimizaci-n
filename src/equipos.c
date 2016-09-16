@@ -310,9 +310,9 @@ void showSaveFile(){
       }
 
       /** Proceso para guardar datos en archivo **/
-      char cantMaxChar[5];
-      char compra[5];
-      char cantObjChar[5];
+      char cantMaxChar[10];
+      char compra[10];
+      char cantObjChar[10];
 
       //itoa(plazoProyecto,cantMaxChar,10); 
       //itoa(tipo,tipoChar,10); 
@@ -325,11 +325,11 @@ void showSaveFile(){
 
 
       char primerLinea[20];
-      strcat(primerLinea, cantMaxChar);
-      strcat(primerLinea," ");
       strcat(primerLinea, compra);
       strcat(primerLinea," ");
       strcat(primerLinea, cantObjChar);
+      strcat(primerLinea," ");
+      strcat(primerLinea, cantMaxChar);
       strcat(primerLinea,"\n");
 
       printf("String:%s\n", primerLinea);
@@ -338,18 +338,16 @@ void showSaveFile(){
 
       for (int i = 0; i < vidaUtil; i++) 
       {
-        for (int j = 0; j < 2; j++)
+        for (int j = 0; j < 3; j++)
         {
           char valor[10];
           sprintf(valor, "%d", matrizValores[i][j]);
 
-          //printf("%d\n", matrizValores[i][j]);
+          printf("%d\n", matrizValores[i][j]);
           strcat(texto, valor);
           strcpy(valor,"");
-          if (j<1)
-          {
             strcat(texto," ");
-          }
+          
         }
         strcat(texto, "\n");
         fputs(texto, fichero);
