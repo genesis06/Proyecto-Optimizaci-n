@@ -533,7 +533,7 @@ void getTextInputValues()
     costoInicial = atoi(costoInicialString);
     printf("costo inicial: %d\n", costoInicial);
            
-    for (int i = 0; i < vidaUtil; ++i)
+    for (int i = 1; i < vidaUtil; ++i)
     {
         for (int j = 0; j < 4; ++j)
         {
@@ -546,7 +546,7 @@ void getTextInputValues()
               gchar *currentTextInputText;
               currentTextInputText = gtk_entry_get_text(GTK_ENTRY(textInputsMatrix[i][j]));
               int newValue = atoi(currentTextInputText);
-              matrizValores[i][j] = newValue;
+              matrizValores[i][j-1] = newValue;
 
               if(i <= comboBoxVidaUtilSelect)
               {
@@ -619,7 +619,7 @@ void closeWindow()
 }
 void displayAnswer()
 {   
-    for (int i = 1; i <= plazoProyecto; i++) 
+    for (int i = 0; i <= plazoProyecto + 1; i++) 
     {
         char costoTiempo[20] = "";
         snprintf(costoTiempo, 20, "%d", costosPorTiempo[i]);
