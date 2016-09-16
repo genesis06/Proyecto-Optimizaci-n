@@ -33,7 +33,7 @@ double inflacion;
 int valorCompra = 500;
 int plazoProyecto = 5; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int vidaUtil= 3; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
-int matrizValores[30][2] = {{30,400},{40,300},{60,250}}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
+int matrizValores[30][2]; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 char *listaProximos[30] = {"", "" , "", "", ""}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int costosPorTiempo[30] = {0,0,0,0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int costos[3] = {0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
@@ -124,6 +124,7 @@ void calcularReemplazoOptimo(int t){
 // Calcula los costos dependiendo de los valores de tx
 void calcularCostos(){
 
+  costoInicial = valorCompra;
   for (int i = 0; i < vidaUtil; i++)
   {
     costos[i] = valorCompra + calcularMantenimientos(i+1) - matrizValores[i][1];
@@ -543,9 +544,8 @@ void getTextInputValues()
     gchar *costoInicialString;           
     costoInicialString = gtk_entry_get_text(GTK_ENTRY(textInputsMatrix[0][4]));
     costoInicial = atoi(costoInicialString);
-    printf("costo inicial: %d\n", costoInicial);
            
-    for (int i = 1; i < vidaUtil; ++i)
+    for (int i = 0; i < vidaUtil; ++i)
     {
         for (int j = 0; j < 4; ++j)
         {
@@ -631,6 +631,8 @@ void closeWindow()
 }
 void displayAnswer()
 {   
+    comboBoxPlazoSelected = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxPlazo));
+    plazoProyecto = comboBoxPlazoSelected + 1;
     for (int i = 0; i <= plazoProyecto + 1; i++) 
     {
         char costoTiempo[20] = "";
@@ -650,7 +652,7 @@ void displayAnswer()
         for (int jClean = 0; jClean < 32; ++jClean)
         { 
              
-          if(iClean > 2 || jClean > vidaUtil + 1)
+          if(iClean > 2 || jClean > plazoProyecto + 1)
           {
             gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
           }
@@ -812,6 +814,10 @@ int main(int argc, char *argv[])
 
 }
 
+void buttonAnswer0()
+{
+    calcularReemplazoOptimo(0);
+}
 void buttonAnswer1()
 {
     calcularReemplazoOptimo(1);
