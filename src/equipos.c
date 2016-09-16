@@ -454,7 +454,6 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 		while (fgets(buff, 255, (FILE*)infile)){
 
             strcpy(linea, buff);
-            printf(" linea: %s \n", linea);
             if(indiceFilas < vidaUtil){
                 separarColumnas(indiceFilas); 
             }
@@ -471,9 +470,9 @@ static void showOpenFile(GtkWidget* button, gpointer window)
     for(int i=0;i<vidaUtil;i++){
          for(int j=0;j<3;j++){
           //printf("%d %d\n", i,j);
-        printf("%d ", matrizValores[i][j]); 
+        //printf("%d ", matrizValores[i][j]); 
       }
-      printf("\n");
+      //printf("\n");
     }
 
           
@@ -493,13 +492,12 @@ void separarColumnas(int fila){
   int indiceColumnas =0;
   /**Agarra el primer token separado por espacio**/
   token = strtok (linea," ");  
-  printf("enter : %d \n", token); 
   while (token != NULL )
   {
     /***Guarda el token en la matriz****/
     int valor = atoi(token);
     matrizValores[fila][indiceColumnas] = valor;
-    printf("valor %d   fila: %d   columna: %d \n ", valor, fila ,indiceColumnas); 
+    //printf("valor %d   fila: %d   columna: %d \n ", valor, fila ,indiceColumnas); 
     indiceColumnas++;
     
     token = strtok (NULL, " ");
@@ -573,19 +571,22 @@ void setTextInputValues()
 
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
-        for (int j = 1; j < 4; ++j)
+        for (int j = 0; j < 4; ++j)
         { 
             if(i < vidaUtil)
-              {
-                char newChar[5];
-                snprintf(newChar, 5, "%d", matrizValores[i][j-1]);
-                gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), newChar);
-                gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
-              }
-              else
-              {
-                   gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][j])); 
-              }
+            {
+                if(j!=0)
+                {
+                    char newChar[5];
+                    snprintf(newChar, 5, "%d", matrizValores[i][j-1]);
+                    gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), newChar);
+                }
+                 gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j])); 
+            }
+            else
+            {
+                gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][j])); 
+            }
         }
          
     }
@@ -593,20 +594,8 @@ void setTextInputValues()
     char newValorInicial[10];
     snprintf(newValorInicial, 10, "%d", costoInicial);
     gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[0][4]), newValorInicial);
-  /*  for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
-    {
-       
-         if(i < vidaUtil)
-        {
-             gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][0]));
-              gtk_button_set_label (GTK_BUTTON (textInputsMatrix[i][0]), nombreObjetos[i]);
-        }
-        else
-        {
-             gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][0])); 
-        }
-    }
-    strcpy(stringNombres,"");*/
+    gtk_combo_box_set_active(GTK_COMBO_BOX(comboBoxPlazo),plazoProyecto - 1 );
+    gtk_combo_box_set_active(GTK_COMBO_BOX(comboBoxVidaUtil),vidaUtil - 1 );
 }
 void cleanLabels()
 {
