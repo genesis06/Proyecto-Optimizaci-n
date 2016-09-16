@@ -20,10 +20,10 @@ GtkWidget   *window;
 GtkWidget *resultInputsMatrix[20][32];
 
 //variables de interfaz
-GtkGrid    *resultGrid;
+GtkGrid   *resultGrid;
 GtkWidget *resultScreen;
 GtkWidget *inputScreen;
-GtkWidget   *resultadoString1;
+GtkWidget *resultadoString1;
 
 
 //variables especificas de este programa
@@ -300,7 +300,7 @@ void showSaveFile(){
 
       /** Proceso para guardar datos en archivo **/
       char cantMaxChar[5];
-      char tipoChar[5];
+      char compra[5];
       char cantObjChar[5];
 
       //itoa(plazoProyecto,cantMaxChar,10); 
@@ -308,15 +308,15 @@ void showSaveFile(){
       //itoa(vidaUtil,cantObjChar,10); 
       //Conversion de tipos para guardar primera linea
       sprintf(cantMaxChar,"%d",plazoProyecto); // ***********CAMBIAR NUMERO POR plazoProyecto
-      sprintf(tipoChar, "%d",tipo); // **************CAMBIAR NUMERO POR tipo
+      sprintf(compra, "%d",costoInicial); // **************CAMBIAR NUMERO POR tipo
       sprintf(cantObjChar, "%d",vidaUtil); //*********** CAMBIAR NUMERO POR vidaUtil
-      printf("%s %s %s\n",cantMaxChar,tipoChar,cantObjChar );
+      printf("%s %s %s\n",cantMaxChar,compra,cantObjChar );
 
 
       char primerLinea[20];
       strcat(primerLinea, cantMaxChar);
       strcat(primerLinea," ");
-      strcat(primerLinea, tipoChar);
+      strcat(primerLinea, compra);
       strcat(primerLinea," ");
       strcat(primerLinea, cantObjChar);
       strcat(primerLinea,"\n");
@@ -327,7 +327,7 @@ void showSaveFile(){
 
       for (int i = 0; i < vidaUtil; i++) 
       {
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 2; j++)
         {
           char valor[10];
           sprintf(valor, "%d", matrizValores[i][j]);
@@ -335,7 +335,7 @@ void showSaveFile(){
           //printf("%d\n", matrizValores[i][j]);
           strcat(texto, valor);
           strcpy(valor,"");
-          if (j<3)
+          if (j<1)
           {
             strcat(texto," ");
           }
@@ -384,7 +384,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 		infile = fopen(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)), "r");
 	 
 		char buff[255];
-    char *token = calloc(5, sizeof(char));
+    char *token ;
 		char *primeraLinea[255];
     
 
@@ -452,21 +452,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
       printf("\n");
     }
 
-    /******* Inicia proceso de split línea para obtener datos ******/
-          char* nombre = calloc(5, sizeof(char));
-          nombre = strtok (stringNombres," ");
-          int indice = 0;
-
-          /** Obtiene datos de primera linea y la guarda en un array **/
-          while (nombre != NULL)
-          {
-              if(indice <4){
-                nombreObjetos[indice] = nombre;  
-              }
-              nombre = strtok (NULL, " ");
-              indice++;
-          }
-
+          
     /****************************/
 		// Cerrar Archivo
 		fclose(infile);
@@ -562,10 +548,19 @@ void getTextInputValues()
 }
 void setTextInputValues()
 {
+   /*printf("Matriz\n");
+
+    for(int i=0;i<vidaUtil;i++){
+         for(int j=0;j<2;j++){
+          //printf("%d %d\n", i,j);
+        printf("%d ", matrizValores[i][j]); 
+      }
+      printf("\n");
+    }*/
 
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
-        for (int j = 1; j < 5; ++j)
+        for (int j = 0; j < 3; ++j)
         { 
             if(i < vidaUtil)
               {
@@ -581,7 +576,7 @@ void setTextInputValues()
         }
          
     }
-    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+  /*  for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
        
          if(i < vidaUtil)
@@ -594,7 +589,7 @@ void setTextInputValues()
              gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][0])); 
         }
     }
-    strcpy(stringNombres,"");
+    strcpy(stringNombres,"");*/
 }
 void cleanLabels()
 {
