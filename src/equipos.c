@@ -43,6 +43,8 @@ int costoInicial;
 int ganancias[30]={0,0,0,0,0};
 
 
+
+
 int tablaCalculos[20][2];
 char stringNombres[100];
 char *nombreObjetos[20] = {"A1", "A2", "A3", "A4", "A5", "A6","A7","A8", "A9", "A10", "11","12","13","14","15","16" ,"17", "18", "19", "20"};
@@ -60,6 +62,13 @@ typedef struct {
     int valor;
     int proximo;
 } G_prox;
+
+typedef struct {
+    int valor;
+    int proximo[30];
+} G_prox2;
+
+G_prox2 valoresBellman[30] ={{0,0},{0,0},{0,0},{0,0},{0,0},{0,0}};
 
 //delcaraciones de funciones
 void calcularCostos();
@@ -97,29 +106,24 @@ void reemplazoEquipos(){
 
 void calcularReemplazoOptimo(int t){
   char* string = calloc(100, sizeof(char));
+  char *taux = calloc(5, sizeof(char));
+  sprintf(taux,"%d",  t);
+  strcat(string,taux);
+  strcat(string, " ");
   int largo = cantidadProximos[t];
   
   while(t!=plazoProyecto){
-    if(largo>1){
-      char *aux = listaProximos[t];   
-      char *token = calloc(5, sizeof(char));
-      token = strtok (aux,",");
-      strcat(string,token);
-      strcat(string, " ");
-
-      t = atoi(token);
-      
-    }
-    else{
-      strcat(string,listaProximos[t]);
-      strcat(string, " ");
-      t = atoi(listaProximos[t]);
-    }
+    char *aux = calloc(10, sizeof(char));
+    sprintf(aux,"%d", valoresBellman[t].proximo[0]);
+    strcat(string,aux);
+    strcat(string," ");
+    t = valoresBellman[t].proximo[0];
+    
     largo = cantidadProximos[t];
   }
-  strcpy(stringReemplazoOptimo, string);
-  printf("Reemplazo: %s\n", string);
-  gtk_label_set_text(resultadoString1, stringReemplazoOptimo);
+  strcpy(stringReemplazoOptimo,string);
+  printf("Reemplazo: %s\n", stringReemplazoOptimo);
+   gtk_label_set_text(resultadoString1, stringReemplazoOptimo);
 }
 
 
@@ -186,6 +190,9 @@ void calcularG(int t){
       sprintf(num,"%d",  t+1);
       costosPorTiempo[t] = costos[0];
       listaProximos[t] = num;
+
+      valoresBellman[t].valor=costos[0]; //////
+      valoresBellman[t].proximo[0]=t+1; //////
     }
     else{
       
@@ -195,6 +202,10 @@ void calcularG(int t){
       sprintf(num,"%d", auxiliar[0].proximo);
       costosPorTiempo[t] = auxiliar[0].valor;
       listaProximos[t] = num;
+
+      valoresBellman[t].valor=auxiliar[0].valor; //////
+      valoresBellman[t].proximo[0]=auxiliar[0].proximo; //////
+
 
       int repetidos = cantidadRepetidos(auxiliar, largoValores);
       if (repetidos > 1)
@@ -206,7 +217,9 @@ void calcularG(int t){
         {
           char *num2=calloc(5, sizeof(char));
           sprintf(num2,"%d", auxiliar[i].proximo);
-          strcat(proximos,num2);    
+          strcat(proximos,num2); 
+
+          valoresBellman[t].proximo[i]=auxiliar[i].proximo; //////   
         }
         listaProximos[t]= proximos;
       }
