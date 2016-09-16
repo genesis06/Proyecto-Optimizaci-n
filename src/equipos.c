@@ -29,11 +29,11 @@ GtkWidget *resultadoString1;
 //variables especificas de este programa
 int tipo;//0=0/1, 1= bounded, 2= unbounded
 
-double inflacion;
+double inflacion=12.0;
 int valorCompra = 500;
 int plazoProyecto = 5; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int vidaUtil= 3; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
-int matrizValores[30][2]; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
+int matrizValores[30][3]; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 char *listaProximos[30] = {"", "" , "", "", ""}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int costosPorTiempo[30] = {0,0,0,0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE PLAZO
 int costos[3] = {0,0,0}; // CAMBIAR POR EL VALOR MAXIMO DE VIDA UTIL
@@ -87,6 +87,7 @@ char linea[100];
 
 // Funcion principal
 void reemplazoEquipos(){
+  printf("Inlfacion: %f\n", inflacion);
   calcularCostos();
   for (int i = plazoProyecto; i >= 0; i--)
   {
@@ -128,13 +129,13 @@ void calcularCostos(){
   costoInicial = valorCompra;
   for (int i = 0; i < vidaUtil; i++)
   {
-    if (ganancias[i]<=0)
+    if (matrizValores[i][2]<=0)
     {
       costos[i] = valorCompra + calcularMantenimientos(i+1) - matrizValores[i][1];
     }
     else{
 
-      costos[i] = (valorCompra + calcularMantenimientos(i+1) - matrizValores[i][1]) - ganancias[i];
+      costos[i] = (valorCompra + calcularMantenimientos(i+1) - matrizValores[i][1]) - matrizValores[i][2];
     }
     
   }
@@ -455,7 +456,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
     printf("Matriz\n");
 
     for(int i=0;i<vidaUtil;i++){
-         for(int j=0;j<2;j++){
+         for(int j=0;j<3;j++){
           //printf("%d %d\n", i,j);
         printf("%d ", matrizValores[i][j]); 
       }
@@ -487,10 +488,7 @@ void separarColumnas(int fila){
     matrizValores[fila][indiceColumnas] = valor;
     indiceColumnas++;
     token = strtok (NULL, " ");
-      
-    
   }
-   
 }
 
 //Esta funcion esconde los inputs para cambiar tamaño de matriz
@@ -557,15 +555,15 @@ void getTextInputValues()
 }
 void setTextInputValues()
 {
-   /*printf("Matriz\n");
+   printf("Matriz\n");
 
     for(int i=0;i<vidaUtil;i++){
-         for(int j=0;j<2;j++){
+         for(int j=0;j<3;j++){
           //printf("%d %d\n", i,j);
         printf("%d ", matrizValores[i][j]); 
       }
       printf("\n");
-    }*/
+    }
 
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
