@@ -395,7 +395,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 		infile = fopen(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)), "r");
 	 
 		char buff[255];
-    char *token ;
+        char *token ;
 		char *primeraLinea[255];
     
 
@@ -414,7 +414,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
           /** Obtiene datos de primera linea y la guarda en un array **/
           while (token != NULL)
           {
-              if(index <3){
+              if(index <4){
                 primeraLinea[index] = token;  
               }
               token = strtok (NULL, " ");
@@ -430,7 +430,8 @@ static void showOpenFile(GtkWidget* button, gpointer window)
           //gtk_combo_box_set_active(GTK_COMBO_BOX(comboBox),indiceComboObjetos );
           printf("Plazo: %d\n", plazoProyecto);
           printf("vida: %d\n", vidaUtil);
-          printf("Compra: %d\n", costoInicial);
+          printf("costo inical: %d\n", costoInicial);
+
           
     /********************** Proceso para leer y guardar matriz ******************************/      
     int indiceFilas = 0;
@@ -440,20 +441,19 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 		while (fgets(buff, 255, (FILE*)infile)){
 
             strcpy(linea, buff);
-            //printf("Linea: %s\n", buff);
+            printf(" linea: %s \n", linea);
             if(indiceFilas < vidaUtil){
-            separarColumnas(indiceFilas); 
-            //printf("Objeto: %s\n",  nombres[0].name); 
+                separarColumnas(indiceFilas); 
             }
-
             indiceFilas++;
             strcpy(linea,"");
+
 			
 		}
     /*****************************************************************************************/
 
     /** Imprime matriz  **/
-    printf("Matriz\n");
+    //printf("Matriz\n");
 
     for(int i=0;i<vidaUtil;i++){
          for(int j=0;j<3;j++){
@@ -480,13 +480,15 @@ void separarColumnas(int fila){
   int indiceColumnas =0;
   /**Agarra el primer token separado por espacio**/
   token = strtok (linea," ");  
-  
+  printf("enter : %d \n", token); 
   while (token != NULL )
   {
     /***Guarda el token en la matriz****/
     int valor = atoi(token);
     matrizValores[fila][indiceColumnas] = valor;
+    printf("valor %d   fila: %d   columna: %d \n ", valor, fila ,indiceColumnas); 
     indiceColumnas++;
+    
     token = strtok (NULL, " ");
   }
 }
@@ -555,26 +557,17 @@ void getTextInputValues()
 }
 void setTextInputValues()
 {
-   printf("Matriz\n");
-
-    for(int i=0;i<vidaUtil;i++){
-         for(int j=0;j<3;j++){
-          //printf("%d %d\n", i,j);
-        printf("%d ", matrizValores[i][j]); 
-      }
-      printf("\n");
-    }
 
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (int j = 1; j < 4; ++j)
         { 
             if(i < vidaUtil)
               {
-                 char newChar[4];
-                  snprintf(newChar, 4, "%d", matrizValores[i][j]);
-                  gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), newChar);
-                 gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
+                char newChar[5];
+                snprintf(newChar, 5, "%d", matrizValores[i][j-1]);
+                gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), newChar);
+                gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
               }
               else
               {
@@ -583,6 +576,10 @@ void setTextInputValues()
         }
          
     }
+
+    char newValorInicial[10];
+    snprintf(newValorInicial, 10, "%d", costoInicial);
+    gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[0][4]), newValorInicial);
   /*  for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
        
