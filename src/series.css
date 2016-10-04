@@ -1,0 +1,47 @@
+
+.resultMatrix GtkLabel
+{
+	border-style: solid;
+	border-width: 1px;
+	border-color: #AEA79F;
+	padding: 7px;
+}
+.resultMatrix GtkLabel:first‑child
+{
+	border-color: #333333;
+}
+.resultMatrix GtkButton
+{
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+}
+
+.resultMatrix GtkEntry
+{
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+}
+
+.inputMatrix GtkLabel
+{
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	
+}
+
+.inputMatrix GtkButton
+{
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+}
+
+.inputMatrix GtkEntry
+{
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+}
