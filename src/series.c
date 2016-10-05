@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     
     
     GtkBuilder  *builder;
-    //GtkGrid    *inputsGrid;
+    GtkGrid    *inputsGrid;
 
 
     gtk_init(&argc, &argv);
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     comboJuegos = GTK_WIDGET(gtk_builder_get_object(builder, "totalJuegosCombo"));
     //totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxPlazo)); //TODO remove comment
   
-    //inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput"));
+    inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput"));
     //resultGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridRespuesta"));
     //gtk_widget_set_name (GTK_WIDGET(resultGrid), "gridRespuesta");
 
@@ -83,11 +83,11 @@ int main(int argc, char *argv[])
     gtk_widget_show(inputScreen);
     
 
-    for (int i = 4; i < 10; ++i)
+    for (int i = 0; i < 20; ++i)
     {
         
 
-    	lugarJuegosLabels[i] = gtk_grid_get_child_at(resultGrid,i + 2 ,1);
+    	lugarJuegosLabels[i] = gtk_grid_get_child_at(GTK_GRID(inputsGrid),1 ,i+2);
         
     }
 
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
   	screen = gdk_display_get_default_screen (display);
   	gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   	gsize bytes_written, bytes_read;
-  	const gchar* ccsContent = "src/equipos.css";  
+  	const gchar* ccsContent = "src/series.css";  
   	GError *error = 0;
    	gtk_css_provider_load_from_path (provider,
                                       g_filename_to_utf8(ccsContent, strlen(ccsContent), &bytes_read, &bytes_written, &error),
@@ -125,11 +125,16 @@ int main(int argc, char *argv[])
 
 }
 
+void closeWindow()
+{
+    gtk_main_quit();
+}
+
 //function for binterface input buttons, used to change location value
 void changePlace0(){
 	//change value in array
 	char *currentLabelValue = lugarJuegos[0];
-	if(strcmp(comparingValue, currentLabelValue) != 0)
+	if(strcmp(comparingValue, currentLabelValue) == 0)
 	{
 		lugarJuegos[0] = changeValue;
 	}
@@ -138,177 +143,178 @@ void changePlace0(){
 		lugarJuegos[0] = comparingValue;
 	}
 	//update string in interface
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[0]), lugarJuegos[0]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[0]), lugarJuegos[0]);
 }
 
 void changePlace1(){
 	char *currentLabelValue = lugarJuegos[1];
-	if(strcmp(comparingValue, currentLabelValue) != 1){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[1] = changeValue;
 	}else{
-		lugarJuegos[1] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[1]), lugarJuegos[1]);
+		lugarJuegos[1] = comparingValue;
+	}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[1]), lugarJuegos[1]);
 }
 
 void changePlace2(){
 	char *currentLabelValue = lugarJuegos[2];
-	if(strcmp(comparingValue, currentLabelValue) != 2){
+	if(strcmp(comparingValue, lugarJuegos[2]) == 0){
 		lugarJuegos[2] = changeValue;
 	}else{
 		lugarJuegos[2] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[2]), lugarJuegos[2]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[2]), lugarJuegos[2]);
 }
 
 void changePlace3(){
 	char *currentLabelValue = lugarJuegos[3];
-	if(strcmp(comparingValue, currentLabelValue) != 3){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[3] = changeValue;
 	}else{
 		lugarJuegos[3] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[3]), lugarJuegos[3]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[3]), lugarJuegos[3]);
 }
 
 void changePlace4(){
 	char *currentLabelValue = lugarJuegos[4];
-	if(strcmp(comparingValue, currentLabelValue) != 4){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[4] = changeValue;
 	}else{
 		lugarJuegos[4] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[4]), lugarJuegos[4]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[4]), lugarJuegos[4]);
 }
 
 void changePlace5(){
 	char *currentLabelValue = lugarJuegos[5];
-	if(strcmp(comparingValue, currentLabelValue) != 5){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[5] = changeValue;
 	}else{
 		lugarJuegos[5] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[5]), lugarJuegos[5]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[5]), lugarJuegos[5]);
 }
 
 void changePlace6(){
 	char *currentLabelValue = lugarJuegos[6];
-	if(strcmp(comparingValue, currentLabelValue) != 6){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[6] = changeValue;
 	}else{
 		lugarJuegos[6] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[6]), lugarJuegos[6]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[6]), lugarJuegos[6]);
 }
 
 void changePlace7(){
 	char *currentLabelValue = lugarJuegos[7];
-	if(strcmp(comparingValue, currentLabelValue) != 7){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[7] = changeValue;
 	}else{
 		lugarJuegos[7] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[7]), lugarJuegos[7]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[7]), lugarJuegos[7]);
 }
 
 void changePlace8(){
 	char *currentLabelValue = lugarJuegos[8];
-	if(strcmp(comparingValue, currentLabelValue) != 8){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[8] = changeValue;
 	}else{
 		lugarJuegos[8] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[8]), lugarJuegos[8]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[8]), lugarJuegos[8]);
 }
 
 void changePlace9(){
 	char *currentLabelValue = lugarJuegos[9];
-	if(strcmp(comparingValue, currentLabelValue) != 9){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[9] = changeValue;
 	}else{
 		lugarJuegos[9] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[9]), lugarJuegos[9]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[9]), lugarJuegos[9]);
 }
 
 void changePlace10(){
 	char *currentLabelValue = lugarJuegos[10];
-	if(strcmp(comparingValue, currentLabelValue) != 10){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[10] = changeValue;
 	}else{
 		lugarJuegos[10] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[10]), lugarJuegos[10]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[10]), lugarJuegos[10]);
 }
 
 void changePlace11(){
 	char *currentLabelValue = lugarJuegos[11];
-	if(strcmp(comparingValue, currentLabelValue) != 11){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[11] = changeValue;
 	}else{
 		lugarJuegos[11] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[11]), lugarJuegos[11]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[11]), lugarJuegos[11]);
 }
 
 void changePlace12(){
 	char *currentLabelValue = lugarJuegos[12];
-	if(strcmp(comparingValue, currentLabelValue) != 12){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[12] = changeValue;
 	}else{
 		lugarJuegos[12] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[12]), lugarJuegos[12]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[12]), lugarJuegos[12]);
 }
 
 void changePlace13(){
 	char *currentLabelValue = lugarJuegos[13];
-	if(strcmp(comparingValue, currentLabelValue) != 13){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[13] = changeValue;
 	}else{
 		lugarJuegos[13] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[13]), lugarJuegos[13]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[13]), lugarJuegos[13]);
 }
 
 void changePlace14(){
 	char *currentLabelValue = lugarJuegos[14];
-	if(strcmp(comparingValue, currentLabelValue) != 14){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[14] = changeValue;
 	}else{
 		lugarJuegos[14] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[14]), lugarJuegos[14]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[14]), lugarJuegos[14]);
 }
 
 void changePlace15(){
 	char *currentLabelValue = lugarJuegos[15];
-	if(strcmp(comparingValue, currentLabelValue) != 15){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[15] = changeValue;
 	}else{
 		lugarJuegos[15] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[15]), lugarJuegos[15]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[15]), lugarJuegos[15]);
 }
 
 void changePlace16(){
 	char *currentLabelValue = lugarJuegos[16];
-	if(strcmp(comparingValue, currentLabelValue) != 16){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[16] = changeValue;
 	}else{
 		lugarJuegos[16] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[16]), lugarJuegos[16]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[16]), lugarJuegos[16]);
 }
 
 void changePlace17(){
 	char *currentLabelValue = lugarJuegos[17];
-	if(strcmp(comparingValue, currentLabelValue) != 17){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[17] = changeValue;
 	}else{
 		lugarJuegos[17] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[17]), lugarJuegos[17]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[17]), lugarJuegos[17]);
 }
 
 void changePlace18(){
 	char *currentLabelValue = lugarJuegos[18];
-	if(strcmp(comparingValue, currentLabelValue) != 18){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[18] = changeValue;
 	}else{
 		lugarJuegos[18] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[18]), lugarJuegos[18]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[18]), lugarJuegos[18]);
 }
 
 void changePlace19(){
 	char *currentLabelValue = lugarJuegos[19];
-	if(strcmp(comparingValue, currentLabelValue) != 19){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[19] = changeValue;
 	}else{
 		lugarJuegos[19] = comparingValue;}
-   	gtk_button_set_label (GTK_BUTTON (lugarJuegosLabels[19]), lugarJuegos[19]);
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[19]), lugarJuegos[19]);
 }
 
