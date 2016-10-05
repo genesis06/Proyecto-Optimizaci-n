@@ -44,6 +44,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="resolver" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -157,7 +158,7 @@
                                         <property name="max_length">4</property>
                                         <property name="width_chars">4</property>
                                         <property name="max_width_chars">4</property>
-                                        <property name="placeholder_text" translatable="yes">1.0</property>
+                                        <property name="text" translatable="yes">1,0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -199,7 +200,7 @@
                                         <property name="max_length">4</property>
                                         <property name="width_chars">4</property>
                                         <property name="max_width_chars">4</property>
-                                        <property name="placeholder_text" translatable="yes">1.0</property>
+                                        <property name="text" translatable="yes">1,0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -237,7 +238,8 @@
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="margin_left">10</property>
-                                        <property name="active">20</property>
+                                        <property name="active">10</property>
+                                        <property name="active_id">10</property>
                                         <items>
                                           <item id="1" translatable="yes">1</item>
                                           <item id="2" translatable="yes">2</item>

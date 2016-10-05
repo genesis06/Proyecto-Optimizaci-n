@@ -14,19 +14,19 @@
 #include <stdio.h>
 
 //------------variables del problema --------
-double probGaneACasa = 1.0;//tomada de la interfaz
-double probPerderACasa = 0;//calculado
+float probGaneACasa = 1.0;//tomada de la interfaz
+float probPerderACasa = 0;//calculado
 
-double probGaneAVisita = 1.0;//tomada de la interfaz
-double probPerderAVisita = 0;//calculado
+float probGaneAVisita = 1.0;//tomada de la interfaz
+float probPerderAVisita = 0;//calculado
 
-double probGaneBCasa = 1.0;//calculado
-double probPerderBCasa = 0;//calculado
+float probGaneBCasa = 1.0;//calculado
+float probPerderBCasa = 0;//calculado
 
-double probGaneBVisita = 1.0;//calculado
-double probPerderBVisita = 0;//calculado
+float probGaneBVisita = 1.0;//calculado
+float probPerderBVisita = 0;//calculado
 //usar esta variable para los valores de la respuesta
-double answerMatrix[20][20] = {{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0}};//TODO cambiar, datos de prueb
+float answerMatrix[20][20] = {{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0}};//TODO cambiar, datos de prueb
 
 int totalJuegos = 4;//TODO cambiar, datos de prueb
 //variables para la localidad de juego
@@ -50,6 +50,43 @@ GtkWidget *probCasaInput;
 GtkWidget *probVisitaInput;
 GtkWidget *lugarJuegosLabels[20];
 
+
+//functions reference
+
+static void getTextInputValues();
+
+
+void resolver (GtkWidget* button, gpointer window)
+{
+    gtk_widget_hide(inputScreen);
+    gtk_widget_show(resultScreen);
+    getTextInputValues();
+    
+
+    //TODO call funtion to solve problem
+    
+    //cleanLabels();
+    //displayAnswer();
+}
+
+//this function replaces the textInputsMatrix with curret values
+void getTextInputValues()
+{
+    totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboJuegos));
+    gchar *inputValueACasaString = gtk_entry_get_text(GTK_ENTRY(probCasaInput));
+    probGaneACasa = atof(inputValueACasaString);
+    gchar *probGaneAVisitaString = gtk_entry_get_text(GTK_ENTRY(probVisitaInput));
+    probGaneAVisita = atof(probGaneAVisitaString);
+    
+
+    //TODO remove this console lines
+    printf("input values: \n Porcentajes: \n Casa %f  Visita %f  \n",probGaneACasa, probGaneAVisita);
+    for (int i = 0; i < 20; ++i)
+    {
+        printf(" %s", lugarJuegos[i]);
+    }
+    printf("\n");
+}
 //--------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
@@ -68,9 +105,11 @@ int main(int argc, char *argv[])
     window = GTK_WIDGET(gtk_builder_get_object(builder, "seriesWindow"));
     gtk_builder_connect_signals(builder, NULL);
 
+    probCasaInput = GTK_WIDGET(gtk_builder_get_object(builder, "probACasaInput"));
+    probVisitaInput = GTK_WIDGET(gtk_builder_get_object(builder, "probaAVisitaInput"));
 
     comboJuegos = GTK_WIDGET(gtk_builder_get_object(builder, "totalJuegosCombo"));
-    //totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxPlazo)); //TODO remove comment
+    totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboJuegos)); //TODO remove comment
   
     inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput"));
     //resultGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridRespuesta"));
@@ -158,7 +197,7 @@ void changePlace1(){
 
 void changePlace2(){
 	char *currentLabelValue = lugarJuegos[2];
-	if(strcmp(comparingValue, lugarJuegos[2]) == 0){
+	if(strcmp(comparingValue, currentLabelValue) == 0){
 		lugarJuegos[2] = changeValue;
 	}else{
 		lugarJuegos[2] = comparingValue;}

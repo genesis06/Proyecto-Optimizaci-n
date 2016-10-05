@@ -49,7 +49,7 @@ void runArboles()
 void runSeries()
 {
   
-    system("cd src ; ./series &");
+    system(" ./src/series &");
 }
 void runMultiplicacion()
 {
