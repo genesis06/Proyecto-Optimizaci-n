@@ -49,11 +49,13 @@ GtkWidget *comboJuegos;//numero de juegos
 GtkWidget *probCasaInput;
 GtkWidget *probVisitaInput;
 GtkWidget *lugarJuegosLabels[20];
+GtkWidget *resultInputsMatrix[20][20];
 
 
 //functions reference
 
 static void getTextInputValues();
+static void displayAnswer();
 void series();
 void imprimir();
 char* calcularLocalia();
@@ -119,9 +121,40 @@ void resolver (GtkWidget* button, gpointer window)
     //void series();
 
     //cleanLabels();
-    //displayAnswer();
+    displayAnswer();
 }
 
+void displayAnswer()
+{   
+    for (int i = 1; i < 21; ++i)
+    {
+        for (int j = 1; j < 21; ++j)
+        { 
+            char tempString[10];
+            snprintf(tempString, 10, "%f",answerMatrix[i-1][j-1]);   
+            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[i][j]), tempString);
+            
+        }
+    }
+    
+    for (int iClean = 0; iClean < 20; ++iClean)
+    {
+        for (int jClean = 0; jClean < 32; ++jClean)
+        { 
+             
+          if(iClean > totalJuegos + 1 || jClean > totalJuegos + 1)
+          {
+            gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
+          }
+          else
+          {
+              gtk_widget_show (resultInputsMatrix[iClean][jClean]);
+            }
+           
+        }
+    }
+    
+}
 //this function replaces the textInputsMatrix with curret values
 void getTextInputValues()
 {
@@ -165,7 +198,7 @@ int main(int argc, char *argv[])
     totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboJuegos)); //TODO remove comment
   
     inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput"));
-    //resultGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridRespuesta"));
+    resultGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridRespuesta"));
     //gtk_widget_set_name (GTK_WIDGET(resultGrid), "gridRespuesta");
 
     inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxInput"));
@@ -183,7 +216,18 @@ int main(int argc, char *argv[])
         
     }
 
-    
+    for (int i = 0; i < 20; ++i)
+    {
+        for (int j = 0; j < 20; ++j)
+        { 
+                resultInputsMatrix[i][j] = gtk_label_new (" " );
+                gtk_widget_show (resultInputsMatrix[i][j]);
+                gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
+            
+          
+           
+        }
+    }
 
 
     GtkCssProvider *provider;
