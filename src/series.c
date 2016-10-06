@@ -14,23 +14,23 @@
 #include <stdio.h>
 
 //------------variables del problema --------
-float probGaneACasa = 1.0;//tomada de la interfaz
+float probGaneACasa = 0.57;//tomada de la interfaz
 float probPerderACasa = 0;//calculado
 
-float probGaneAVisita = 1.0;//tomada de la interfaz
+float probGaneAVisita = 0.49;//tomada de la interfaz
 float probPerderAVisita = 0;//calculado
 
-float probGaneBCasa = 1.0;//calculado
+float probGaneBCasa = 0.51;//calculado
 float probPerderBCasa = 0;//calculado
 
-float probGaneBVisita = 1.0;//calculado
+float probGaneBVisita = 0.43;//calculado
 float probPerderBVisita = 0;//calculado
 //usar esta variable para los valores de la respuesta
 float answerMatrix[20][20] = {{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0}};//TODO cambiar, datos de prueb
 
 int totalJuegos = 4;//TODO cambiar, datos de prueb
 //variables para la localidad de juego
-char *lugarJuegos[20] = {"casa", "casa", "casa", "casa", "casa",
+char *lugarJuegos[20] = {"casa", "casa", "visita", "visita", "visita",
 						"casa", "casa", "casa", "casa", "casa",
 						"casa", "casa", "casa", "casa", "casa",
 						"casa", "casa", "casa", "casa", "casa"};
@@ -54,6 +54,57 @@ GtkWidget *lugarJuegosLabels[20];
 //functions reference
 
 static void getTextInputValues();
+void series();
+void imprimir();
+char* calcularLocalia();
+
+void series(){
+
+    for (int i = 0; i < totalJuegos +1; i++)
+    {
+        for (int j = 0; j < totalJuegos +1; j++)
+        {
+            if(i==0 && j==0){
+                answerMatrix[i][j]=-1.0;
+            }
+            else{
+                if(j==0){
+                    answerMatrix[i][j]=0.0;       
+                }
+                else if(i==0){
+                    answerMatrix[i][j]=1.0;
+                }
+                else{
+                    if(calcularLocalia(i,j) == "casa"){
+                        
+                        answerMatrix[i][j]= probGaneACasa * answerMatrix[i-1][j] + probGaneBVisita* answerMatrix[i][j-1];    
+                    }
+                    else{
+                        answerMatrix[i][j]= probGaneAVisita * answerMatrix[i-1][j] + probGaneBCasa* answerMatrix[i][j-1];   
+                    }
+                }
+            }
+        }
+    }
+    imprimir();
+}
+
+void imprimir(){
+    for (int i = 0; i < totalJuegos+1; ++i)
+    {
+        for (int j = 0; j < totalJuegos+1; ++j)
+        {
+            printf("%f\t", answerMatrix[i][j]);
+
+        }
+        printf("\n");
+    }
+}
+
+char* calcularLocalia(int i, int j){
+    return lugarJuegos[(totalJuegos-i) + (totalJuegos-j)];
+}
+
 
 
 void resolver (GtkWidget* button, gpointer window)
@@ -65,6 +116,8 @@ void resolver (GtkWidget* button, gpointer window)
 
     //TODO call funtion to solve problem
     
+    //void series();
+
     //cleanLabels();
     //displayAnswer();
 }
