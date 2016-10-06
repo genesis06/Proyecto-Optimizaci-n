@@ -67,22 +67,22 @@ void series(){
         for (int j = 0; j < totalJuegos +1; j++)
         {
             if(i==0 && j==0){
-                answerMatrix[i][j]=-1.0;
+                answerMatrix[i][j]=-0.0;
             }
             else{
                 if(j==0){
-                    answerMatrix[i][j]=0.0;       
+                    answerMatrix[i][j]=1.0;       
                 }
                 else if(i==0){
-                    answerMatrix[i][j]=1.0;
+                    answerMatrix[i][j]=0.0;
                 }
                 else{
                     if(calcularLocalia(i,j) == "casa"){
                         
-                        answerMatrix[i][j]= probGaneACasa * answerMatrix[i-1][j] + probGaneBVisita* answerMatrix[i][j-1];    
+                        answerMatrix[i][j]= probGaneBVisita * answerMatrix[i-1][j] +  probGaneACasa* answerMatrix[i][j-1];    
                     }
                     else{
-                        answerMatrix[i][j]= probGaneAVisita * answerMatrix[i-1][j] + probGaneBCasa* answerMatrix[i][j-1];   
+                        answerMatrix[i][j]= probGaneBCasa  * answerMatrix[i-1][j] + probGaneAVisita* answerMatrix[i][j-1];   
                     }
                 }
             }
@@ -118,7 +118,7 @@ void resolver (GtkWidget* button, gpointer window)
 
     //TODO call funtion to solve problem
     
-    //void series();
+    series();
 
     //cleanLabels();
     displayAnswer();
@@ -155,6 +155,90 @@ void displayAnswer()
     }
     
 }
+
+void showSaveFile(){
+
+  getTextInputValues();
+  
+  GtkWidget *dialog;
+  GtkFileChooser *chooser;
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+  gint res;
+
+  dialog = gtk_file_chooser_dialog_new ("Save File",
+                                        window,
+                                        action,
+                                        ("_Cancel"),
+                                        GTK_RESPONSE_CANCEL,
+                                        ("_Save"),
+                                        GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  chooser = GTK_FILE_CHOOSER (dialog);
+
+  gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
+
+  res = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (res == GTK_RESPONSE_ACCEPT)
+    {
+      printf("ENtro if\n");
+
+      char *filename = gtk_file_chooser_get_filename (chooser);
+
+      FILE *fichero;
+      //char stringSave[300];
+      char* lineas[50];
+      char texto[100];
+
+      fichero = fopen(filename,"w+");
+
+      if (fichero == NULL) {
+        printf( "No se puede crear el fichero.\n" );
+      }
+
+      /** Proceso para guardar datos en archivo **/
+      char *probAGanaCasa =calloc(10, sizeof(char));
+      char *probAGanaVisita =calloc(10, sizeof(char));
+      char *totalJuegosGanar =calloc(10, sizeof(char));
+      
+      //Conversion de tipos para guardar primera linea
+      sprintf(probAGanaCasa,"%f",probGaneACasa); // ***********CAMBIAR NUMERO POR plazoProyecto
+      sprintf(probAGanaVisita, "%f",probGaneAVisita); // **************CAMBIAR NUMERO POR tipo
+      sprintf(totalJuegosGanar, "%d",totalJuegos); //*********** CAMBIAR NUMERO POR vidaUtil
+      printf("%s %s %s\n",probAGanaCasa,probAGanaVisita,totalJuegosGanar );
+
+
+      
+      char *primerLinea =calloc(20, sizeof(char));
+
+      strcat(primerLinea, probAGanaCasa);
+      strcat(primerLinea," ");
+      strcat(primerLinea, probAGanaVisita);
+      strcat(primerLinea," ");
+      strcat(primerLinea, totalJuegosGanar);
+      strcat(primerLinea,"\n");
+
+      printf("String:%s\n", primerLinea);
+      fputs(primerLinea, fichero); // Escribe primera linea en archivo
+      strcpy(primerLinea,"");
+
+      for (int i = 0; i < totalJuegos*2-1; i++) 
+      {
+        fputs(lugarJuegos[i], fichero); // Escribe primera linea en archivo
+        fputs("\n",fichero);
+      }
+      //printf("stringSave: %s\n", stringSave);
+      //fputs(stringSave, fichero);
+      if (fclose(fichero)!=0)
+        printf( "Problemas al cerrar el fichero\n" );
+
+      /** Fin proceso  **/
+    
+    }
+
+    gtk_widget_destroy(dialog);
+}
+
 //this function replaces the textInputsMatrix with curret values
 void getTextInputValues()
 {
