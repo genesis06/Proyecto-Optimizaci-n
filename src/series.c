@@ -49,7 +49,8 @@ GtkWidget *comboJuegos;//numero de juegos
 GtkWidget *probCasaInput;
 GtkWidget *probVisitaInput;
 GtkWidget *lugarJuegosLabels[20];
-GtkWidget *resultInputsMatrix[20][20];
+GtkWidget *lugarJuegosButtons[20];
+GtkWidget *resultLabelsMatrix[20][20];
 
 
 //functions reference
@@ -130,25 +131,31 @@ void displayAnswer()
     {
         for (int j = 1; j < 21; ++j)
         { 
-            char tempString[10];
-            snprintf(tempString, 10, "%f",answerMatrix[i-1][j-1]);   
-            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[i][j]), tempString);
-            
+            if(i==1 && j==1)
+	      	{
+	           //do nothing
+	      	}
+          	else
+          	{
+          		char tempString[10];
+	            snprintf(tempString, 10, "%f",answerMatrix[i-1][j-1]);   
+	            gtk_label_set_text(GTK_LABEL(resultLabelsMatrix[i][j]), tempString);
+          	}   
         }
     }
     
-    for (int iClean = 0; iClean < 20; ++iClean)
+    for (int iClean = 0; iClean < 21; ++iClean)
     {
-        for (int jClean = 0; jClean < 32; ++jClean)
+        for (int jClean = 0; jClean < 21; ++jClean)
         { 
              
-          if(iClean > totalJuegos + 1 || jClean > totalJuegos + 1)
-          {
-            gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
-          }
-          else
-          {
-              gtk_widget_show (resultInputsMatrix[iClean][jClean]);
+          	if(iClean > totalJuegos + 1 || jClean > totalJuegos + 1)
+          	{
+            	gtk_widget_hide (resultLabelsMatrix[iClean][jClean]);
+          	}
+          	else
+          	{
+              gtk_widget_show (resultLabelsMatrix[iClean][jClean]);
             }
            
         }
@@ -173,6 +180,38 @@ void getTextInputValues()
     }
     printf("\n");
 }
+//updates when number of games changes
+void updateInput()
+{
+    totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboJuegos));
+    for (int i = 0; i < 20; ++i)
+    {
+        for (int j = 0; j < 20; ++j)
+        {
+           if(i <= totalJuegos)
+            {
+               gtk_widget_show(GTK_WIDGET (lugarJuegosButtons[i]));
+               gtk_widget_show(GTK_WIDGET (lugarJuegosLabels[i]));
+            }
+            else
+            {
+                gtk_widget_hide(GTK_WIDGET (lugarJuegosButtons[i]));
+                gtk_widget_hide(GTK_WIDGET (lugarJuegosLabels[i]));
+                lugarJuegos[i] = comparingValue;
+   				gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[i]), lugarJuegos[i]); 
+            }    
+        }
+    }
+
+}
+
+void cleanInput()
+{
+    gtk_widget_hide(resultScreen);
+    gtk_widget_show(inputScreen);
+    void updateInput();
+
+}
 //--------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
@@ -195,7 +234,7 @@ int main(int argc, char *argv[])
     probVisitaInput = GTK_WIDGET(gtk_builder_get_object(builder, "probaAVisitaInput"));
 
     comboJuegos = GTK_WIDGET(gtk_builder_get_object(builder, "totalJuegosCombo"));
-    totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboJuegos)); //TODO remove comment
+    totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboJuegos)); 
   
     inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput"));
     resultGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridRespuesta"));
@@ -213,19 +252,52 @@ int main(int argc, char *argv[])
         
 
     	lugarJuegosLabels[i] = gtk_grid_get_child_at(GTK_GRID(inputsGrid),1 ,i+2);
+    	lugarJuegosButtons[i] = gtk_grid_get_child_at(GTK_GRID(inputsGrid),0 ,i+2);
+
         
     }
 
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 21; ++i)
     {
+        for (int j = 0; j < 21; ++j)
+        { 
+            char tempString[10];
+               
+            if(i==0 && j==0)
+            {
+               resultLabelsMatrix[i][j] = gtk_label_new ("Tabla[i][j]");
+            }
+            else if(i==1 && j==1)
+            {
+               resultLabelsMatrix[i][j] = gtk_label_new ("Null");
+            }
+            else if(i==0)
+            {
+                
+                snprintf(tempString, 10, "%d", j);
+                resultLabelsMatrix[i][j] = gtk_label_new (tempString);
+            }
+            else if(j==0)
+            {
+                snprintf(tempString, 10, "%d", i);
+                resultLabelsMatrix[i][j] = gtk_label_new (tempString);
+            }
+            else
+            {
+                resultLabelsMatrix[i][j] = gtk_label_new ("0.001" );
+                
+            }
+            gtk_widget_show (resultLabelsMatrix[i][j]);
+            gtk_grid_attach (resultGrid,resultLabelsMatrix[i][j],i,j,1,1);
+  
+        }
+
         for (int j = 0; j < 20; ++j)
         { 
-                resultInputsMatrix[i][j] = gtk_label_new (" " );
-                gtk_widget_show (resultInputsMatrix[i][j]);
-                gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
-            
-          
-           
+                resultLabelsMatrix[i][j] = gtk_label_new (" " );
+                gtk_widget_show (resultLabelsMatrix[i][j]);
+                gtk_grid_attach (resultGrid,resultLabelsMatrix[i][j],i,j,1,1);
+  
         }
     }
 
