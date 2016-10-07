@@ -967,14 +967,14 @@ de Juego</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button5">
+              <object class="GtkButton" id="open_button">
                 <property name="label">gtk-open</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="relief">half</property>
                 <property name="use_stock">True</property>
                 <property name="always_show_image">True</property>
-                <signal name="clicked" handler="showOpenFile" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
