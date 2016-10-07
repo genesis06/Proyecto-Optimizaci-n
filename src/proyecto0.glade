@@ -201,7 +201,7 @@ Dinámica</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Prediccion de eventos en series deportivas.</property>
+                <property name="tooltip_text" translatable="yes">Resolver problemas de probabilidad para determinar la posibilidades de gane cuando dos equipos o sujetos se enfrentan. La implementación nos permite cambiar la probabilidad según la localidad.</property>
                 <property name="halign">start</property>
                 <property name="relief">none</property>
                 <property name="xalign">0.43000000715255737</property>

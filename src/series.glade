@@ -301,8 +301,8 @@ de Juego</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="margin_left">10</property>
-                                        <property name="label" translatable="yes">Lugar donde el partido se jugara
-(Presionar boton para cambiar) :</property>
+                                        <property name="label" translatable="yes">Lugar donde el partido se jugará
+(Presionar botón para cambiar) :</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>

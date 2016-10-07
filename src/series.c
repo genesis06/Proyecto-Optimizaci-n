@@ -136,6 +136,7 @@ void cleanInput()
 void updateInput()
 {
     totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboJuegos));
+    int calcularTotalJuegos = totalJuegos * 2;
     for (int i = 0; i < 20; ++i)
     {
         for (int j = 0; j < 20; ++j)
@@ -449,12 +450,12 @@ int main(int argc, char *argv[])
             else if(i==0)
             {
                 
-                snprintf(tempString, 10, "%d", j);
+                snprintf(tempString, 10, "%d", j - 1);
                 resultLabelsMatrix[i][j] = gtk_label_new (tempString);
             }
             else if(j==0)
             {
-                snprintf(tempString, 10, "%d", i);
+                snprintf(tempString, 10, "%d", i - 1);
                 resultLabelsMatrix[i][j] = gtk_label_new (tempString);
             }
             else
