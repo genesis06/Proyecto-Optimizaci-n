@@ -141,7 +141,7 @@ void updateInput()
     {
         for (int j = 0; j < 20; ++j)
         {
-           if(i <= totalJuegos)
+           if(i <= calcularTotalJuegos)
             {
                gtk_widget_show(GTK_WIDGET (lugarJuegosButtons[i]));
                gtk_widget_show(GTK_WIDGET (lugarJuegosLabels[i]));
