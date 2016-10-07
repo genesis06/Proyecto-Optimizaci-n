@@ -967,7 +967,7 @@ de Juego</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="open_button">
+              <object class="GtkButton" id="button5">
                 <property name="label">gtk-open</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
