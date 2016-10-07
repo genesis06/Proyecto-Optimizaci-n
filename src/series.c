@@ -30,7 +30,9 @@ float answerMatrix[20][20] = {{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1
 
 int totalJuegos = 4;//TODO cambiar, datos de prueb
 //variables para la localidad de juego
-char *lugarJuegos[20] = {"casa", "casa", "visita", "visita", "visita",
+char *lugarJuegos[30] = {"casa", "casa", "visita", "visita", "visita",
+						"casa", "casa", "casa", "casa", "casa",
+						"casa", "casa", "casa", "casa", "casa",
 						"casa", "casa", "casa", "casa", "casa",
 						"casa", "casa", "casa", "casa", "casa",
 						"casa", "casa", "casa", "casa", "casa"};
@@ -49,8 +51,8 @@ GtkWidget *button;
 GtkWidget *comboJuegos;//numero de juegos
 GtkWidget *probCasaInput;
 GtkWidget *probVisitaInput;
-GtkWidget *lugarJuegosButtons[20];
-GtkWidget *lugarJuegosLabels[20];
+GtkWidget *lugarJuegosButtons[30];
+GtkWidget *lugarJuegosLabels[30];
 GtkWidget *resultLabelsMatrix[20][20];
 
 
@@ -137,9 +139,9 @@ void updateInput()
 {
     totalJuegos = gtk_combo_box_get_active (GTK_COMBO_BOX(comboJuegos));
     int calcularTotalJuegos = totalJuegos * 2;
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 30; ++i)
     {
-        for (int j = 0; j < 20; ++j)
+        for (int j = 0; j < 30; ++j)
         {
            if(i <= calcularTotalJuegos)
             {
@@ -350,10 +352,12 @@ static void showOpenFile(GtkWidget* button, gpointer window)
         gtk_entry_set_text (GTK_ENTRY (probCasaInput), tempProbCasa);
         gtk_entry_set_text (GTK_ENTRY (probVisitaInput), tempProbVisita);
    		gtk_combo_box_set_active(GTK_COMBO_BOX(comboJuegos),totalJuegos );
-   		GtkWidget *comboJuegos;//numero de juegos
-		GtkWidget *probCasaInput;
-		GtkWidget *probVisitaInput;
-
+   		 for (int i = 0; i < 30; ++i)
+    	{
+        
+    		gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[i]), lugarJuegos[i]);
+    	}
+    	updateInput();
           
     /********************** Proceso para leer y guardar matriz ******************************/      
     int indiceFilas = 0;
@@ -436,7 +440,7 @@ int main(int argc, char *argv[])
     gtk_widget_show(inputScreen);
     
 
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 30; ++i)
     {
         
 
@@ -705,5 +709,94 @@ void changePlace19(){
 	}else{
 		lugarJuegos[19] = comparingValue;}
    	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[19]), lugarJuegos[19]);
+}
+void changePlace20(){
+	char *currentLabelValue = lugarJuegos[20];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[20] = changeValue;
+	}else{
+		lugarJuegos[20] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[20]), lugarJuegos[20]);
+}
+
+void changePlace21(){
+	char *currentLabelValue = lugarJuegos[21];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[21] = changeValue;
+	}else{
+		lugarJuegos[21] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[21]), lugarJuegos[21]);
+}
+
+void changePlace22(){
+	char *currentLabelValue = lugarJuegos[22];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[22] = changeValue;
+	}else{
+		lugarJuegos[22] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[22]), lugarJuegos[22]);
+}
+
+void changePlace23(){
+	char *currentLabelValue = lugarJuegos[23];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[23] = changeValue;
+	}else{
+		lugarJuegos[23] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[23]), lugarJuegos[23]);
+}
+
+void changePlace24(){
+	char *currentLabelValue = lugarJuegos[24];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[24] = changeValue;
+	}else{
+		lugarJuegos[24] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[24]), lugarJuegos[24]);
+}
+
+void changePlace25(){
+	char *currentLabelValue = lugarJuegos[25];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[25] = changeValue;
+	}else{
+		lugarJuegos[25] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[25]), lugarJuegos[25]);
+}
+
+void changePlace26(){
+	char *currentLabelValue = lugarJuegos[26];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[26] = changeValue;
+	}else{
+		lugarJuegos[26] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[26]), lugarJuegos[26]);
+}
+
+void changePlace27(){
+	char *currentLabelValue = lugarJuegos[27];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[27] = changeValue;
+	}else{
+		lugarJuegos[27] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[27]), lugarJuegos[27]);
+}
+
+void changePlace28(){
+	char *currentLabelValue = lugarJuegos[28];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[28] = changeValue;
+	}else{
+		lugarJuegos[28] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[28]), lugarJuegos[28]);
+}
+
+void changePlace29(){
+	char *currentLabelValue = lugarJuegos[29];
+	if(strcmp(comparingValue, currentLabelValue) == 0){
+		lugarJuegos[29] = changeValue;
+	}else{
+		lugarJuegos[29] = comparingValue;}
+   	gtk_label_set_text (GTK_LABEL (lugarJuegosLabels[29]), lugarJuegos[29]);
 }
 

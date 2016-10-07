@@ -1,4 +1,4 @@
-0.52 0.48 4
+0,52 0,48 4
 visita
 visita
 visita
