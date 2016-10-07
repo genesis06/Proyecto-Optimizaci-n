@@ -157,9 +157,9 @@ void updateInput()
 }
 void displayAnswer()
 {   
-    for (int i = 1; i < 21; ++i)
+    for (int i = 1; i < 19; ++i)
     {
-        for (int j = 1; j < 21; ++j)
+        for (int j = 1; j < 19; ++j)
         { 
             if(i==1 && j==1)
             {
@@ -173,10 +173,10 @@ void displayAnswer()
             }  
         }
     }
-    /*
-    for (int iClean = 0; iClean < 21; ++iClean)
+    
+    for (int iClean = 0; iClean < 20; ++iClean)
     {
-        for (int jClean = 0; jClean < 21; ++jClean)
+        for (int jClean = 0; jClean < 20; ++jClean)
         { 
              
           if(iClean > totalJuegos + 1 || jClean > totalJuegos + 1)
@@ -189,7 +189,7 @@ void displayAnswer()
             }
            
         }
-    } */
+    } 
     
 }
 
