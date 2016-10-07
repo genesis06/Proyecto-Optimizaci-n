@@ -43,6 +43,7 @@ GtkWidget   *window;
 GtkGrid   *resultGrid;
 GtkWidget *resultScreen;
 GtkWidget *inputScreen;
+GtkWidget *button;
 
 //intefaz con valores de variables
 GtkWidget *comboJuegos;//numero de juegos
@@ -239,6 +240,96 @@ void showSaveFile(){
     gtk_widget_destroy(dialog);
 }
 
+//Open File
+static void showOpenFile(GtkWidget* button, gpointer window)
+{
+        //Contruccion Dialog
+
+	GtkWidget *dialog;
+	
+  dialog = gtk_file_chooser_dialog_new("Chosse a file", GTK_WINDOW(window), 
+				GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_OK, GTK_RESPONSE_OK, 
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+
+	gtk_widget_show_all(dialog);
+
+        //Localizar el directorio
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), g_get_home_dir());
+
+        //Guarda la respuesta al hacer Ok/Cancel
+	gint resp = gtk_dialog_run(GTK_DIALOG(dialog));
+
+	if(resp == GTK_RESPONSE_OK)
+		{
+			
+		FILE *infile;
+		
+		
+		infile = fopen(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)), "r");
+	 
+		char buff[255];
+        char *token ;
+		char *primeraLinea[255];
+    
+
+		//Leer hasta que no hay lineas
+		  
+			fgets(buff, 255, (FILE*)infile);
+
+
+			//Lee primera Linea	
+			   strcpy(primeraLinea, buff);
+			
+         /******* Inicia proceso de split línea para obtener datos ******/
+          token = strtok (buff," ");
+          int index = 0;
+
+          /** Obtiene datos de primera linea y la guarda en un array **/
+          while (token != NULL)
+          {
+              if(index <3){
+                primeraLinea[index] = token;  
+              }
+              token = strtok (NULL, " ");
+              index++;
+          }
+          /***************************************************************/
+          
+          /** Inicializa variables**/
+          probGaneACasa = atof(primeraLinea[0]);
+          probGaneAVisita = atof(primeraLinea[1]);
+          totalJuegos = atof(primeraLinea[2]);
+
+          //gtk_combo_box_set_active(GTK_COMBO_BOX(comboBox),indiceComboObjetos );
+          printf("Prob casa: %f\n", probGaneACasa);
+          printf("Prob visita: %f\n", probGaneAVisita);
+          printf("Total Juegos: %d\n", totalJuegos);
+
+          
+    /********************** Proceso para leer y guardar matriz ******************************/      
+    int indiceFilas = 0;
+    
+
+    // Lee resto de líneas
+		while (fgets(buff, 255, (FILE*)infile)){
+
+            lugarJuegos[indiceFilas] = buff;
+            indiceFilas++;
+            printf("Lugar: %s", buff);
+
+			
+		}
+    /*****************************************************************************************/
+
+		// Cerrar Archivo
+		fclose(infile);
+		}
+	  gtk_widget_destroy(dialog);
+  
+  //setTextInputValues();
+	
+}
+
 //this function replaces the textInputsMatrix with curret values
 void getTextInputValues()
 {
@@ -287,6 +378,9 @@ int main(int argc, char *argv[])
 
     inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxInput"));
     resultScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxResult"));
+
+    button = GTK_WIDGET(gtk_builder_get_object(builder, "open_button"));
+    g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);	
 
     gtk_widget_hide(resultScreen);
     gtk_widget_show(inputScreen);
