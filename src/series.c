@@ -64,9 +64,9 @@ char* calcularLocalia();
 
 void series(){
 
-    for (int i = 0; i < totalJuegos +1; i++)
+    for (int i = 0; i < totalJuegos + 2; i++)
     {
-        for (int j = 0; j < totalJuegos +1; j++)
+        for (int j = 0; j < totalJuegos + 2 ; j++)
         {
             if(i==0 && j==0){
                 answerMatrix[i][j]=-0.0;
@@ -106,7 +106,7 @@ void imprimir(){
 }
 
 char* calcularLocalia(int i, int j){
-    return lugarJuegos[(totalJuegos-i) + (totalJuegos-j)];
+    return lugarJuegos[(totalJuegos-i + 1) + (totalJuegos-j + 1)];
 }
 
 
@@ -349,7 +349,7 @@ static void showOpenFile(GtkWidget* button, gpointer window)
 
         gtk_entry_set_text (GTK_ENTRY (probCasaInput), tempProbCasa);
         gtk_entry_set_text (GTK_ENTRY (probVisitaInput), tempProbVisita);
-   		gtk_combo_box_set_active(GTK_COMBO_BOX(comboJuegos),totalJuegos - 1);
+   		gtk_combo_box_set_active(GTK_COMBO_BOX(comboJuegos),totalJuegos );
    		GtkWidget *comboJuegos;//numero de juegos
 		GtkWidget *probCasaInput;
 		GtkWidget *probVisitaInput;
