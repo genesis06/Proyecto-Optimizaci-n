@@ -50,7 +50,7 @@ GtkWidget *probCasaInput;
 GtkWidget *probVisitaInput;
 GtkWidget *lugarJuegosButtons[20];
 GtkWidget *lugarJuegosLabels[20];
-GtkWidget *resultInputsMatrix[20][20];
+GtkWidget *resultLabelsMatrix[20][20];
 
 
 //functions reference
@@ -122,7 +122,7 @@ void resolver (GtkWidget* button, gpointer window)
     series();
 
     //cleanLabels();
-    //displayAnswer();
+    displayAnswer();
 }
 
 void cleanInput()
@@ -161,13 +161,19 @@ void displayAnswer()
     {
         for (int j = 1; j < 21; ++j)
         { 
-            char tempStringDisplay[10];
-            snprintf(tempStringDisplay, 10, "%0.3f",answerMatrix[i-1][j-1]);   
-            gtk_label_set_text(GTK_LABEL(resultInputsMatrix[i][j]), tempStringDisplay);
-            
+            if(i==1 && j==1)
+            {
+
+            }
+            else
+            {
+            	 char tempStringDisplay[10];
+            	snprintf(tempStringDisplay, 10, "%0.3f",answerMatrix[i-1][j-1]);   
+            	gtk_label_set_text(GTK_LABEL(resultLabelsMatrix[i][j]), tempStringDisplay);
+            }  
         }
     }
-    
+    /*
     for (int iClean = 0; iClean < 21; ++iClean)
     {
         for (int jClean = 0; jClean < 21; ++jClean)
@@ -175,15 +181,15 @@ void displayAnswer()
              
           if(iClean > totalJuegos + 1 || jClean > totalJuegos + 1)
           {
-            gtk_widget_hide (resultInputsMatrix[iClean][jClean]);
+            gtk_widget_hide (resultLabelsMatrix[iClean][jClean]);
           }
           else
           {
-              gtk_widget_show (resultInputsMatrix[iClean][jClean]);
+              gtk_widget_show (resultLabelsMatrix[iClean][jClean]);
             }
            
         }
-    }
+    } */
     
 }
 
@@ -335,9 +341,34 @@ int main(int argc, char *argv[])
     {
         for (int j = 0; j < 20; ++j)
         { 
-                resultInputsMatrix[i][j] = gtk_label_new (" - " );
-                gtk_widget_show (resultInputsMatrix[i][j]);
-                gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
+                char tempString[10];
+               
+            if(i==0 && j==0)
+            {
+               resultLabelsMatrix[i][j] = gtk_label_new ("Tabla[i][j]");
+            }
+            else if(i==1 && j==1)
+            {
+               resultLabelsMatrix[i][j] = gtk_label_new ("Null");
+            }
+            else if(i==0)
+            {
+                
+                snprintf(tempString, 10, "%d", j);
+                resultLabelsMatrix[i][j] = gtk_label_new (tempString);
+            }
+            else if(j==0)
+            {
+                snprintf(tempString, 10, "%d", i);
+                resultLabelsMatrix[i][j] = gtk_label_new (tempString);
+            }
+            else
+            {
+                resultLabelsMatrix[i][j] = gtk_label_new ("0.001" );
+                
+            }
+            gtk_widget_show (resultLabelsMatrix[i][j]);
+            gtk_grid_attach (resultGrid,resultLabelsMatrix[i][j],i,j,1,1);
             
           
            
