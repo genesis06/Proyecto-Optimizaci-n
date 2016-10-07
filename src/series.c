@@ -181,7 +181,7 @@ void displayAnswer()
         for (int jClean = 0; jClean < 20; ++jClean)
         { 
              
-          if(iClean > totalJuegos + 1 || jClean > totalJuegos + 1)
+          if(iClean > totalJuegos + 2 || jClean > totalJuegos + 2)
           {
             gtk_widget_hide (resultLabelsMatrix[iClean][jClean]);
           }
@@ -342,6 +342,17 @@ static void showOpenFile(GtkWidget* button, gpointer window)
           printf("Prob casa: %f\n", probGaneACasa);
           printf("Prob visita: %f\n", probGaneAVisita);
           printf("Total Juegos: %d\n", totalJuegos);
+          char *tempProbCasa[10];
+          char *tempProbVisita[10];
+          snprintf(tempProbCasa, 10, "%0.3f", probGaneACasa);
+          snprintf(tempProbVisita, 10, "%0.3f", probGaneAVisita);
+
+        gtk_entry_set_text (GTK_ENTRY (probCasaInput), tempProbCasa);
+        gtk_entry_set_text (GTK_ENTRY (probVisitaInput), tempProbVisita);
+   		gtk_combo_box_set_active(GTK_COMBO_BOX(comboJuegos),totalJuegos - 1);
+   		GtkWidget *comboJuegos;//numero de juegos
+		GtkWidget *probCasaInput;
+		GtkWidget *probVisitaInput;
 
           
     /********************** Proceso para leer y guardar matriz ******************************/      
