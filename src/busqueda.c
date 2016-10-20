@@ -22,9 +22,13 @@ typedef struct {
     float value;
 } Item;
 
-float answerMatrix[20][20] = {{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0}};//TODO cambiar, datos de prueb
-Item datos[29] = {{"Harrison", 0.18},{"Lennon" ,0.32},{"McCartney", 0.39},{"Starr", 0.11}};
-int tamDatos = 4;
+float answerMatrixA[20][20] = {{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0}};//TODO cambiar, datos de prueb
+int answerMatrixR[20][20] = {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};//TODO cambiar, datos de prueb
+//Item datos[20] = {{"Harrison", 0.18},{"Lennon" ,0.32},{"McCartney", 0.39},{"Starr", 0.11}};
+Item datos[20] = {{"Carpenter", 0.05},{"Cash" ,0.07},{"Cabain", 0.01},{"Harrison", 0.35},{"Hendrix", 0.09},
+          {"Joplin" ,0.23},{"Lennon", 0.15},{"Morrison", 0.04},{"Presley", 0.01}};
+int tamDatos = 9;
+int columnaInicial = 2;
 
 //variables de todos los problemas
 int MAX_INPUT_MATRIX_SIZE = 29;
@@ -48,14 +52,239 @@ int numeroLlaves = 10;
 
 
 //declaraciones de funcion .h
+bool verificarDatos();
+bool estaOrdenada();
+void ordenarDatos();
+void setTablaInicial();
+float calcularCasilla(int row, int col);
+void calcularValoresTabla();
+float sumarProbabilidades(int row,int col);
+float ordenar(float*valores, int largo, int row, int col);
+int getIndex(float number, float* array, int largo);
+void imprimirA();
+void imprimirR();
+
+
 static void getTextInputValues();
 static void displayAnswer();
 
 
 
 
+
+
 //---funciones del problema----------------
 
+// FUNCION PRINCIPAL DE LA LOGICA
+void busquedaArboles(){
+  //if(verificarDatos()){
+    if(estaOrdenada()){
+      setTablaInicial();
+      calcularValoresTabla();
+    }
+    else{
+      ordenarDatos();
+      setTablaInicial();
+      calcularValoresTabla();
+    }
+    imprimirA();
+    imprimirR();
+ // }
+  //else{
+    //printf("%s\n", "La suma de probabilidades es diferente de 1");
+  //}
+}
+
+// Inicializa las tablas A y R
+void setTablaInicial(){
+  for (int i = 0; i < tamDatos+1; i++)
+  {
+    for (int j = 0; j < tamDatos+1; j++)
+    {
+      if(i==j){
+        answerMatrixA[i][j] = 0.0;
+        answerMatrixR[i][j] = 0;
+      }
+      else if(i== j-1){
+        answerMatrixA[i][j] = datos[i].value;
+        answerMatrixR[i][j] = j;  
+      }
+      else{
+        answerMatrixA[i][j] = 0.0;  
+        answerMatrixR[i][j] = 0;  
+      }
+    }
+  }
+}
+
+// Calcula la tabla A de los costos minimos, junto con la tabla R
+void calcularValoresTabla(){
+  int contadorFila = 0;
+    for (int i = 0; i < tamDatos+1; ++i)
+    {
+      for (int j = columnaInicial; j < tamDatos+1; ++j)
+      {
+        answerMatrixA[contadorFila][j] = calcularCasilla(contadorFila,j);
+        contadorFila++;
+      }
+      contadorFila=0;
+      columnaInicial++;
+    }
+  
+}
+
+// Realiza el metodo PUM PUM para calcular el costo minimo.
+float calcularCasilla(int row, int col){ //  0,  2
+  float numeros[col-row];
+  int contaFilas = 0;
+  for (int j = row; j < col; ++j)
+  {
+    numeros[contaFilas] = answerMatrixA[row][j];
+    contaFilas++;
+    //printf("%f\n",  answerMatrixA[row][j]);
+  }
+  contaFilas = 0;
+  for (int i = row; i < col; ++i)
+  {
+    
+    //printf("%d %d\n",i+1, col );
+    //printf("%f\n", numeros[contaFilas]);
+    //printf("%f\n",  answerMatrixA[i+1][col]);
+    numeros[contaFilas] = numeros[contaFilas] + answerMatrixA[i+1][col];
+    contaFilas++;
+//    printf("SUma: %f\n", numeros[i]);
+  }
+  //for (int i = 0; i < col-row; i++)
+  //{
+    //printf("%f\n", numeros[i]);
+  //}
+  
+  return ordenar(numeros,col-row, row, col) + sumarProbabilidades(row,col);
+  
+}
+
+// Ordena los costos (sin probabilidades sumadas) para obtener el menor de ellos para el metodo PUM PUM
+// Ademas construye la tabla R con el k ganador
+float ordenar(float*valores, int largo, int row, int col){
+  float aux;
+  float auxiliar[largo];
+  memcpy(auxiliar,valores,sizeof(auxiliar)); 
+
+  /*for (int i = 0; i < largo; ++i)
+  {
+    printf("%f\n", valores[i]);
+  }*/
+
+  for (int i = 0; i < largo-1; i++)
+  {
+    for (int j = i+1; j < largo; j++)
+    {
+      if(valores[j] < valores[i]){
+        aux = valores[j];
+        valores[j] = valores[i];
+        valores[i] = aux;
+      }
+    }
+  }
+/*
+  for (int i = 0; i < largo; ++i)
+  {
+    printf("%f ", auxiliar[i]);
+  }
+  printf("\n");
+  printf("%d %d: %d \n",row,col, getIndex(valores[0], auxiliar, largo) +row);*/
+  answerMatrixR[row][col] = getIndex(valores[0], auxiliar, largo)+row+1;
+  return valores[0];
+
+}
+
+// Ordena los datos de menor a mayor
+void ordenarDatos(){
+  Item aux;
+  for (int i = 0; i < tamDatos-1; i++)
+  {
+    for (int j = i+1; j < tamDatos; j++)
+    {
+      if(datos[j].name < datos[i].name){
+        aux = datos[j];
+        datos[j] = datos[i];
+        datos[i] = aux;
+      }
+    }
+  }
+}
+
+// Verifica si la lista de datos esta ordenada
+bool estaOrdenada(){
+  float ref = datos[0].value;
+  for (int i = 1; i < tamDatos-1; ++i)
+  {
+    if(ref > datos[i].value){
+      return false;
+    }
+  }
+  return true;
+
+}
+
+// Suma las probabilidades dependiendo de la casilla donde se encuentre
+float sumarProbabilidades(int row,int col){
+  float suma = 0;
+  for (int i = row; i < col; ++i)
+  {
+    suma = suma + datos[i].value;
+  }
+  return suma;
+}
+
+// Obtiene el indice de un numero , que es equivalente al k ganador para construir la tabla R
+int getIndex(float number, float* array, int largo){
+  for (int i = 0; i < largo; ++i)
+  {
+    if(number == array[i]){return i;}
+  }
+}
+
+
+// Indica si los datos son probabilidades o no
+bool verificarDatos(){
+  float suma = 0;
+  for (int i = 0; i < tamDatos; i++)
+  {
+    suma += datos[i].value;
+  }
+  printf("%f\n", suma);
+  if(suma == 1.000000){ 
+    return true;
+  }
+  else{ 
+    return false;
+  }
+}
+
+void imprimirA(){
+  for (int i = 0; i < tamDatos+1; ++i)
+  {
+    for (int j = 0; j < tamDatos+1; ++j)
+    {
+      printf("%f\t", answerMatrixA[i][j]);
+    }
+    printf("\n");
+  }
+
+  
+}
+
+void imprimirR(){
+  for (int i = 0; i < tamDatos+1; ++i)
+  {
+    for (int j = 0; j < tamDatos+1; ++j)
+    {
+      printf("%d\t", answerMatrixR[i][j]);
+    }
+    printf("\n");
+  }
+}
 
 //---funciones de interfaz----------------
 //llamada a todas las funciones para resolver el problema
