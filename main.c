@@ -43,7 +43,7 @@ void runRemplazo()
 }
 void runArboles()
 {
-    system("./src/mochila &");
+    system("./src/busqueda &");
 }
 void runSeries()
 {
