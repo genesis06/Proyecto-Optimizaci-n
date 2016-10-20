@@ -23,6 +23,8 @@ GtkWidget *resultScreen;
 GtkWidget *inputScreen;
 GtkWidget *button;
 GtkWidget *comboBoxNumero;
+GtkGrid    *inputsGrid;
+GtkWidget *labelInput;
 GtkGrid *resultGridA;
 GtkGrid *resultGridR;
 //variables especificas de este algoritmo
@@ -38,7 +40,54 @@ int numeroLlaves = 10;
 
 
 //---funciones de interfaz----------------
+//llamada a todas las funciones para resolver el problema
+void resolver (GtkWidget* button, gpointer window)
+{
+    gtk_widget_hide(inputsGrid);
+    gtk_widget_show(resultScreen);
+    gtk_widget_hide(labelInput);
+    gtk_widget_hide(comboBoxNumero);
+    //getTextInputValues();
+    
 
+
+    //cleanLabels();
+    //displayAnswer();
+}
+
+//Esta funcion esconde los inputs para cambiar tamaño de matriz
+void updateInput()
+{
+    numeroLlaves = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxNumero));
+    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+    {
+        for (int j = 0; j < 2; ++j)
+        {
+           if(i <= numeroLlaves)
+            {
+               gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
+            }
+            else
+            {
+                 gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][j])); 
+            }    
+        }
+    }
+
+}
+void cleanInput()
+{
+    gtk_widget_hide(resultScreen);
+    gtk_widget_show(inputsGrid);
+
+    gtk_widget_show(labelInput);
+    gtk_widget_show(comboBoxNumero);
+
+}
+void closeWindow()
+{
+    gtk_main_quit();
+}
 
 //------MAIN--------------------------------------------------------------------
 int main(int argc, char *argv[])
@@ -46,7 +95,7 @@ int main(int argc, char *argv[])
     
     
     GtkBuilder      *builder;
-    GtkGrid    *inputsGrid;
+    
     
 
 
@@ -70,19 +119,20 @@ int main(int argc, char *argv[])
 
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button5"));
     //g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
-  
+    
+    labelInput =  GTK_GRID(gtk_builder_get_object(builder, "Label2"));
     
     inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput"));
     resultGridA =  GTK_GRID(gtk_builder_get_object(builder, "gridA"));
     resultGridR =  GTK_GRID(gtk_builder_get_object(builder, "gridA"));
     
 
-    inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxInput"));
+    inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "box8"));
     resultScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxResult"));
 
 
     gtk_widget_hide(resultScreen);
-    gtk_widget_show(inputScreen);
+    gtk_widget_show(inputsGrid);
     
  
    
@@ -96,20 +146,25 @@ int main(int argc, char *argv[])
           if(j == 0)
           {
             gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "Identificador");
+
+            gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 20);
+            gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 20);
+            gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),20);
           }
           else
           {
             gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "1,0");
+            gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 5);
+            gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 5);
+            gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),5);
           }
          
           gtk_widget_show (textInputsMatrix[i][j]);
-          gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
-          gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
           gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
             
         }  
     }
-
+    /*
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
         for (int j = 0; j < MAX_INPUT_MATRIX_SIZE; ++j)
@@ -129,10 +184,10 @@ int main(int argc, char *argv[])
           gtk_grid_attach (resultGridR,resultInputsMatrix[i][j],i,j,1,1);  
         }
     }
-
+    */
 
     
-    //updateInput();
+    updateInput();
 
 
     GtkCssProvider *provider;
