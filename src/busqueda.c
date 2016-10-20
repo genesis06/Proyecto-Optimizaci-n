@@ -11,6 +11,15 @@
 #include <unistd.h>
 #include <stdio.h>
 
+typedef struct {
+    char *name;
+    float value;
+} Item;
+
+float answerMatrix[20][20] = {{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0}};//TODO cambiar, datos de prueb
+Item datos[20] = {{"Harrison", 0.18},{"Lennon" ,0.32},{"McCartney", 0.39},{"Starr", 0.11}};
+int tamDatos = 4;
+
 //variables de todos los problemas
 int MAX_INPUT_MATRIX_SIZE = 29;
 GtkWidget *textInputsMatrix[20][5];
