@@ -205,7 +205,7 @@ void ordenarDatos(){
   {
     for (int j = i+1; j < tamDatos; j++)
     {
-      if(datos[j].name < datos[i].name){
+      if(strcmp(datos[j].name,datos[i].name) < 0){
         aux = datos[j];
         datos[j] = datos[i];
         datos[i] = aux;
@@ -216,10 +216,10 @@ void ordenarDatos(){
 
 // Verifica si la lista de datos esta ordenada
 bool estaOrdenada(){
-  float ref = datos[0].value;
+  char* ref = datos[0].name;
   for (int i = 1; i < tamDatos-1; ++i)
   {
-    if(ref > datos[i].value){
+    if(strcmp(ref,datos[i].name) > 0){
       return false;
     }
   }
