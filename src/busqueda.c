@@ -3,6 +3,12 @@
 
    Arboles de busqueda
    Licencia GNU Free Documentation License 1.2 
+
+
+   referencias:
+    manejar estructuras en listas:
+    http://fresh2refresh.com/c-programming/c-array-of-structures/
+
 */
 #include <gtk/gtk.h>
 #include <stdbool.h>
@@ -24,7 +30,8 @@ int tamDatos = 4;
 int MAX_INPUT_MATRIX_SIZE = 29;
 GtkWidget *textInputsMatrix[20][2];
 GtkWidget   *window;
-GtkWidget *resultInputsMatrix[20][32];
+GtkWidget *resultInputsMatrixA[29][29];//utiliza estas dos para las respuestas
+GtkWidget *resultInputsMatrixR[29][29];
 
 //variables de interfaz
 
@@ -56,7 +63,7 @@ void resolver (GtkWidget* button, gpointer window)
 {
     
     gtk_widget_show(resultScreen);
-    gtk_widget_hide(inputScreen);
+    gtk_widget_hide(inputScreen); //TODO comment
     //TODO uncomment
     //gtk_widget_hide(labelInput);
    //gtk_widget_hide(comboBoxNumero);
@@ -115,6 +122,61 @@ void getTextInputValues()
     }
 
 }
+void displayAnswer()
+{   
+    /*
+    for (int i = 0; i <= numeroLlaves + 1; i++) 
+    {;
+        //gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), tiempo);
+        gtk_label_set_text(GTK_LABEL(resultInputsMatrixA[1][i + 1]), costoTiempo);
+        gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), listaProximos[i]);
+        gtk_widget_show (resultInputsMatrix[0][i + 1]);
+        gtk_widget_show (resultInputsMatrix[1][i + 1]);
+        gtk_widget_show (resultInputsMatrix[2][i + 1]);
+
+        char tempStringDisplay[10];
+        snprintf(tempStringDisplay, 10, "%0.3f",answerMatrix[i-1][j-1]);   
+        gtk_label_set_text(GTK_LABEL(resultLabelsMatrix[i][j]), tempStringDisplay);
+
+
+    }
+
+    for (int i = 1; i < numeroLlaves + 1; ++i)
+    {
+        for (int j = 1; j < numeroLlaves + 1; ++j)
+        { 
+            
+              char tempStringDisplay[10];
+              nprintf(tempStringDisplay, 10, "%0.3f",answerMatrix[i-1][j-1]);   
+              gtk_label_set_text(GTK_LABEL(resultLabelsMatrix[i][j]), tempStringDisplay);
+              gtk_widget_show (resultLabelsMatrix[j][i]);
+             
+        }
+    }
+    */
+
+    for (int iClean = 0; iClean < MAX_INPUT_MATRIX_SIZE; ++iClean)
+    {
+        for (int jClean = 0; jClean < MAX_INPUT_MATRIX_SIZE; ++jClean)
+        { 
+             
+          if( jClean > numeroLlaves + 1)
+          {
+            gtk_widget_hide (resultInputsMatrixA[iClean][jClean]);
+             gtk_widget_hide (resultInputsMatrixR[iClean][jClean]);
+          }
+          else
+          {
+              gtk_widget_show (resultInputsMatrixA[iClean][jClean]);
+              gtk_widget_show (resultInputsMatrixR[iClean][jClean]);
+            }
+           }
+    }
+    
+    
+}
+
+
 //Esta funcion esconde los inputs para cambiar tamaño de matriz
 void updateInput()
 {
@@ -138,7 +200,7 @@ void updateInput()
 void cleanInput()
 {
     gtk_widget_hide(resultScreen);
-    gtk_widget_show(inputScreen);
+    gtk_widget_show(inputScreen);//TODO comment
 
     //TODO uncomment
     //gtk_widget_show(inputsGrid);
@@ -194,7 +256,7 @@ int main(int argc, char *argv[])
 
 
     gtk_widget_hide(resultScreen);
-    gtk_widget_show(inputScreen);
+    gtk_widget_show(inputScreen);//TODO comment
     //TODO uncomment
     //gtk_widget_show(inputsGrid);
     
