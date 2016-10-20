@@ -43,13 +43,11 @@ void runRemplazo()
 }
 void runArboles()
 {
-  
-    system("cd src ; ./pending Arboles &");
+    system("./src/mochila &");
 }
 void runSeries()
 {
-  
-    system(" ./src/series &");
+    system("cd src ; ./src/series &");
 }
 void runMultiplicacion()
 {
