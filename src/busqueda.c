@@ -17,12 +17,12 @@ typedef struct {
 } Item;
 
 float answerMatrix[20][20] = {{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0},{1.0,1.0,1.0,1.0}};//TODO cambiar, datos de prueb
-Item datos[20] = {{"Harrison", 0.18},{"Lennon" ,0.32},{"McCartney", 0.39},{"Starr", 0.11}};
+Item datos[29] = {{"Harrison", 0.18},{"Lennon" ,0.32},{"McCartney", 0.39},{"Starr", 0.11}};
 int tamDatos = 4;
 
 //variables de todos los problemas
 int MAX_INPUT_MATRIX_SIZE = 29;
-GtkWidget *textInputsMatrix[20][5];
+GtkWidget *textInputsMatrix[20][2];
 GtkWidget   *window;
 GtkWidget *resultInputsMatrix[20][32];
 
@@ -40,7 +40,9 @@ GtkGrid *resultGridR;
 int numeroLlaves = 10;
 
 
-
+//declaraciones de funcion .h
+static void getTextInputValues();
+static void displayAnswer();
 
 
 
@@ -52,11 +54,14 @@ int numeroLlaves = 10;
 //llamada a todas las funciones para resolver el problema
 void resolver (GtkWidget* button, gpointer window)
 {
-    gtk_widget_hide(inputsGrid);
+    
     gtk_widget_show(resultScreen);
-    gtk_widget_hide(labelInput);
-    gtk_widget_hide(comboBoxNumero);
-    //getTextInputValues();
+    gtk_widget_hide(inputScreen);
+    //TODO uncomment
+    //gtk_widget_hide(labelInput);
+   //gtk_widget_hide(comboBoxNumero);
+    //gtk_widget_hide(inputsGrid);
+    getTextInputValues();
     
 
 
@@ -64,6 +69,52 @@ void resolver (GtkWidget* button, gpointer window)
     //displayAnswer();
 }
 
+//this function replaces the textInputsMatrix with curret values
+void getTextInputValues()
+{
+    numeroLlaves = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxNumero));       
+    for (int i = 0; i < numeroLlaves; ++i)
+    {
+        
+            gchar *currentTextInputTextName;
+            currentTextInputTextName = gtk_entry_get_text(GTK_ENTRY(textInputsMatrix[i][0]));
+            gchar *currentTextInputTextValue;
+            currentTextInputTextValue = gtk_entry_get_text(GTK_ENTRY(textInputsMatrix[i][1]));
+
+            float newValue = atof(currentTextInputTextValue);
+            
+            datos[i].name = currentTextInputTextName;
+            datos[i].value = newValue;
+            /*
+            if(j == 0)
+            {
+               
+              datos[i]->name = currentTextInputText;
+            }
+            else
+            {
+              int newValue = atoi(currentTextInputText);
+              datos[i]->value = newValue;
+              
+              if(i <= numeroLlaves)
+              {
+                 gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
+              }
+              else
+              {
+                   gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][j])); 
+              }
+              
+            }*/        
+        
+    }
+    for (int i = 0; i < numeroLlaves; ++i)
+    {
+        printf(" %s  ",  datos[i].name);
+        printf(" %f  \n",  datos[i].value);
+    }
+
+}
 //Esta funcion esconde los inputs para cambiar tamaño de matriz
 void updateInput()
 {
@@ -87,10 +138,12 @@ void updateInput()
 void cleanInput()
 {
     gtk_widget_hide(resultScreen);
-    gtk_widget_show(inputsGrid);
+    gtk_widget_show(inputScreen);
 
-    gtk_widget_show(labelInput);
-    gtk_widget_show(comboBoxNumero);
+    //TODO uncomment
+    //gtk_widget_show(inputsGrid);
+    //gtk_widget_show(labelInput);
+    //gtk_widget_show(comboBoxNumero);
 
 }
 void closeWindow()
@@ -129,7 +182,7 @@ int main(int argc, char *argv[])
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button5"));
     //g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
     
-    labelInput =  GTK_GRID(gtk_builder_get_object(builder, "Label2"));
+    labelInput =  GTK_WIDGET(gtk_builder_get_object(builder, "Label2"));
     
     inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput"));
     resultGridA =  GTK_GRID(gtk_builder_get_object(builder, "gridA"));
@@ -141,7 +194,9 @@ int main(int argc, char *argv[])
 
 
     gtk_widget_hide(resultScreen);
-    gtk_widget_show(inputsGrid);
+    gtk_widget_show(inputScreen);
+    //TODO uncomment
+    //gtk_widget_show(inputsGrid);
     
  
    
@@ -162,7 +217,7 @@ int main(int argc, char *argv[])
           }
           else
           {
-            gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "1,0");
+            gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "1.0");
             gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 5);
             gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 5);
             gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),5);
