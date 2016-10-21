@@ -623,6 +623,22 @@ void closeWindow()
     gtk_main_quit();
 }
 
+void setTextInputValues()
+{
+    gtk_combo_box_set_active(GTK_COMBO_BOX(comboBoxNumero),numeroLlaves - 1 );
+    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+    { 
+        gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][0]),  datos[i].name);
+
+        char setValue[10];
+        snprintf(setValue, 10, "%0.3f",  datos[i].value);
+        gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][1]), setValue);
+        gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][0]));
+        gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][1])); 
+      }
+        
+}
+
 //------MAIN--------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
