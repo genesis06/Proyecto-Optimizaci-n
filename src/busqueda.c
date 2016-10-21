@@ -94,6 +94,7 @@ void busquedaArboles(){
   calcularValoresTabla();
   imprimirA();
   imprimirR();
+  columnaInicial = 2;
 }
 
 // Inicializa las tablas A y R
