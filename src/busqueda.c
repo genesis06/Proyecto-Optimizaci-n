@@ -489,13 +489,13 @@ static void showOpenFile(GtkWidget* button, gpointer window)
       printf("%s %f\n", datos[i].name, datos[i].value); 
     }
     /*****************************************************************************************/
-
+    numeroLlaves = tamDatos;
     // Cerrar Archivo
     fclose(infile);
     }
     gtk_widget_destroy(dialog);
   
- // setTextInputValues();
+  setTextInputValues();
   
 }
 
@@ -620,8 +620,9 @@ void closeWindow()
 
 void setTextInputValues()
 {
+    
     gtk_combo_box_set_active(GTK_COMBO_BOX(comboBoxNumero),numeroLlaves - 1 );
-    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+    for (int i = 0; i < numeroLlaves; ++i)
     { 
         gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][0]),  datos[i].name);
 
