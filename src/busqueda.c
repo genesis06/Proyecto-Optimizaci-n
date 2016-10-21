@@ -30,6 +30,8 @@ Item datos[20] = {{"Carpenter", 0.05},{"Cash" ,0.07},{"Cabain", 0.01},{"Harrison
 int tamDatos = 9;
 int columnaInicial = 2;
 
+char linea[300];
+
 //variables de todos los problemas
 int MAX_INPUT_MATRIX_SIZE = 29;
 GtkWidget *textInputsMatrix[20][2];
@@ -323,6 +325,185 @@ void resolver (GtkWidget* button, gpointer window)
     displayAnswer();
 }
 
+void showSaveFile(){
+
+  //getTextInputValues();
+  
+  GtkWidget *dialog;
+  GtkFileChooser *chooser;
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+  gint res;
+
+  dialog = gtk_file_chooser_dialog_new ("Save File",
+                                        window,
+                                        action,
+                                        ("_Cancel"),
+                                        GTK_RESPONSE_CANCEL,
+                                        ("_Save"),
+                                        GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  chooser = GTK_FILE_CHOOSER (dialog);
+
+  gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
+
+  res = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (res == GTK_RESPONSE_ACCEPT)
+    {
+      printf("ENtro if\n");
+
+      char *filename = gtk_file_chooser_get_filename (chooser);
+
+      FILE *fichero;
+
+      fichero = fopen(filename,"w+");
+
+      if (fichero == NULL) {
+        printf( "No se puede crear el fichero.\n" );
+      }
+
+      /** Proceso para guardar datos en archivo **/
+      char *numeroLlaves =calloc(10, sizeof(char));
+      
+      //Conversion de tipos para guardar primera linea
+      sprintf(numeroLlaves,"%d",tamDatos); // ***********CAMBIAR NUMERO POR plazoProyecto
+      printf("%s \n",numeroLlaves);
+
+
+      
+      char *primerLinea =calloc(20, sizeof(char));
+
+      strcat(primerLinea, numeroLlaves);
+      strcat(primerLinea,"\n");
+
+      printf("String:%s\n", primerLinea);
+      fputs(primerLinea, fichero); // Escribe primera linea en archivo
+      strcpy(primerLinea,"");
+
+      for (int i = 0; i < tamDatos; i++) 
+      {
+        char *dato =calloc(100, sizeof(char));
+        char *value =calloc(50, sizeof(char));
+
+        strcat(dato, datos[i].name);
+        strcat(dato, " ");
+        sprintf(value, "%f",datos[i].value);
+        strcat(dato, value);
+        strcat(dato, "\n");
+
+        fputs(dato, fichero); // Escribe primera linea en archivo
+
+        strcpy(dato,"");
+        strcpy(value,"");
+      }
+      //printf("stringSave: %s\n", stringSave);
+      //fputs(stringSave, fichero);
+      if (fclose(fichero)!=0)
+        printf( "Problemas al cerrar el fichero\n" );
+
+      /** Fin proceso  **/
+    
+    }
+
+    gtk_widget_destroy(dialog);
+}
+
+//Open File
+static void showOpenFile(GtkWidget* button, gpointer window)
+{
+        //Contruccion Dialog
+
+  GtkWidget *dialog;
+  
+  dialog = gtk_file_chooser_dialog_new("Chosse a file", GTK_WINDOW(window), 
+        GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_OK, GTK_RESPONSE_OK, 
+        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+
+  gtk_widget_show_all(dialog);
+
+        //Localizar el directorio
+  gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), g_get_home_dir());
+
+        //Guarda la respuesta al hacer Ok/Cancel
+  gint resp = gtk_dialog_run(GTK_DIALOG(dialog));
+
+  if(resp == GTK_RESPONSE_OK)
+    {
+      
+    FILE *infile;
+    
+    
+    infile = fopen(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)), "r");
+   
+    char buff[255];
+    
+    char primeraLinea[50];
+    
+
+    //Leer hasta que no hay lineas
+      
+      fgets(buff, 255, (FILE*)infile);
+
+
+      //Lee primera Linea 
+       strcpy(primeraLinea, buff);
+    
+        /***************************************************************/
+        
+        /** Inicializa variables**/
+        tamDatos = atoi(primeraLinea);
+
+        //gtk_combo_box_set_active(GTK_COMBO_BOX(comboBox),indiceComboObjetos );
+        printf("Llaves: %d\n", tamDatos);
+          
+      
+      
+    /********************** Proceso para leer y guardar matriz ******************************/      
+    // Lee resto de líneas
+    int indiceFilas = 0;
+    
+    while (fgets(buff, 1000, (FILE*)infile)){
+            printf("%s\n", "entra");
+            strcpy(linea, buff);
+            if(indiceFilas < tamDatos){
+                separarColumnas(indiceFilas); 
+            }
+            indiceFilas++;
+            strcpy(linea,"");
+      
+    }
+    /*****************************************************************************************/
+
+    // Cerrar Archivo
+    fclose(infile);
+    }
+    gtk_widget_destroy(dialog);
+  
+  //setTextInputValues();
+  
+}
+
+void separarColumnas(int fila){
+  
+  char *token =calloc(100, sizeof(char));;
+  /**Agarra el primer token separado por espacio**/
+  token = strtok (linea," ");  
+  while (token != NULL )
+  {
+    /***Guarda el token en la matriz****/
+    
+    datos[fila].name = token;
+    printf("%s\n", token);
+    
+    
+    token = strtok (NULL, " ");
+  }
+  float valor = atof(token);
+  datos[fila].value = valor;
+  printf("%s\n", token);
+
+}
+
 //this function replaces the textInputsMatrix with curret values
 void getTextInputValues()
 {
@@ -472,7 +653,7 @@ int main(int argc, char *argv[])
     //g_signal_connect(button, "clicked", G_CALLBACK(resolver), window);
 
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button5"));
-    //g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
+    g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
     
     labelInput =  GTK_WIDGET(gtk_builder_get_object(builder, "Label2"));
     
