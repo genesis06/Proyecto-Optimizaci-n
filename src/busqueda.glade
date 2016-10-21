@@ -66,7 +66,6 @@
               <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="halign">start</property>
                 <property name="margin_left">15</property>
                 <property name="margin_right">15</property>
                 <property name="margin_top">15</property>
@@ -102,7 +101,7 @@
                                   <object class="GtkLabel" id="label2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Número de llave:</property>
+                                    <property name="label" translatable="yes">Número de llaves:</property>
                                     <style>
                                       <class name="testCss"/>
                                     </style>
@@ -274,6 +273,9 @@
                                 <child>
                                   <placeholder/>
                                 </child>
+                                <style>
+                                  <class name="resultMatrix"/>
+                                </style>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -324,6 +326,9 @@
                                 <child>
                                   <placeholder/>
                                 </child>
+                                <style>
+                                  <class name="resultMatrix"/>
+                                </style>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
