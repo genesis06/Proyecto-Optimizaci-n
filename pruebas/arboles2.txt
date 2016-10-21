@@ -1,0 +1,5 @@
+4
+Harrison 0,18
+Lennon 0,32
+McCartney 0,39
+Presley 0,11

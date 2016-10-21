@@ -325,7 +325,7 @@ void formarString(){
         strcat(stringDatos,"\n");
         strcat(value,"");
       }
-      printf("%s\n", stringDatos);
+      //printf("%s\n", stringDatos);
     }
 
 //---funciones de interfaz----------------
@@ -389,7 +389,7 @@ void showSaveFile(){
       
       //Conversion de tipos para guardar primera linea
       sprintf(numeroLlaves,"%d",tamDatos); // ***********CAMBIAR NUMERO POR plazoProyecto
-      printf("%s \n",numeroLlaves);
+      //printf("%s \n",numeroLlaves);
 
 
       
@@ -504,10 +504,10 @@ static void showOpenFile(GtkWidget* button, gpointer window)
             indiceFilas++;
       
     }
-    for (int i = 0; i < tamDatos; ++i)
+    /*for (int i = 0; i < tamDatos; ++i)
     {
       printf("%s %f\n", datos[i].name, datos[i].value); 
-    }
+    }*/
     /*****************************************************************************************/
     numeroLlaves = tamDatos;
     // Cerrar Archivo
