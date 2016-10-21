@@ -168,7 +168,7 @@ Dinámica</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_markup" translatable="yes">Nodos son comparados encontrar un elemento </property>
+                <property name="tooltip_markup" translatable="yes">Ordenamiento de datos en un árbol binario basado en la probabilidad o frecuencia que los nodos tienen de ser utilizados o consultados. Se generan dos tablas de resultados para la construcción de un árbol.</property>
                 <property name="halign">start</property>
                 <property name="relief">none</property>
                 <property name="xalign">0.43000000715255737</property>
