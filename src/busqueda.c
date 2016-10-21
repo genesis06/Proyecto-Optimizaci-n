@@ -61,6 +61,8 @@ void calcularValoresTabla();
 float sumarProbabilidades(int row,int col);
 float ordenar(float*valores, int largo, int row, int col);
 int getIndex(float number, float* array, int largo);
+float sumaValores();
+void calcularProbabilidades();
 void imprimirA();
 void imprimirR();
 
@@ -77,22 +79,18 @@ static void displayAnswer();
 
 // FUNCION PRINCIPAL DE LA LOGICA
 void busquedaArboles(){
-  //if(verificarDatos()){
-    if(estaOrdenada()){
-      setTablaInicial();
-      calcularValoresTabla();
-    }
-    else{
-      ordenarDatos();
-      setTablaInicial();
-      calcularValoresTabla();
-    }
-    imprimirA();
-    imprimirR();
- // }
-  //else{
-    //printf("%s\n", "La suma de probabilidades es diferente de 1");
-  //}
+  if(verificarDatos() == false){
+    printf("%s\n", "La suma de probabilidades es diferente de 1");
+    calcularProbabilidades();
+  }
+  if(estaOrdenada() == false){
+    printf("%s\n", "LOs datos no estan ordenados");
+    ordenarDatos();
+  }
+  setTablaInicial();
+  calcularValoresTabla();
+  imprimirA();
+  imprimirR();
 }
 
 // Inicializa las tablas A y R
@@ -254,12 +252,32 @@ bool verificarDatos(){
     suma += datos[i].value;
   }
   printf("%f\n", suma);
-  if(suma == 1.000000){ 
+  if(suma == 1.0f){ 
     return true;
   }
   else{ 
     return false;
   }
+}
+
+void calcularProbabilidades(){
+  float total = sumaValores();
+
+  for (int i = 0; i < tamDatos; ++i)
+  {
+    datos[i].value = datos[i].value / total;
+    //printf("%f\n", datos[i].value);
+  }
+}
+
+float sumaValores(){
+  float suma = 0;
+
+  for (int i = 0; i < tamDatos; ++i)
+  {
+    suma = suma + datos[i].value;
+  }
+  return suma;
 }
 
 void imprimirA(){
