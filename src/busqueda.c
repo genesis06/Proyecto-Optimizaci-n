@@ -34,8 +34,8 @@ int columnaInicial = 2;
 int MAX_INPUT_MATRIX_SIZE = 29;
 GtkWidget *textInputsMatrix[20][2];
 GtkWidget   *window;
-GtkWidget *resultInputsMatrixA[29][29];//utiliza estas dos para las respuestas
-GtkWidget *resultInputsMatrixR[29][29];
+GtkWidget *resultLabelsMatrixA[29][29];//utiliza estas dos para las respuestas
+GtkWidget *resultLabelsMatrixR[29][29];
 
 //variables de interfaz
 
@@ -48,7 +48,7 @@ GtkWidget *labelInput;
 GtkGrid *resultGridA;
 GtkGrid *resultGridR;
 //variables especificas de este algoritmo
-int numeroLlaves = 10;
+int numeroLlaves = 9;
 
 
 //declaraciones de funcion .h
@@ -64,7 +64,7 @@ int getIndex(float number, float* array, int largo);
 void imprimirA();
 void imprimirR();
 
-
+static void displayAnswer();
 static void getTextInputValues();
 static void displayAnswer();
 
@@ -267,7 +267,7 @@ void imprimirA(){
   {
     for (int j = 0; j < tamDatos+1; ++j)
     {
-      printf("%f\t", answerMatrixA[i][j]);
+      printf("%0.3f\t", answerMatrixA[i][j]);
     }
     printf("\n");
   }
@@ -299,16 +299,18 @@ void resolver (GtkWidget* button, gpointer window)
     //gtk_widget_hide(inputsGrid);
     getTextInputValues();
     
-
+    busquedaArboles();
 
     //cleanLabels();
-    //displayAnswer();
+    displayAnswer();
 }
 
 //this function replaces the textInputsMatrix with curret values
 void getTextInputValues()
 {
-    numeroLlaves = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxNumero));       
+    numeroLlaves = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxNumero));
+    numeroLlaves = numeroLlaves + 1;
+    printf(" %d \n ",  numeroLlaves);     
     for (int i = 0; i < numeroLlaves; ++i)
     {
         
@@ -320,28 +322,7 @@ void getTextInputValues()
             float newValue = atof(currentTextInputTextValue);
             
             datos[i].name = currentTextInputTextName;
-            datos[i].value = newValue;
-            /*
-            if(j == 0)
-            {
-               
-              datos[i]->name = currentTextInputText;
-            }
-            else
-            {
-              int newValue = atoi(currentTextInputText);
-              datos[i]->value = newValue;
-              
-              if(i <= numeroLlaves)
-              {
-                 gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
-              }
-              else
-              {
-                   gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][j])); 
-              }
-              
-            }*/        
+            datos[i].value = newValue;      
         
     }
     for (int i = 0; i < numeroLlaves; ++i)
@@ -353,51 +334,49 @@ void getTextInputValues()
 }
 void displayAnswer()
 {   
-    /*
-    for (int i = 0; i <= numeroLlaves + 1; i++) 
-    {;
-        //gtk_label_set_text(GTK_LABEL(resultInputsMatrix[0][i + 1]), tiempo);
-        gtk_label_set_text(GTK_LABEL(resultInputsMatrixA[1][i + 1]), costoTiempo);
-        gtk_label_set_text(GTK_LABEL(resultInputsMatrix[2][i + 1]), listaProximos[i]);
-        gtk_widget_show (resultInputsMatrix[0][i + 1]);
-        gtk_widget_show (resultInputsMatrix[1][i + 1]);
-        gtk_widget_show (resultInputsMatrix[2][i + 1]);
-
-        char tempStringDisplay[10];
-        snprintf(tempStringDisplay, 10, "%0.3f",answerMatrix[i-1][j-1]);   
-        gtk_label_set_text(GTK_LABEL(resultLabelsMatrix[i][j]), tempStringDisplay);
-
-
-    }
-
-    for (int i = 1; i < numeroLlaves + 1; ++i)
+     //for a
+    printf(" %d \n ",  numeroLlaves);
+    for (int i = 1; i < numeroLlaves + 2; ++i)
     {
-        for (int j = 1; j < numeroLlaves + 1; ++j)
+        for (int j = 1; j < numeroLlaves + 2; ++j)
         { 
             
               char tempStringDisplay[10];
-              nprintf(tempStringDisplay, 10, "%0.3f",answerMatrix[i-1][j-1]);   
-              gtk_label_set_text(GTK_LABEL(resultLabelsMatrix[i][j]), tempStringDisplay);
-              gtk_widget_show (resultLabelsMatrix[j][i]);
+              snprintf(tempStringDisplay, 10, "%0.3f",answerMatrixA[i-1][j-1]);   
+              gtk_label_set_text(GTK_LABEL(resultLabelsMatrixA[i][j]), tempStringDisplay);
+              gtk_widget_show (resultLabelsMatrixA[j][i]);
              
         }
     }
-    */
-
+    //for R
+    
+    for (int i = 1; i < numeroLlaves + 2; ++i)
+    {
+        for (int j = 1; j < numeroLlaves + 2; ++j)
+        { 
+            
+              char tempStringDisplay[10];
+              snprintf(tempStringDisplay, 10, "%d",answerMatrixR[i-1][j-1]);   
+              gtk_label_set_text(GTK_LABEL(resultLabelsMatrixR[i][j]), tempStringDisplay);
+              gtk_widget_show (resultLabelsMatrixR[j][i]);
+             
+        }
+    }
+    
     for (int iClean = 0; iClean < MAX_INPUT_MATRIX_SIZE; ++iClean)
     {
         for (int jClean = 0; jClean < MAX_INPUT_MATRIX_SIZE; ++jClean)
         { 
              
-          if( jClean > numeroLlaves + 1)
+          if( jClean > numeroLlaves + 1||  iClean > numeroLlaves + 1 )
           {
-            gtk_widget_hide (resultInputsMatrixA[iClean][jClean]);
-             gtk_widget_hide (resultInputsMatrixR[iClean][jClean]);
+            gtk_widget_hide (resultLabelsMatrixA[iClean][jClean]);
+             gtk_widget_hide (resultLabelsMatrixR[iClean][jClean]);
           }
           else
           {
-              gtk_widget_show (resultInputsMatrixA[iClean][jClean]);
-              gtk_widget_show (resultInputsMatrixR[iClean][jClean]);
+              gtk_widget_show (resultLabelsMatrixA[iClean][jClean]);
+              gtk_widget_show (resultLabelsMatrixR[iClean][jClean]);
             }
            }
     }
@@ -410,11 +389,14 @@ void displayAnswer()
 void updateInput()
 {
     numeroLlaves = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxNumero));
+    numeroLlaves = numeroLlaves + 1;
+    printf(" %d \n ",  numeroLlaves);
+
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
         for (int j = 0; j < 2; ++j)
         {
-           if(i <= numeroLlaves)
+           if(i <= numeroLlaves -1)
             {
                gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
             }
@@ -465,6 +447,7 @@ int main(int argc, char *argv[])
 
     comboBoxNumero = GTK_WIDGET(gtk_builder_get_object(builder, "comboCantidad"));
     numeroLlaves = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxNumero));
+    numeroLlaves = numeroLlaves + 1;
 
     
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
@@ -477,14 +460,14 @@ int main(int argc, char *argv[])
     
     inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput"));
     resultGridA =  GTK_GRID(gtk_builder_get_object(builder, "gridA"));
-    resultGridR =  GTK_GRID(gtk_builder_get_object(builder, "gridA"));
+    resultGridR =  GTK_GRID(gtk_builder_get_object(builder, "gridR"));
     
 
     inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "box8"));
     resultScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxResult"));
 
 
-    gtk_widget_hide(resultScreen);
+    //gtk_widget_hide(resultScreen);
     gtk_widget_show(inputScreen);//TODO comment
     //TODO uncomment
     //gtk_widget_show(inputsGrid);
@@ -519,29 +502,75 @@ int main(int argc, char *argv[])
             
         }  
     }
-    /*
-    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+    //for a
+   for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
         for (int j = 0; j < MAX_INPUT_MATRIX_SIZE; ++j)
-        {  
-          resultInputsMatrix[i][j] = gtk_label_new (" " );
-          gtk_widget_show (resultInputsMatrix[i][j]);
-          gtk_grid_attach (resultGridA,resultInputsMatrix[i][j],i,j,1,1);  
+        { 
+                char tempString[10];
+               
+            if(i==0 && j==0)
+            {
+               resultLabelsMatrixA[i][j] = gtk_label_new (" - ");
+            }
+            else if(i==0)
+            {
+                
+                snprintf(tempString, 10, "%d", j - 1 );
+                resultLabelsMatrixA[i][j] = gtk_label_new (tempString);
+            }
+            else if(j==0)
+            {
+                snprintf(tempString, 10, "%d", i );
+                resultLabelsMatrixA[i][j] = gtk_label_new (tempString);
+            }
+            else
+            {
+                resultLabelsMatrixA[i][j] = gtk_label_new ("0.001" );
+                
+            }
+            gtk_widget_show (resultLabelsMatrixA[i][j]);
+            gtk_grid_attach (resultGridA,resultLabelsMatrixA[i][j],j,i,1,1);
+                    
         }
     }
 
-    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+
+    //for R 
+   
+   for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
     {
         for (int j = 0; j < MAX_INPUT_MATRIX_SIZE; ++j)
-        {  
-          resultInputsMatrix[i][j] = gtk_label_new (" " );
-          gtk_widget_show (resultInputsMatrix[i][j]);
-          gtk_grid_attach (resultGridR,resultInputsMatrix[i][j],i,j,1,1);  
+        { 
+                char tempString[10];
+               
+            if(i==0 && j==0)
+            {
+               resultLabelsMatrixR[i][j] = gtk_label_new (" - ");
+            }
+            else if(i==0)
+            {
+                
+                snprintf(tempString, 10, "%d", j - 1 );
+                resultLabelsMatrixR[i][j] = gtk_label_new (tempString);
+            }
+            else if(j==0)
+            {
+                snprintf(tempString, 10, "%d", i );
+                resultLabelsMatrixR[i][j] = gtk_label_new (tempString);
+            }
+            else
+            {
+                resultLabelsMatrixR[i][j] = gtk_label_new ("0.001" );
+                
+            }
+            gtk_widget_show (resultLabelsMatrixR[i][j]);
+            gtk_grid_attach (resultGridR,resultLabelsMatrixR[i][j],j,i,1,1);
+                    
         }
     }
-    */
-
     
+
     updateInput();
 
 
