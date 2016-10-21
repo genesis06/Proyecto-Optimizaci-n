@@ -68,6 +68,8 @@ void calcularProbabilidades();
 void imprimirA();
 void imprimirR();
 
+void separarColumnas(int fila);
+
 static void displayAnswer();
 static void getTextInputValues();
 static void displayAnswer();
@@ -435,14 +437,14 @@ static void showOpenFile(GtkWidget* button, gpointer window)
     
     infile = fopen(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)), "r");
    
-    char buff[255];
+    char buff[500];
     
     char primeraLinea[50];
     
 
     //Leer hasta que no hay lineas
       
-      fgets(buff, 255, (FILE*)infile);
+      fgets(buff, 500, (FILE*)infile);
 
 
       //Lee primera Linea 
@@ -461,16 +463,30 @@ static void showOpenFile(GtkWidget* button, gpointer window)
     /********************** Proceso para leer y guardar matriz ******************************/      
     // Lee resto de líneas
     int indiceFilas = 0;
+    char line[100];
     
-    while (fgets(buff, 1000, (FILE*)infile)){
-            printf("%s\n", "entra");
-            strcpy(linea, buff);
-            if(indiceFilas < tamDatos){
-                separarColumnas(indiceFilas); 
+    
+    while (fgets(buff, 500, (FILE*)infile)){
+            char *st =calloc(200, sizeof(char));
+            strcpy(st, buff);
+            char *ch =calloc(100, sizeof(char));
+            //printf("Split \"%s\"\n", st);
+            ch = strtok(st, " ");
+            datos[indiceFilas].name = ch;
+            while (ch != NULL) {
+              printf("%s\n", ch);
+              datos[indiceFilas].value = atof(ch);
+              ch = strtok(NULL, " ,");
+
             }
+
+
             indiceFilas++;
-            strcpy(linea,"");
       
+    }
+    for (int i = 0; i < tamDatos; ++i)
+    {
+      printf("%s %f\n", datos[i].name, datos[i].value); 
     }
     /*****************************************************************************************/
 
@@ -479,29 +495,8 @@ static void showOpenFile(GtkWidget* button, gpointer window)
     }
     gtk_widget_destroy(dialog);
   
-  //setTextInputValues();
+ // setTextInputValues();
   
-}
-
-void separarColumnas(int fila){
-  
-  char *token =calloc(100, sizeof(char));;
-  /**Agarra el primer token separado por espacio**/
-  token = strtok (linea," ");  
-  while (token != NULL )
-  {
-    /***Guarda el token en la matriz****/
-    
-    datos[fila].name = token;
-    printf("%s\n", token);
-    
-    
-    token = strtok (NULL, " ");
-  }
-  float valor = atof(token);
-  datos[fila].value = valor;
-  printf("%s\n", token);
-
 }
 
 //this function replaces the textInputsMatrix with curret values

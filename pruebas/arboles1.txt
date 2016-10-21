@@ -1,0 +1,10 @@
+9
+Carpenter 0,05
+Cash 0,07
+Cabain 0,01
+Harrison 0,35
+Hendrix 0,09
+Joplin 0,23
+Lennon 0,15
+Morrison 0,04
+Presley 0,01
