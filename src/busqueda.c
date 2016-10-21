@@ -67,8 +67,7 @@ float sumaValores();
 void calcularProbabilidades();
 void imprimirA();
 void imprimirR();
-
-void separarColumnas(int fila);
+void formarString();
 
 static void displayAnswer();
 static void getTextInputValues();
@@ -307,6 +306,26 @@ void imprimirR(){
     printf("\n");
   }
 }
+
+void formarString(){
+      char* stringDatos =calloc(3000, sizeof(char));
+      char *value =calloc(50, sizeof(char));
+      char *llave =calloc(50, sizeof(char));
+
+      for (int i = 0; i < tamDatos; ++i)
+      {
+        strcat(stringDatos, "Key");
+        sprintf(llave, "%d ",i);
+        strcat(stringDatos, llave);
+        strcat(stringDatos, datos[i].name);
+        sprintf(value, "%f",datos[i].value);
+        strcat(stringDatos,"\t");
+        strcat(stringDatos, value);
+        strcat(stringDatos,"\n");
+        strcat(value,"");
+      }
+      printf("%s\n", stringDatos);
+    }
 
 //---funciones de interfaz----------------
 //llamada a todas las funciones para resolver el problema
