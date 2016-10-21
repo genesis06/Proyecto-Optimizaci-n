@@ -723,9 +723,9 @@ int main(int argc, char *argv[])
           else
           {
             gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "1.0");
-            gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 5);
-            gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 5);
-            gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),5);
+            gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 10);
+            gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 10);
+            gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),10);
           }
          
           gtk_widget_show (textInputsMatrix[i][j]);
