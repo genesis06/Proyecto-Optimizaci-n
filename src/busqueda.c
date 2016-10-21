@@ -334,11 +334,11 @@ void resolver (GtkWidget* button, gpointer window)
 {
     
     gtk_widget_show(resultScreen);
-    gtk_widget_hide(inputScreen); //TODO comment
+    //gtk_widget_hide(inputScreen); //TODO comment
     //TODO uncomment
-    //gtk_widget_hide(labelInput);
-   //gtk_widget_hide(comboBoxNumero);
-    //gtk_widget_hide(inputsGrid);
+    gtk_widget_hide(labelInput);
+    gtk_widget_hide(comboBoxNumero);
+    gtk_widget_hide(inputsGrid);
     getTextInputValues();
     
     busquedaArboles();
@@ -625,12 +625,12 @@ void updateInput()
 void cleanInput()
 {
     gtk_widget_hide(resultScreen);
-    gtk_widget_show(inputScreen);//TODO comment
+   // gtk_widget_show(inputScreen);//TODO comment
 
     //TODO uncomment
-    //gtk_widget_show(inputsGrid);
-    //gtk_widget_show(labelInput);
-    //gtk_widget_show(comboBoxNumero);
+    gtk_widget_show(inputsGrid);
+    gtk_widget_show(labelInput);
+    gtk_widget_show(comboBoxNumero);
 
 }
 void closeWindow()
@@ -698,10 +698,10 @@ int main(int argc, char *argv[])
     resultScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxResult"));
 
 
-    //gtk_widget_hide(resultScreen);
-    gtk_widget_show(inputScreen);//TODO comment
+    gtk_widget_hide(resultScreen);
+    //gtk_widget_show(inputScreen);//TODO comment
     //TODO uncomment
-    //gtk_widget_show(inputsGrid);
+    gtk_widget_show(inputsGrid);
     
  
    
