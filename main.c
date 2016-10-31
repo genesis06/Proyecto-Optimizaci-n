@@ -52,7 +52,7 @@ void runSeries()
 void runMultiplicacion()
 {
   
-    system("cd src ; ./pending Multiplicacioxn &");
+    system("./src/matrices &");
 }
  
 // called when window is closed
