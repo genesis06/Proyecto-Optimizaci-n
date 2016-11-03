@@ -1,13 +1,110 @@
-
-
-
-
-
-
-
-
 /*
+   ITCR - Investigación de Operaciones
 
+   Multiplicacion de matrices
+   Licencia GNU Free Documentation License 1.2 
+
+
+   referencias:
+    manejar estructuras en listas:
+    http://fresh2refresh.com/c-programming/c-array-of-structures/
+
+*/
+#include <gtk/gtk.h>
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+
+
+//-------------------variables -----------------------
+//global
+int MAX_INPUT_MATRIX_SIZE = 20;
+typedef struct {
+    int n;
+    int m;
+} matriz;
+
+
+matriz inputValues[20] = {{1,2},{2,3},{3,2},{2,7}};
+int cantidadMatrices = 9;
+int columnaInicial = 2;
+
+char linea[300];
+
+//variables de todos los problemas
+
+GtkWidget *textInputsMatrix[20][2];
+GtkWidget   *window;
+GtkWidget   *resultadoString0;
+GtkWidget *resultadoString1 ;
+GtkWidget *resultadoStringWarning;
+
+//variables de interfaz
+
+GtkWidget *resultScreen;
+GtkWidget *inputScreen;
+GtkWidget *button;
+GtkWidget *cantidadMatricesComboBox;
+GtkWidget *labelCantidad;
+GtkGrid    *inputsGrid;
+//variables especificas de este algoritmo
+int numeroLlaves = 9;
+
+
+//declaraciones de funcion .h
+static void displayAnswer();
+static void getTextInputValues();
+static void displayAnswer();
+
+
+
+//---funciones del problema----------------
+void resolver ()
+{
+    //sow screen
+    gtk_widget_show(resultadoString0);
+    gtk_widget_show(resultadoString1);
+    gtk_widget_show(resultadoStringWarning);
+    
+    gtk_widget_hide(inputsGrid);
+    gtk_widget_hide(labelCantidad);
+    gtk_widget_hide(cantidadMatricesComboBox);
+    
+    //get values
+    //getTextInputValues();
+    
+    //TODO insert problem functions
+
+
+
+    //update answer with values
+    //displayAnswer();
+
+
+}
+
+//----------------funciones de interfaz--------------
+void cleanInput()
+{
+    gtk_widget_hide(resultadoString0);
+    gtk_widget_hide(resultadoString1);
+    gtk_widget_hide(resultadoStringWarning);
+    
+    gtk_widget_show(inputsGrid);
+    gtk_widget_show(labelCantidad);
+    gtk_widget_show(cantidadMatricesComboBox);
+
+}
+
+void closeWindow()
+{
+    gtk_main_quit();
+}
+
+
+///-------------------------------main-----------------
 int main(int argc, char *argv[])
 {
     
@@ -22,92 +119,83 @@ int main(int argc, char *argv[])
     
  
     builder = gtk_builder_new();
-    gtk_builder_add_from_file (builder, "src/mochila.glade", NULL);
+    gtk_builder_add_from_file (builder, "src/matrices.glade", NULL);
  
-    window = GTK_WIDGET(gtk_builder_get_object(builder, "mochilaWindow"));
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "matricesWindow"));
     gtk_builder_connect_signals(builder, NULL);
 
-   
-    comboBox = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext3"));
-    comboSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBox));
 
+    cantidadMatricesComboBox = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext4"));
+    cantidadMatrices = gtk_combo_box_get_active (GTK_COMBO_BOX(cantidadMatricesComboBox));
+    labelCantidad = GTK_WIDGET(gtk_builder_get_object(builder, "box9"));
 
-    comboBoxCapacidad = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext1"));
-    comboBoxCapacidadSelected = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxCapacidad));
-
-    comboBoxObjetos = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext4"));
-    comboBoxObjetosSelect = gtk_combo_box_get_active (GTK_COMBO_BOX(comboBoxObjetos));
     
-    button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
-    g_signal_connect(button, "clicked", G_CALLBACK(resolver), window);
-
-    button = GTK_WIDGET(gtk_builder_get_object(builder, "button5"));
-    g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
-  
-    
-    inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "grid2"));
-    resultGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridRespuesta"));
-    gtk_widget_set_name (GTK_WIDGET(resultGrid), "gridRespuesta");
+    inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput2"));
 
     inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxInput"));
     resultScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxResult"));
 
+    resultadoString0 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate1"));
     resultadoString1 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate2"));
-    resultadoString2 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate4"));
-    resultadoString3 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate5"));
+    resultadoStringWarning =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate3"));
+    
+    //assign  save and load buttons callback
+    //TODO uncomment
+    button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
 
-    gtk_widget_hide(resultScreen);
-    gtk_widget_show(inputScreen);
+    button = GTK_WIDGET(gtk_builder_get_object(builder, "button5"));
+    //g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
+
+
+    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+        {
+            for (int j = 0; j < 3; ++j)
+            { 
+                if(j == 1)
+                {
+                  textInputsMatrix[i][j] = gtk_label_new ("  x  " );
+                  gtk_widget_show (textInputsMatrix[i][j]);
+                  gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
+
+                }
+                else
+                {
+                    
+
+                  textInputsMatrix[i][j] = gtk_entry_new ();
+                  gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),4);
+                  gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "1");
+                  gtk_widget_show (textInputsMatrix[i][j]);
+                  gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
+                  gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
+                  gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
+                }
+                //GtkWidget *entry;
+                //add one input and store reference
+                
+               
+            }
+        }
+
+
+
+
+    //hide answer
+    gtk_widget_hide(resultadoString0);
+    gtk_widget_hide(resultadoString1);
+    gtk_widget_hide(resultadoStringWarning);
+    
+    gtk_widget_show(inputsGrid);
+    gtk_widget_show(labelCantidad);
+    gtk_widget_show(cantidadMatricesComboBox);
+
+    //gtk_widget_show(inputScreen);
+    //gtk_widget_show(resultScreen);
     
  
    
 
-    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
-    {
-        for (int j = 0; j < 4; ++j)
-        { 
-            if(j == 0)
-            {
-              textInputsMatrix[i][j] = gtk_button_new ();
-              //gtk_entry_set_max_length (GTK_BUTTON (textInputsMatrix[i][j]),4);
-              gtk_button_set_label (GTK_BUTTON (textInputsMatrix[i][j]), nombreObjetos[i]);
-              gtk_widget_show (textInputsMatrix[i][j]);
-             // gtk_entry_set_max_width_chars(GTK_BUTTON (textInputsMatrix[i][j]), 4);
-              //gtk_entry_set_width_chars(GTK_BUTTON (textInputsMatrix[i][j]), 4);
-              gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
-
-            }
-            else
-            {
-              textInputsMatrix[i][j] = gtk_entry_new ();
-              gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),4);
-              gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "-1");
-              gtk_widget_show (textInputsMatrix[i][j]);
-              gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
-              gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
-              gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
-            }
-            //GtkWidget *entry;
-            //add one input and store reference
-            
-           
-        }
-    }
-
-    for (int i = 0; i < 20; ++i)
-    {
-        for (int j = 0; j < 20; ++j)
-        { 
-             
-          resultInputsMatrix[i][j] = gtk_label_new (" - " );
-          gtk_widget_show (resultInputsMatrix[i][j]);
-          gtk_grid_attach (resultGrid,resultInputsMatrix[i][j],i,j,1,1);
-           
-        }
-    }
-
     
-
 
 
     GtkCssProvider *provider;
@@ -118,7 +206,7 @@ int main(int argc, char *argv[])
   g_signal_connect(G_OBJECT (window), "destroy",
       G_CALLBACK(gtk_main_quit), NULL);
 
-/*---------------- CSS ----------------------------------------------------------------------------------------------------
+/*---------------- CSS ----------------------------------------------------------------------------------------------------*/
   provider = gtk_css_provider_new ();
   display = gdk_display_get_default ();
   screen = gdk_display_get_default_screen (display);
@@ -145,4 +233,4 @@ int main(int argc, char *argv[])
 
 }
 
-*/
+

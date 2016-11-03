@@ -15,3 +15,4 @@ cd ..
 
 gcc -rdynamic -o Proyecto main.c -Wall `pkg-config --cflags --libs gtk+-3.0` -export-dynamic 
 
+./src/matrices
