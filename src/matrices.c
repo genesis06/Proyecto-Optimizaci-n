@@ -19,29 +19,28 @@
 
 
 //-------------------variables -----------------------
-//global
+//global - estaticas
 int MAX_INPUT_MATRIX_SIZE = 20;
+
+//variables especificas de este algoritmo
+
 typedef struct {
     int n;
     int m;
 } matriz;
+char *nodeNames[20] = {"M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","M13","M14","M15","M16","M17","M18","M19","M20"};
 
 
 matriz inputValues[20] = {{1,2},{2,3},{3,2},{2,7}};
 int cantidadMatrices = 9;
-int columnaInicial = 2;
-
-char linea[300];
 
 //variables de todos los problemas
 
-GtkWidget *textInputsMatrix[20][2];
+GtkWidget *textInputsMatrix[21][4];
 GtkWidget   *window;
 GtkWidget   *resultadoString0;
-GtkWidget *resultadoString1 ;
+GtkWidget *resultadoString1 ; ///aca se tiene que poner el resultado
 GtkWidget *resultadoStringWarning;
-
-//variables de interfaz
 
 GtkWidget *resultScreen;
 GtkWidget *inputScreen;
@@ -49,8 +48,7 @@ GtkWidget *button;
 GtkWidget *cantidadMatricesComboBox;
 GtkWidget *labelCantidad;
 GtkGrid    *inputsGrid;
-//variables especificas de este algoritmo
-int numeroLlaves = 9;
+
 
 
 //declaraciones de funcion .h
@@ -86,6 +84,30 @@ void resolver ()
 }
 
 //----------------funciones de interfaz--------------
+
+//Esta funcion esconde los inputs para cambiar tamaño de matriz
+void updateInput()
+{
+    cantidadMatrices = gtk_combo_box_get_active (GTK_COMBO_BOX(cantidadMatricesComboBox));
+    cantidadMatrices = cantidadMatrices + 1;
+
+    for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+           if(i <= cantidadMatrices -1)
+            {
+               gtk_widget_show(GTK_WIDGET (textInputsMatrix[i][j]));
+            }
+            else
+            {
+                 gtk_widget_hide(GTK_WIDGET (textInputsMatrix[i][j])); 
+            }    
+        }
+    }
+
+}
+
 void cleanInput()
 {
     gtk_widget_hide(resultadoString0);
@@ -149,14 +171,16 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
         {
-            for (int j = 0; j < 3; ++j)
+            for (int j = 0; j < 4; ++j)
             { 
-                if(j == 1)
+                if(j == 2 )
                 {
                   textInputsMatrix[i][j] = gtk_label_new ("  x  " );
-                  gtk_widget_show (textInputsMatrix[i][j]);
-                  gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
 
+                }
+                else if(j  ==0 )
+                {
+                  textInputsMatrix[i][j] = gtk_label_new (nodeNames[i]);
                 }
                 else
                 {
@@ -165,11 +189,13 @@ int main(int argc, char *argv[])
                   textInputsMatrix[i][j] = gtk_entry_new ();
                   gtk_entry_set_max_length (GTK_ENTRY (textInputsMatrix[i][j]),4);
                   gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][j]), "1");
-                  gtk_widget_show (textInputsMatrix[i][j]);
+                  
                   gtk_entry_set_max_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
                   gtk_entry_set_width_chars(GTK_ENTRY (textInputsMatrix[i][j]), 4);
-                  gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
+                  
                 }
+                gtk_widget_show (textInputsMatrix[i][j]);
+                gtk_grid_attach (inputsGrid,textInputsMatrix[i][j],j,i + 1,1,1);
                 //GtkWidget *entry;
                 //add one input and store reference
                 
