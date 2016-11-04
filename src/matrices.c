@@ -64,14 +64,14 @@ void resolver ()
     //sow screen
     gtk_widget_show(resultadoString0);
     gtk_widget_show(resultadoString1);
-    gtk_widget_show(resultadoStringWarning);
+    //gtk_widget_show(resultadoStringWarning);
     
     gtk_widget_hide(inputsGrid);
     gtk_widget_hide(labelCantidad);
     gtk_widget_hide(cantidadMatricesComboBox);
     
     //get values
-    //getTextInputValues();
+    getTextInputValues();
     
     //TODO insert problem functions
 
@@ -85,6 +85,44 @@ void resolver ()
 
 //----------------funciones de interfaz--------------
 
+
+
+//this function replaces the textInputsMatrix with curret values
+void getTextInputValues()
+{
+    cantidadMatrices = gtk_combo_box_get_active (GTK_COMBO_BOX(cantidadMatricesComboBox));
+    cantidadMatrices = cantidadMatrices + 1;
+    printf(" %d \n ",  cantidadMatrices);     
+    gtk_widget_hide(resultadoStringWarning);
+    for (int i = 0; i < cantidadMatrices; ++i)
+    {
+        
+            gchar *currentNValue;
+            currentNValue = gtk_entry_get_text(GTK_ENTRY(textInputsMatrix[i][1]));
+            gchar *currentMValue;
+            currentMValue = gtk_entry_get_text(GTK_ENTRY(textInputsMatrix[i][3]));
+
+            int newValueN = atoi(currentNValue);
+            int newValueM = atoi(currentMValue);
+            
+            inputValues[i].n = newValueN;
+            inputValues[i].m = newValueM;
+            if( i > 0)
+            {
+              if(inputValues[i].n != inputValues[i -1].m)
+              {
+                  inputValues[i].n = inputValues[i -1].m;
+                  gtk_widget_show(resultadoStringWarning);
+              }
+            }      
+        
+    }
+    for (int i = 0; i < cantidadMatrices; ++i)
+    {
+        printf(" %d  x   %d  \n",  inputValues[i].n , inputValues[i].m);
+    }
+
+}
 //Esta funcion esconde los inputs para cambiar tamaño de matriz
 void updateInput()
 {
