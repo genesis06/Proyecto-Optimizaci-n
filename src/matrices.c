@@ -67,6 +67,7 @@ void resolver ()
     //gtk_widget_show(resultadoStringWarning);
     
     gtk_widget_hide(inputsGrid);
+    gtk_widget_hide(inputScreen);
     gtk_widget_hide(labelCantidad);
     gtk_widget_hide(cantidadMatricesComboBox);
     
@@ -84,7 +85,18 @@ void resolver ()
 }
 
 //----------------funciones de interfaz--------------
+void cleanInput()
+{
+    gtk_widget_hide(resultadoString0);
+    gtk_widget_hide(resultadoString1);
+    gtk_widget_hide(resultadoStringWarning);
+    
+    gtk_widget_show(inputScreen);
+    gtk_widget_show(inputsGrid);
+    gtk_widget_show(labelCantidad);
+    gtk_widget_show(cantidadMatricesComboBox);
 
+}
 
 void setTextInputValues()
 {
@@ -104,6 +116,8 @@ void setTextInputValues()
       updateInput();
         
 }
+
+
 
 //this function replaces the textInputsMatrix with curret values
 void getTextInputValues()
@@ -171,17 +185,7 @@ void updateInput()
 
 }
 
-void cleanInput()
-{
-    gtk_widget_hide(resultadoString0);
-    gtk_widget_hide(resultadoString1);
-    gtk_widget_hide(resultadoStringWarning);
-    
-    gtk_widget_show(inputsGrid);
-    gtk_widget_show(labelCantidad);
-    gtk_widget_show(cantidadMatricesComboBox);
 
-}
 
 void closeWindow()
 {
@@ -217,7 +221,7 @@ int main(int argc, char *argv[])
     
     inputsGrid =  GTK_GRID(gtk_builder_get_object(builder, "gridInput2"));
 
-    inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxInput"));
+    inputScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxInput2"));
     resultScreen =  GTK_WIDGET(gtk_builder_get_object(builder, "boxResult"));
 
     resultadoString0 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate1"));
@@ -274,6 +278,7 @@ int main(int argc, char *argv[])
     gtk_widget_hide(resultadoString1);
     gtk_widget_hide(resultadoStringWarning);
     
+    gtk_widget_hide(inputsGrid);
     gtk_widget_show(inputsGrid);
     gtk_widget_show(labelCantidad);
     gtk_widget_show(cantidadMatricesComboBox);
