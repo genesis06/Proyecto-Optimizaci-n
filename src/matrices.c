@@ -32,7 +32,11 @@ char *nodeNames[20] = {"M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11",
 char stringRespuesta[100];
 
 matriz inputValues[20] = {{1,2},{2,3},{3,2},{2,7}};
+int inputValuesTransform[40];
 int cantidadMatrices = 9;
+
+int resultMatrixM[20][20];
+int resultMatrixP[20][20];
 
 //variables de todos los problemas
 
@@ -55,6 +59,7 @@ GtkGrid    *inputsGrid;
 static void displayAnswer();
 static void getTextInputValues();
 static void displayAnswer();
+static void transformInput();
 
 
 
@@ -73,7 +78,8 @@ void resolver ()
     
     //get values
     getTextInputValues();
-    
+    transformInput();
+
     //TODO insert problem functions
 
 
@@ -82,6 +88,22 @@ void resolver ()
     displayAnswer();
 
 
+}
+
+void transformInput ()
+{
+  for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
+  { 
+      int referenceIndex =  i * 2; 
+      inputValuesTransform[referenceIndex] = inputValues[i].n;
+      inputValuesTransform[referenceIndex + 1] = inputValues[i].m;
+  }
+  for (int i = 0; i < 40; ++i)
+  {
+      printf(" %d  \n",  inputValuesTransform[i]);
+  }
+
+       
 }
 
 //----------------funciones de interfaz--------------
