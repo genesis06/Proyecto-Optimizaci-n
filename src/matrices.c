@@ -117,7 +117,94 @@ void setTextInputValues()
         
 }
 
+//Open File
+static void showOpenFile(GtkWidget* button, gpointer window)
+{
+        //Contruccion Dialog
 
+  GtkWidget *dialog;
+  
+  dialog = gtk_file_chooser_dialog_new("Chosse a file", GTK_WINDOW(window), 
+        GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_OK, GTK_RESPONSE_OK, 
+        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+
+  gtk_widget_show_all(dialog);
+
+        //Localizar el directorio
+  gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), g_get_home_dir());
+
+        //Guarda la respuesta al hacer Ok/Cancel
+  gint resp = gtk_dialog_run(GTK_DIALOG(dialog));
+
+  if(resp == GTK_RESPONSE_OK)
+    {
+      
+    FILE *infile;
+    
+    
+    infile = fopen(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)), "r");
+   
+    char buff[500];
+    
+    char primeraLinea[50];
+    
+
+    //Leer hasta que no hay lineas
+      
+      fgets(buff, 500, (FILE*)infile);
+
+
+      //Lee primera Linea 
+       strcpy(primeraLinea, buff);
+    
+        /***************************************************************/
+        
+        /** Inicializa variables**/
+        cantidadMatrices = atoi(primeraLinea);
+
+        //gtk_combo_box_set_active(GTK_COMBO_BOX(comboBox),indiceComboObjetos );
+        printf("Llaves: %d\n", cantidadMatrices);
+          
+      
+      
+    /********************** Proceso para leer y guardar matriz ******************************/      
+    // Lee resto de líneas
+    int indiceFilas = 0;
+    char line[100];
+    
+    
+    while (fgets(buff, 500, (FILE*)infile)){
+            char *st =calloc(200, sizeof(char));
+            strcpy(st, buff);
+            char *ch =calloc(100, sizeof(char));
+            //printf("Split \"%s\"\n", st);
+            ch = strtok(st, " ");
+
+            inputValues[indiceFilas].n = atoi(ch);
+            while (ch != NULL) {
+              inputValues[indiceFilas].m = atoi(ch);
+              ch = strtok(NULL, " ,");
+
+            }
+
+
+            indiceFilas++;
+      
+    }
+    /*for (int i = 0; i < tamDatos; ++i)
+    {
+      printf("%s %f\n", datos[i].name, datos[i].value); 
+    }*/
+    /*****************************************************************************************/
+    
+    // Cerrar Archivo
+    fclose(infile);
+    }
+    gtk_widget_destroy(dialog);
+  
+  setTextInputValues();
+  
+}
 
 //this function replaces the textInputsMatrix with curret values
 void getTextInputValues()
@@ -233,7 +320,7 @@ int main(int argc, char *argv[])
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
 
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button5"));
-    //g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
+    g_signal_connect(button, "clicked", G_CALLBACK(showOpenFile), window);
 
 
     for (int i = 0; i < MAX_INPUT_MATRIX_SIZE; ++i)
@@ -285,10 +372,6 @@ int main(int argc, char *argv[])
 
     //gtk_widget_show(inputScreen);
     //gtk_widget_show(resultScreen);
-    
-    cantidadMatrices = 4;
-   setTextInputValues();
-
     
 
 
