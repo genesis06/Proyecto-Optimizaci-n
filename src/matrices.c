@@ -29,7 +29,7 @@ typedef struct {
     int m;
 } matriz;
 char *nodeNames[20] = {"M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","M13","M14","M15","M16","M17","M18","M19","M20"};
-
+char stringRespuesta[100];
 
 matriz inputValues[20] = {{1,2},{2,3},{3,2},{2,7}};
 int cantidadMatrices = 9;
@@ -78,7 +78,7 @@ void resolver ()
 
 
     //update answer with values
-    //displayAnswer();
+    displayAnswer();
 
 
 }
@@ -122,6 +122,13 @@ void getTextInputValues()
         printf(" %d  x   %d  \n",  inputValues[i].n , inputValues[i].m);
     }
 
+}
+
+void displayAnswer()
+{
+    strcat(stringRespuesta, "Place holder text"); //TODO replace with anwers
+    gtk_label_set_text(resultadoString1, stringRespuesta);
+        
 }
 //Esta funcion esconde los inputs para cambiar tamaño de matriz
 void updateInput()
