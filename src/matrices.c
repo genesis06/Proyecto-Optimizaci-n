@@ -367,8 +367,43 @@ void getTextInputValues()
 
 void displayAnswer()
 {
-    strcat(stringRespuesta, "Place holder text"); //TODO replace with anwers
+    strcat(stringRespuesta, "Place holder text"); //TODO replace with anwers, comment this
     gtk_label_set_text(resultadoString1, stringRespuesta);
+
+
+    for (int i = 1; i < 21; ++i)
+    {
+        for (int j = 1; j < 21; ++j)
+        { 
+            char tempStringDisplayM[10];
+            snprintf(tempStringDisplayM, 10, "%d",resultMatrixM[i-1][j-1]);   
+            gtk_label_set_text(GTK_LABEL(resultMatrixMLabels[i][j]), tempStringDisplayM);
+
+            char tempStringDisplayP[10];
+            snprintf(tempStringDisplayP, 10, "%d",resultMatrixP[i-1][j-1]);   
+            gtk_label_set_text(GTK_LABEL(resultMatrixPLabels[i][j]), tempStringDisplayP);
+              
+        }
+    }
+    
+    for (int iClean = 0; iClean < 21; ++iClean)
+    {
+        for (int jClean = 0; jClean < 21; ++jClean)
+        { 
+             
+          if(iClean > cantidadMatrices  || jClean > cantidadMatrices )
+          {
+            gtk_widget_hide (resultMatrixMLabels[iClean][jClean]);
+            gtk_widget_hide (resultMatrixPLabels[iClean][jClean]);
+          }
+          else
+          {
+              gtk_widget_show (resultMatrixMLabels[iClean][jClean]);
+              gtk_widget_show (resultMatrixPLabels[iClean][jClean]);
+            }
+           
+        }
+    }
         
 }
 //Esta funcion esconde los inputs para cambiar tamaño de matriz
