@@ -31,12 +31,19 @@ typedef struct {
 char *nodeNames[20] = {"M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","M13","M14","M15","M16","M17","M18","M19","M20"};
 char stringRespuesta[100];
 
-matriz inputValues[20] = {{1,2},{2,3},{3,2},{2,7}};
-int inputValuesTransform[40];
-int cantidadMatrices = 9;
+
 
 int resultMatrixM[20][20];
 int resultMatrixP[20][20];
+
+int inputValuesTransform[40];
+int cantidadMatrices = 6;
+
+
+matriz inputValues[20] = {{5,2},{2,3},{3,4},{4,6},{6,7},{7,8}};
+int dimensiones[21]={5,2,3,4,6,7,8};
+
+int columnaInicial = 2;
 
 //variables de todos los problemas
 
@@ -68,6 +75,17 @@ static void displayAnswer();
 static void transformInput();
 
 
+void guardarDimensiones();
+int getDimensiones(int i, int j, int k);
+void imprimirM();
+void imprimirP();
+void setTablaInicial();
+int calcularCasilla(int row, int col);
+int ordenar(int*valores, int largo, int row, int col);
+int getIndex(int number, int* array, int largo);
+void calcularValoresTabla();
+void generarDimensiones();
+
 
 //---funciones del problema----------------
 void resolver ()
@@ -91,7 +109,12 @@ void resolver ()
     transformInput();
 
     //TODO insert problem functions
-
+    generarDimensiones();
+    setTablaInicial();
+    calcularValoresTabla();
+    imprimirM();
+    printf("\n");
+    imprimirP();
 
 
     //update answer with values
@@ -99,6 +122,174 @@ void resolver ()
 
 
 }
+
+void generarDimensiones(){
+  for (int i = 0; i < cantidadMatrices; ++i)
+  {
+    if(i==0){
+      dimensiones[i]=inputValues[i].n;
+      dimensiones[i+1]=inputValues[i].m;
+    }
+    else{
+      dimensiones[i+1]=inputValues[i].m;
+    }
+
+  }
+  for (int i = 0; i < cantidadMatrices+1; ++i)
+  {
+    printf("%d\n", dimensiones[i]);
+  }
+}
+int getDimensiones(int i, int j, int k){
+  
+  return dimensiones[i]*dimensiones[j+1]*dimensiones[k];
+}
+
+// Inicializa las tablas A y R
+void setTablaInicial(){
+  for (int i = 0; i < cantidadMatrices; i++)
+  {
+    for (int j = 0; j < cantidadMatrices; j++)
+    {
+      if(i==j){
+        resultMatrixM[i][j] = 0;
+        resultMatrixP[i][j] = 0;
+      }
+      else if(i== j-1){
+        resultMatrixM[i][j] = getDimensiones(i,j,i+1);
+        resultMatrixP[i][j] = i+1;  
+      }
+      else{
+        resultMatrixM[i][j] = 0;  
+        resultMatrixP[i][j] = 0;  
+      }
+    }
+  }
+}
+
+
+
+// Calcula la tabla A de los costos minimos, junto con la tabla R
+void calcularValoresTabla(){
+  int contadorFila = 0;
+    for (int i = 0; i < cantidadMatrices; ++i)
+    {
+      for (int j = columnaInicial; j < cantidadMatrices; ++j)
+      {
+        resultMatrixM[contadorFila][j] = calcularCasilla(contadorFila,j);
+        contadorFila++;
+      }
+      contadorFila=0;
+      columnaInicial++;
+    }
+  
+}
+
+// Realiza el metodo PUM PUM para calcular el costo minimo.
+int calcularCasilla(int row, int col){ //  0,  2
+  int numeros[col-row];
+  int contaFilas = 0;
+  for (int j = row; j < col; ++j)
+  {
+    numeros[contaFilas] = resultMatrixM[row][j];
+    contaFilas++;
+    //printf("%f\n",  answerMatrixA[row][j]);
+  }
+  contaFilas = 0;
+  for (int i = row; i < col; ++i)
+  {
+    
+    //printf("%d %d\n",i+1, col );
+    //printf("%d\n", numeros[contaFilas]);
+    //printf("%d\n",  answerMatrixM[i+1][col]);
+    //printf("%d %d %d\n",  dimensiones[i],dimensiones[col+1],dimensiones[i+1]);
+    //printf("%d \n", getDimensiones( i, col) );
+    //printf("%d\n",  numeros[contaFilas] + answerMatrixM[i+1][col] + getDimensiones( contaFilas, col));
+    //printf("%d %d\n",  i,col);
+    //printf("\n");
+    numeros[contaFilas] = numeros[contaFilas] + resultMatrixM[i+1][col] + getDimensiones( row, col,i+1);
+    contaFilas++;
+//    printf("SUma: %f\n", numeros[i]);
+  }
+  //for (int i = 0; i < col-row; i++)
+  //{
+    //printf("%f\n", numeros[i]);
+  //}
+  
+  return ordenar(numeros,col-row, row, col) ;
+  
+}
+
+// Ordena los costos (sin probabilidades sumadas) para obtener el menor de ellos para el metodo PUM PUM
+// Ademas construye la tabla R con el k ganador
+int ordenar(int*valores, int largo, int row, int col){
+  int aux;
+  int auxiliar[largo];
+  memcpy(auxiliar,valores,sizeof(auxiliar)); 
+
+  /*for (int i = 0; i < largo; ++i)
+  {
+    printf("%f\n", valores[i]);
+  }*/
+
+  for (int i = 0; i < largo-1; i++)
+  {
+    for (int j = i+1; j < largo; j++)
+    {
+      if(valores[j] < valores[i]){
+        aux = valores[j];
+        valores[j] = valores[i];
+        valores[i] = aux;
+      }
+    }
+  }
+/*
+  for (int i = 0; i < largo; ++i)
+  {
+    printf("%f ", auxiliar[i]);
+  }
+  printf("\n");
+  printf("%d %d: %d \n",row,col, getIndex(valores[0], auxiliar, largo) +row);*/
+  resultMatrixP[row][col] = getIndex(valores[0], auxiliar, largo)+row+1;
+  return valores[0];
+
+}
+
+// Obtiene el indice de un numero , que es equivalente al k ganador para construir la tabla R
+int getIndex(int number, int* array, int largo){
+  for (int i = 0; i < largo; ++i)
+  {
+    if(number == array[i]){return i;}
+  }
+}
+
+
+
+
+void imprimirM(){
+  for (int i = 0; i < cantidadMatrices; ++i)
+  {
+    for (int j = 0; j < cantidadMatrices; ++j)
+    {
+      printf("%d\t", resultMatrixM[i][j]);
+    }
+    printf("\n");
+  }
+
+  
+}
+
+void imprimirP(){
+  for (int i = 0; i < cantidadMatrices; ++i)
+  {
+    for (int j = 0; j < cantidadMatrices; ++j)
+    {
+      printf("%d\t", resultMatrixP[i][j]);
+    }
+    printf("\n");
+  }
+}
+
 
 void transformInput ()
 {
