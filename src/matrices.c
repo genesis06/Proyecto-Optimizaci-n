@@ -115,6 +115,7 @@ void resolver ()
     imprimirM();
     printf("\n");
     imprimirP();
+    columnaInicial = 2;
 
 
     //update answer with values
@@ -738,7 +739,7 @@ int main(int argc, char *argv[])
                 
             }
             gtk_widget_show (resultMatrixMLabels[i][j]);
-            gtk_grid_attach (resultMatrixMLabelsWidget,resultMatrixMLabels[i][j],i,j,1,1);
+            gtk_grid_attach (resultMatrixMLabelsWidget,resultMatrixMLabels[i][j],j,i,1,1);
             
           
            
@@ -772,7 +773,7 @@ int main(int argc, char *argv[])
                 
             }
             gtk_widget_show (resultMatrixPLabels[i][j]);
-            gtk_grid_attach (resultMatrixPLabelsWidget,resultMatrixPLabels[i][j],i,j,1,1);
+            gtk_grid_attach (resultMatrixPLabelsWidget,resultMatrixPLabels[i][j],j,i,1,1);
             
           
            
