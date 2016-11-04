@@ -41,9 +41,13 @@ int resultMatrixP[20][20];
 //variables de todos los problemas
 
 GtkWidget *textInputsMatrix[21][4];
-GtkWidget   *window;
-GtkWidget   *resultadoString0;
+GtkWidget *window;
+GtkWidget *resultMatrixMLabels[21][21];
+GtkWidget *resultMatrixPLabels[21][21];
+GtkWidget *resultadoString0;
 GtkWidget *resultadoString1 ; ///aca se tiene que poner el resultado
+GtkWidget *resultadoString6 ;
+GtkWidget *resultadoString7 ;
 GtkWidget *resultadoStringWarning;
 
 GtkWidget *resultScreen;
@@ -51,6 +55,8 @@ GtkWidget *inputScreen;
 GtkWidget *button;
 GtkWidget *cantidadMatricesComboBox;
 GtkWidget *labelCantidad;
+GtkWidget *resultMatrixMLabelsWidget;
+GtkWidget *resultMatrixPLabelsWidget;
 GtkGrid    *inputsGrid;
 
 
@@ -69,7 +75,11 @@ void resolver ()
     //sow screen
     gtk_widget_show(resultadoString0);
     gtk_widget_show(resultadoString1);
-    //gtk_widget_show(resultadoStringWarning);
+
+    gtk_widget_show(resultMatrixMLabelsWidget);
+    gtk_widget_show(resultMatrixPLabelsWidget);
+    gtk_widget_show(resultadoString6);
+    gtk_widget_show(resultadoString7);
     
     gtk_widget_hide(inputsGrid);
     gtk_widget_hide(inputScreen);
@@ -112,6 +122,12 @@ void cleanInput()
     gtk_widget_hide(resultadoString0);
     gtk_widget_hide(resultadoString1);
     gtk_widget_hide(resultadoStringWarning);
+
+    gtk_widget_hide(resultMatrixMLabelsWidget);
+    gtk_widget_hide(resultMatrixPLabelsWidget);
+    gtk_widget_hide(resultadoString6);
+    gtk_widget_hide(resultadoString7);
+    
     
     gtk_widget_show(inputScreen);
     gtk_widget_show(inputsGrid);
@@ -419,8 +435,13 @@ int main(int argc, char *argv[])
 
     resultadoString0 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate1"));
     resultadoString1 =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate2"));
+    resultadoString6 =  GTK_WIDGET(gtk_builder_get_object(builder, "label6"));
+    resultadoString7 =  GTK_WIDGET(gtk_builder_get_object(builder, "label7"));
     resultadoStringWarning =  GTK_WIDGET(gtk_builder_get_object(builder, "labelRespuestaMate3"));
     
+    resultMatrixMLabelsWidget  =  GTK_WIDGET(gtk_builder_get_object(builder, "respuestaM"));
+    resultMatrixPLabelsWidget  =  GTK_WIDGET(gtk_builder_get_object(builder, "respuestaP"));
+
     //assign  save and load buttons callback
     //TODO uncomment
     button = GTK_WIDGET(gtk_builder_get_object(builder, "button3"));
@@ -464,12 +485,84 @@ int main(int argc, char *argv[])
         }
 
 
+    for (int i = 0; i < 21; ++i)
+    {
+        for (int j = 0; j < 21; ++j)
+        { 
+            char tempString[10];
+               
+            if(i==0 && j==0)
+            {
+               resultMatrixMLabels[i][j] = gtk_label_new ("  ");
+            }
+            else if(i==0)
+            {
+                
+                snprintf(tempString, 10, "%d", j );
+                resultMatrixMLabels[i][j] = gtk_label_new (tempString);
+            }
+            else if(j==0)
+            {
+                snprintf(tempString, 10, "%d", i );
+                resultMatrixMLabels[i][j] = gtk_label_new (tempString);
+            }
+            else
+            {
+                resultMatrixMLabels[i][j] = gtk_label_new (" - " );
+                
+            }
+            gtk_widget_show (resultMatrixMLabels[i][j]);
+            gtk_grid_attach (resultMatrixMLabelsWidget,resultMatrixMLabels[i][j],i,j,1,1);
+            
+          
+           
+        }
+    }
+
+    for (int i = 0; i < 21; ++i)
+    {
+        for (int j = 0; j < 21; ++j)
+        { 
+            char tempString[10];
+               
+            if(i==0 && j==0)
+            {
+               resultMatrixPLabels[i][j] = gtk_label_new ("  ");
+            }
+            else if(i==0)
+            {
+                
+                snprintf(tempString, 10, "%d", j );
+                resultMatrixPLabels[i][j] = gtk_label_new (tempString);
+            }
+            else if(j==0)
+            {
+                snprintf(tempString, 10, "%d", i );
+                resultMatrixPLabels[i][j] = gtk_label_new (tempString);
+            }
+            else
+            {
+                resultMatrixPLabels[i][j] = gtk_label_new (" - " );
+                
+            }
+            gtk_widget_show (resultMatrixPLabels[i][j]);
+            gtk_grid_attach (resultMatrixPLabelsWidget,resultMatrixPLabels[i][j],i,j,1,1);
+            
+          
+           
+        }
+    }
+
 
 
     //hide answer
     gtk_widget_hide(resultadoString0);
     gtk_widget_hide(resultadoString1);
     gtk_widget_hide(resultadoStringWarning);
+    gtk_widget_hide(resultMatrixMLabelsWidget);
+    gtk_widget_hide(resultMatrixPLabelsWidget);
+    gtk_widget_hide(resultadoString6);
+    gtk_widget_hide(resultadoString7);
     
     gtk_widget_hide(inputsGrid);
     gtk_widget_show(inputsGrid);
