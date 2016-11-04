@@ -30,7 +30,7 @@ typedef struct {
 } matriz;
 char *nodeNames[20] = {"M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","M13","M14","M15","M16","M17","M18","M19","M20"};
 char stringRespuesta[100];
-
+char *copiaNames[20];
 
 
 int resultMatrixM[20][20];
@@ -85,6 +85,8 @@ int ordenar(int*valores, int largo, int row, int col);
 int getIndex(int number, int* array, int largo);
 void calcularValoresTabla();
 void generarDimensiones();
+void generarString();
+void generarDos(int inicio, int final, int primero, int utimo, int elemento);
 
 
 //---funciones del problema----------------
@@ -116,12 +118,92 @@ void resolver ()
     printf("\n");
     imprimirP();
     columnaInicial = 2;
-
+    generarString();
 
     //update answer with values
     displayAnswer();
 
 
+}
+void generarString(){
+  for (int i = 0; i < cantidadMatrices; ++i)
+  {
+    copiaNames[i] = nodeNames[i];
+  }
+  
+  char *nomPrimero =calloc(10, sizeof(char));
+  strcat(nomPrimero, "( ");
+  char *aux =calloc(10, sizeof(char));
+  strcpy(aux, nodeNames[0]);
+  strcat(nomPrimero, aux);
+  copiaNames[0] = nomPrimero;
+  //strcpy(copiaNames[0],nomPrimero);
+  
+  char *nomUltimo =calloc(10, sizeof(char));
+  strcat(nomUltimo, nodeNames[cantidadMatrices-1]);
+  strcat(nomUltimo, ")");
+  copiaNames[cantidadMatrices-1] = nomUltimo;
+    
+  
+  int nodoInicial = resultMatrixP[0][cantidadMatrices-1];
+  generarDos(1,6,1,6,nodoInicial);
+
+  strcat(stringRespuesta,"(");
+  for (int i = 0; i < cantidadMatrices; ++i)
+  {
+    strcat(stringRespuesta," ");
+    strcat(stringRespuesta,copiaNames[i]);
+    strcat(stringRespuesta," ");
+  }
+  strcat(stringRespuesta,")");
+  printf("%s\n", stringRespuesta);
+
+}
+
+void generarDos(int inicio, int final, int primero, int utimo, int elemento){
+  if(inicio == resultMatrixP[inicio][final]-1){
+    char *aux =calloc(10, sizeof(char));
+      strcat(aux, "(");
+      strcat(aux, nodeNames[inicio-1]);
+      copiaNames[inicio-1]=aux;
+      printf("ele: %s\n", aux);
+
+
+      char *nom =calloc(10, sizeof(char));
+      //strcat(nom, "( ");
+      strcat(nom,nodeNames[elemento-1]);
+      strcat(nom, ")");
+      copiaNames[elemento-1] = nom;
+    printf("%s\n", "termino");
+  }
+  else if(elemento-primero > final-elemento){
+      char *aux =calloc(10, sizeof(char));
+      strcat(aux, "(");
+      strcat(aux, nodeNames[inicio-1]);
+      copiaNames[inicio-1]=aux;
+      printf("ele: %s\n", nodeNames[inicio-1]);
+
+      char *nom =calloc(10, sizeof(char));
+      //strcat(nom, "( ");
+      strcat(nom,nodeNames[elemento-1]);
+      strcat(nom, ")");
+      copiaNames[elemento-1] = nom;
+      generarDos(inicio,final-1,primero, final, resultMatrixP[inicio][final-1]);
+  }
+  else if(elemento-primero < final-elemento){
+
+      char *aux =calloc(10, sizeof(char));
+      strcat(aux, "(");
+      strcat(aux, nodeNames[inicio-1]);
+      copiaNames[inicio-1]=aux;
+      printf("ele: %s\n", nodeNames[inicio-1]);
+
+      char *nom =calloc(10, sizeof(char));
+      strcat(nom,nodeNames[elemento-1]);
+      strcat(nom, ")");
+      copiaNames[elemento-1] = nom;
+      generarDos(inicio+1,final,primero, final, resultMatrixP[inicio][final-1]);
+  }
 }
 
 void generarDimensiones(){
