@@ -86,6 +86,24 @@ void resolver ()
 //----------------funciones de interfaz--------------
 
 
+void setTextInputValues()
+{
+    
+    gtk_combo_box_set_active(GTK_COMBO_BOX(cantidadMatricesComboBox),cantidadMatrices - 1 );
+    for (int i = 0; i < cantidadMatrices; ++i)
+    { 
+        
+
+        char setValueN[10];
+        snprintf(setValueN, 10, "%d",  inputValues[i].n);
+        char setValueM[10];
+        snprintf(setValueM, 10, "%d",  inputValues[i].m);
+        gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][1]),  setValueN);
+        gtk_entry_set_text (GTK_ENTRY (textInputsMatrix[i][3]),  setValueM);; 
+      }
+      updateInput();
+        
+}
 
 //this function replaces the textInputsMatrix with curret values
 void getTextInputValues()
@@ -263,8 +281,8 @@ int main(int argc, char *argv[])
     //gtk_widget_show(inputScreen);
     //gtk_widget_show(resultScreen);
     
- 
-   
+    cantidadMatrices = 4;
+   setTextInputValues();
 
     
 
