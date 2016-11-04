@@ -116,7 +116,91 @@ void setTextInputValues()
       updateInput();
         
 }
+void showSaveFile(){
 
+  //getTextInputValues();
+  
+  GtkWidget *dialog;
+  GtkFileChooser *chooser;
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+  gint res;
+
+  dialog = gtk_file_chooser_dialog_new ("Save File",
+                                        window,
+                                        action,
+                                        ("_Cancel"),
+                                        GTK_RESPONSE_CANCEL,
+                                        ("_Save"),
+                                        GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  chooser = GTK_FILE_CHOOSER (dialog);
+
+  gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
+
+  res = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (res == GTK_RESPONSE_ACCEPT)
+    {
+      printf("ENtro if\n");
+
+      char *filename = gtk_file_chooser_get_filename (chooser);
+
+      FILE *fichero;
+
+      fichero = fopen(filename,"w+");
+
+      if (fichero == NULL) {
+        printf( "No se puede crear el fichero.\n" );
+      }
+
+      /** Proceso para guardar datos en archivo **/
+      char *numeroLlaves =calloc(10, sizeof(char));
+      
+      //Conversion de tipos para guardar primera linea
+      sprintf(numeroLlaves,"%d",cantidadMatrices); // ***********CAMBIAR NUMERO POR plazoProyecto
+      //printf("%s \n",numeroLlaves);
+
+
+      
+      char *primerLinea =calloc(20, sizeof(char));
+
+      strcat(primerLinea, numeroLlaves);
+      strcat(primerLinea,"\n");
+
+      printf("String:%s\n", primerLinea);
+      fputs(primerLinea, fichero); // Escribe primera linea en archivo
+      strcpy(primerLinea,"");
+
+      for (int i = 0; i < cantidadMatrices; i++) 
+      {
+        char *dato =calloc(100, sizeof(char));
+        char *valueN =calloc(50, sizeof(char));
+        char *valueM =calloc(50, sizeof(char));
+
+        sprintf(valueN, "%d",inputValues[i].n);
+        strcat(dato, valueN);
+        strcat(dato, " ");
+        sprintf(valueM, "%d",inputValues[i].m);
+        strcat(dato, valueM);
+        strcat(dato, "\n");
+
+        fputs(dato, fichero); // Escribe primera linea en archivo
+
+        strcpy(dato,"");
+        strcpy(valueN,"");
+        strcpy(valueM,"");
+      }
+      //printf("stringSave: %s\n", stringSave);
+      //fputs(stringSave, fichero);
+      if (fclose(fichero)!=0)
+        printf( "Problemas al cerrar el fichero\n" );
+
+      /** Fin proceso  **/
+    
+    }
+
+    gtk_widget_destroy(dialog);
+}
 //Open File
 static void showOpenFile(GtkWidget* button, gpointer window)
 {
